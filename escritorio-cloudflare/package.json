@@ -1,0 +1,16 @@
+{
+  "name": "escritorio-bios-ia",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Escritório BIOS IA para Cloudflare Pages (site + API + D1 + Diretor com Claude)",
+  "scripts": {
+    "dev": "wrangler pages dev public",
+    "deploy": "wrangler pages deploy public"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "latest"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}

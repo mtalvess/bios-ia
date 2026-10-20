@@ -1,0 +1,11 @@
+name = "escritorio-bios-ia"
+pages_build_output_dir = "public"
+compatibility_date = "2026-09-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Banco D1 do escritório. Crie com:  npx wrangler d1 create escritorio-bios-ia
+# e cole o database_id gerado aqui (ou configure o binding "DB" no painel da Cloudflare).
+[[d1_databases]]
+binding = "DB"
+database_name = "escritorio-bios-ia"
+database_id = "COLE_AQUI_O_ID_DO_D1"
