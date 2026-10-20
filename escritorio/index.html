@@ -3,274 +3,458 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Anton&family=Inter:wght@400;500;600;700&display=swap">
 <style>
-/* Layout: escritório em pixel art no topo (a "câmera" da empresa), pedido + quadro + atividade embaixo. Visual noturno único da BIOS. */
+/* Layout: barra fixa com abas (Escritório · Quadro · Equipe · Atividade); o escritório em pixel art ocupa a cena com painel lateral do agente; visual noturno único da BIOS. */
 :root{
-  --bg:#020A1C; --panel:#0A1A3A; --panel2:#0E2148; --line:#1C2E55;
+  --bg:#020A1C; --panel:#0A1A3A; --panel2:#0E2148; --line:#1C2E55; --line2:#2A4170;
   --fg:#F5F8FF; --muted:#A4B4D0; --blue:#0965FA; --cyan:#2EC5FF;
   --ok:#3DDC84; --warn:#FFC447; --bad:#FF6B5A;
   --f-pix:"Silkscreen","Courier New",monospace; --f-disp:"Anton",Impact,sans-serif; --f-ui:"Inter",system-ui,sans-serif;
   color-scheme:dark;
 }
 *{box-sizing:border-box}
-body{background:var(--bg);color:var(--fg);font-family:var(--f-ui);font-size:15px;line-height:1.45;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 40px}
-.wrap{max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
-header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px}
-h1{font-family:var(--f-disp);font-weight:400;font-size:clamp(34px,5vw,54px);letter-spacing:.5px;line-height:1;margin:0;text-transform:uppercase;text-wrap:balance}
-h1 span{color:var(--cyan)}
-.sub{color:var(--muted);margin:6px 0 0;max-width:60ch}
-.stats{display:flex;gap:10px;flex-wrap:wrap}
-.stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px 14px;min-width:96px}
-.stat b{display:block;font-family:var(--f-disp);font-weight:400;font-size:28px;line-height:1.05;font-variant-numeric:tabular-nums}
-.stat small{color:var(--muted);font-family:var(--f-pix);font-size:11px;letter-spacing:.5px;text-transform:uppercase}
-.office{position:relative;border-radius:14px;overflow:hidden;border:2px solid var(--line);background:#0b1430;box-shadow:0 20px 60px rgba(0,0,0,.45)}
-#cv{display:block;width:100%;height:auto;image-rendering:pixelated;cursor:pointer}
-.bubbles{position:absolute;inset:0;pointer-events:none}
-.bub{position:absolute;transform:translate(-50%,-100%);background:var(--fg);color:#061233;font-family:var(--f-pix);font-size:clamp(8px,1.05vw,11px);line-height:1.2;padding:4px 7px;border-radius:6px;white-space:nowrap;max-width:28vw;overflow:hidden;text-overflow:ellipsis;box-shadow:0 3px 0 rgba(0,0,0,.35)}
-.bub::after{content:"";position:absolute;left:50%;bottom:-5px;margin-left:-5px;border:5px solid transparent;border-top-color:var(--fg);border-bottom:0}
-.bub.warn{background:var(--warn)} .bub.warn::after{border-top-color:var(--warn)}
-.bub.meet{background:var(--cyan)} .bub.meet::after{border-top-color:var(--cyan)}
-.legend{position:absolute;left:10px;bottom:8px;display:flex;gap:10px;flex-wrap:wrap;font-family:var(--f-pix);font-size:10px;color:var(--fg);background:rgba(2,10,28,.75);padding:5px 9px;border-radius:8px}
+html,body{background:var(--bg)}
+body{color:var(--fg);font-family:var(--f-ui);font-size:15px;line-height:1.45}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:rgba(2,10,28,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.bar-in{max-width:1240px;margin:0 auto;display:flex;align-items:center;gap:14px;padding-block:10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));flex-wrap:wrap}
+.brand{font-family:var(--f-disp);font-size:24px;letter-spacing:.5px;text-transform:uppercase;white-space:nowrap}
+.brand span{color:var(--cyan)}
+nav{display:flex;gap:4px;flex:1 1 auto;overflow-x:auto;scrollbar-width:none}
+nav a{color:var(--muted);text-decoration:none;font-family:var(--f-pix);font-size:12px;letter-spacing:.6px;text-transform:uppercase;padding:8px 12px;border-radius:8px;white-space:nowrap;display:flex;gap:6px;align-items:center}
+nav a:hover{color:var(--fg);background:var(--panel)}
+nav a[aria-current="page"]{color:var(--fg);background:var(--panel2);box-shadow:inset 0 -2px 0 var(--cyan)}
+nav a .n{font-family:var(--f-ui);font-size:11px;font-weight:700;background:var(--warn);color:#2a1a00;border-radius:999px;padding:0 6px;line-height:16px}
+.btn{background:var(--blue);color:#fff;border:0;border-radius:999px;padding:9px 16px;font:inherit;font-weight:700;cursor:pointer;white-space:nowrap}
+.btn:hover{filter:brightness(1.1)} .btn[disabled]{opacity:.55;cursor:wait}
+.btn.ghost{background:transparent;border:1px solid var(--line2);color:var(--fg)}
+.btn.sm{padding:5px 10px;font-size:13px}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+main{max-width:1240px;margin:0 auto;padding-block:18px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.view{display:flex;flex-direction:column;gap:16px}
+.view[hidden]{display:none!important}
+h2.t{font-family:var(--f-disp);font-weight:400;font-size:clamp(28px,4vw,40px);text-transform:uppercase;margin:0;line-height:1;text-wrap:balance}
+.lead{color:var(--muted);margin:4px 0 0;max-width:68ch}
+.strip{display:flex;gap:10px;flex-wrap:wrap}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px 14px;display:flex;align-items:baseline;gap:8px}
+.stat b{font-family:var(--f-disp);font-weight:400;font-size:26px;font-variant-numeric:tabular-nums}
+.stat small{color:var(--muted);font-family:var(--f-pix);font-size:11px;text-transform:uppercase}
+.scene{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:16px;align-items:start}
+@media (max-width:980px){.scene{grid-template-columns:minmax(0,1fr)}}
+.office{position:relative;border-radius:14px;overflow:hidden;border:2px solid var(--line2);background:#0b1430;box-shadow:0 24px 70px rgba(0,0,0,.5)}
+#cv{display:block;width:100%;height:auto;image-rendering:pixelated;cursor:default}
+.ov{position:absolute;inset:0;pointer-events:none}
+.bub{position:absolute;transform:translate(-50%,-100%);background:var(--fg);color:#061233;font-family:var(--f-pix);font-size:clamp(8px,.95vw,11px);line-height:1.2;padding:4px 7px;border-radius:6px;white-space:nowrap;max-width:26vw;overflow:hidden;text-overflow:ellipsis;box-shadow:0 3px 0 rgba(0,0,0,.35)}
+.bub::after{content:"";position:absolute;left:50%;bottom:-5px;margin-left:-5px;border:5px solid transparent;border-top-color:inherit;border-bottom:0}
+.bub{border-color:var(--fg)} .bub.warn{background:var(--warn);border-color:var(--warn)} .bub.meet{background:var(--cyan);border-color:var(--cyan)} .bub.tag{background:#061233;color:var(--fg);border-color:#061233}
+.legend{position:absolute;left:10px;bottom:8px;display:flex;gap:10px;flex-wrap:wrap;font-family:var(--f-pix);font-size:10px;background:rgba(2,10,28,.78);padding:5px 9px;border-radius:8px}
 .legend i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:4px;vertical-align:middle}
-.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2.2fr);gap:18px}
-@media (max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;min-width:0}
-.card h2{font-family:var(--f-pix);font-weight:700;font-size:13px;letter-spacing:1px;text-transform:uppercase;color:var(--cyan);margin:0 0 12px}
-textarea,select,button{font:inherit}
-textarea{width:100%;min-height:96px;resize:vertical;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
-textarea:focus-visible,button:focus-visible,select:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
-.btn{background:var(--blue);color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer}
-.btn[disabled]{opacity:.55;cursor:wait}
-.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--fg)}
-.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px}
-.note{color:var(--muted);font-size:13px;margin:8px 0 0}
-.out{margin-top:12px;font-size:14px;white-space:pre-wrap;color:var(--fg);min-width:0}
-.board{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
-@media (max-width:620px){.board{grid-template-columns:minmax(0,1fr)}}
-.col{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:8px;min-width:0}
-.col h3{margin:0;font-family:var(--f-pix);font-size:11px;letter-spacing:.8px;text-transform:uppercase;display:flex;justify-content:space-between;color:var(--muted)}
+.side{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.side h3{font-family:var(--f-disp);font-weight:400;font-size:30px;text-transform:uppercase;margin:0;line-height:1}
+.prof{display:flex;gap:12px;align-items:center}
+.av{width:56px;height:56px;image-rendering:pixelated;background:var(--panel2);border-radius:12px;flex-shrink:0}
+.pill{display:inline-flex;align-items:center;gap:6px;font-family:var(--f-pix);font-size:11px;text-transform:uppercase;padding:3px 8px;border-radius:999px;background:var(--panel2);color:var(--muted)}
+.pill i{width:8px;height:8px;border-radius:9px;background:var(--muted)}
+.pill.work i{background:var(--ok)} .pill.wait i{background:var(--warn)} .pill.meet i{background:var(--cyan)}
+.mini{display:flex;flex-direction:column;gap:8px}
+.mt{background:var(--bg);border:1px solid var(--line);border-left:4px solid var(--c,#888);border-radius:10px;padding:8px 10px;display:flex;flex-direction:column;gap:6px}
+.mt p{margin:0;font-weight:600;font-size:14px;overflow-wrap:anywhere}
+.mt span{color:var(--muted);font-size:12.5px}
+.seg{display:flex;gap:4px;flex-wrap:wrap}
+.seg button{font:inherit;font-size:11.5px;border:1px solid var(--line2);background:transparent;color:var(--muted);border-radius:999px;padding:2px 8px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--cyan);color:#021226;border-color:var(--cyan);font-weight:700}
+.note{color:var(--muted);font-size:13px;margin:0}
+.team-list{display:flex;flex-direction:column;gap:6px}
+.tl{display:flex;align-items:center;gap:10px;background:transparent;border:1px solid transparent;border-radius:10px;padding:6px;cursor:pointer;color:var(--fg);font:inherit;text-align:left;width:100%}
+.tl:hover{background:var(--panel2)} .tl canvas{width:32px;height:32px;image-rendering:pixelated;border-radius:8px;background:var(--panel2)}
+.tl b{display:block;font-size:14px} .tl small{color:var(--muted);font-size:12px}
+.tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+select,input,textarea{font:inherit;background:var(--bg);color:var(--fg);border:1px solid var(--line2);border-radius:10px;padding:8px 10px}
+.board{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+@media (max-width:900px){.board{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:540px){.board{grid-template-columns:minmax(0,1fr)}}
+.col{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:10px;display:flex;flex-direction:column;gap:8px;min-height:140px;min-width:0;transition:border-color .15s,background .15s}
+.col.over{border-color:var(--cyan);background:var(--panel2)}
+.col h3{margin:0 0 2px;font-family:var(--f-pix);font-size:12px;letter-spacing:.6px;text-transform:uppercase;display:flex;justify-content:space-between;color:var(--muted)}
 .col h3 b{color:var(--fg);font-variant-numeric:tabular-nums}
-.task{background:var(--panel2);border-radius:10px;padding:9px 10px;border-left:4px solid var(--c,#888);display:flex;flex-direction:column;gap:6px;min-width:0}
-.task p{margin:0;font-size:13.5px;font-weight:600;overflow-wrap:anywhere}
-.task .meta{display:flex;justify-content:space-between;gap:6px;align-items:center;font-size:12px;color:var(--muted)}
-.task select{background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:6px;font-size:12px;padding:2px 4px;max-width:120px}
-.ok{background:var(--ok);color:#03210f;border:0;border-radius:6px;font-size:12px;font-weight:700;padding:3px 8px;cursor:pointer}
-.empty{color:var(--muted);font-size:13px;text-align:center;padding:10px 4px}
-.feed{display:flex;flex-direction:column;gap:6px;max-height:280px;overflow:auto}
-.feed div{font-size:13px;display:grid;grid-template-columns:52px minmax(0,1fr);gap:8px}
-.feed time{color:var(--muted);font-variant-numeric:tabular-nums;font-family:var(--f-pix);font-size:11px;padding-top:2px}
-.chip{display:inline-block;font-family:var(--f-pix);font-size:10px;padding:1px 6px;border-radius:4px;color:#061233;margin-right:4px}
-dialog{background:var(--panel);color:var(--fg);border:1px solid var(--line);border-radius:16px;max-width:min(460px,92vw);padding:20px}
-dialog::backdrop{background:rgba(0,0,0,.55)}
-dialog h3{font-family:var(--f-disp);font-weight:400;font-size:30px;margin:0;text-transform:uppercase}
-dialog ul{padding-left:18px;margin:8px 0}
+.task{background:var(--panel2);border-radius:10px;padding:10px;border-left:4px solid var(--c,#888);display:flex;flex-direction:column;gap:8px;cursor:grab;min-width:0}
+.task.dragging{opacity:.4}
+.task p{margin:0;font-size:14px;font-weight:600;overflow-wrap:anywhere}
+.task .meta{display:flex;justify-content:space-between;gap:6px;align-items:center;font-size:12px;color:var(--muted);flex-wrap:wrap}
+.task select{font-size:12px;padding:2px 4px;border-radius:6px;max-width:130px}
+.who{display:inline-flex;align-items:center;gap:6px}
+.who i{width:10px;height:10px;border-radius:3px;background:var(--c)}
+.ok{background:var(--ok);color:#03210f;border:0;border-radius:6px;font:inherit;font-size:12px;font-weight:700;padding:3px 8px;cursor:pointer}
+.empty{color:var(--muted);font-size:13px;text-align:center;padding:14px 4px;border:1px dashed var(--line2);border-radius:10px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.ac{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.ac .top{display:flex;gap:12px;align-items:center}
+.ac h4{margin:0;font-family:var(--f-disp);font-weight:400;font-size:24px;text-transform:uppercase;line-height:1}
+.load{height:8px;background:var(--bg);border-radius:9px;overflow:hidden;display:flex}
+.load i{display:block;height:100%}
+.ac dl{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:0;text-align:center}
+.ac dt{font-family:var(--f-pix);font-size:9.5px;color:var(--muted);text-transform:uppercase}
+.ac dd{margin:0;font-family:var(--f-disp);font-size:22px;font-variant-numeric:tabular-nums}
+.tline{display:flex;flex-direction:column;gap:18px}
+.day h4{font-family:var(--f-pix);font-size:12px;color:var(--cyan);text-transform:uppercase;margin:0 0 8px;letter-spacing:.8px}
+.ev{display:grid;grid-template-columns:56px minmax(0,1fr);gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}
+.ev time{font-family:var(--f-pix);font-size:11px;color:var(--muted);padding-top:2px;font-variant-numeric:tabular-nums}
+.chip{display:inline-block;font-family:var(--f-pix);font-size:10px;padding:1px 6px;border-radius:4px;color:#061233;margin-right:6px}
+dialog{background:var(--panel);color:var(--fg);border:1px solid var(--line2);border-radius:18px;width:min(560px,94vw);padding:20px}
+dialog::backdrop{background:rgba(0,4,16,.65)}
+dialog h3{font-family:var(--f-disp);font-weight:400;font-size:32px;text-transform:uppercase;margin:0}
+dialog textarea{width:100%;min-height:110px;resize:vertical;margin-top:10px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:12px}
+.plan{margin-top:12px;display:flex;flex-direction:column;gap:6px}
+.plan div{font-size:14px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 
-<div class="wrap">
-  <header>
-    <div>
-      <h1>Escritório <span>BIOS IA</span></h1>
-      <p class="sub">A equipe de agentes da BIOS trabalhando em tempo real. Clique num personagem para ver o que ele está fazendo. Mande um pedido e o Diretor reúne a equipe e distribui as tarefas.</p>
-    </div>
-    <div class="stats" aria-live="polite">
-      <div class="stat"><b id="sWork">0</b><small>trabalhando</small></div>
-      <div class="stat"><b id="sAppr">0</b><small>p/ aprovar</small></div>
-      <div class="stat"><b id="sDone">0</b><small>entregues</small></div>
-    </div>
-  </header>
+<div class="bar"><div class="bar-in">
+  <div class="brand">BIOS <span>IA</span></div>
+  <nav aria-label="Seções">
+    <a href="#escritorio" data-v="escritorio">Escritório</a>
+    <a href="#quadro" data-v="quadro">Quadro <span class="n" id="nAppr" hidden>0</span></a>
+    <a href="#equipe" data-v="equipe">Equipe</a>
+    <a href="#atividade" data-v="atividade">Atividade</a>
+  </nav>
+  <button class="btn" id="bNovo" type="button">+ Novo pedido</button>
+</div></div>
 
-  <div class="office">
-    <canvas id="cv" width="480" height="300" aria-label="Escritório em pixel art com os agentes da BIOS"></canvas>
-    <div class="bubbles" id="bubbles"></div>
-    <div class="legend"><span><i style="background:var(--ok)"></i>trabalhando</span><span><i style="background:var(--warn)"></i>esperando você</span><span><i style="background:var(--muted)"></i>livre</span></div>
-  </div>
-
-  <div class="grid">
-    <div class="card">
-      <h2>Novo pedido para o Diretor</h2>
-      <form id="fPedido">
-        <label for="pedido" class="note" style="display:block;margin:0 0 6px">O que a BIOS precisa fazer?</label>
-        <textarea id="pedido" placeholder="Ex.: Lançar o cardápio digital para pizzarias de Campina Grande este mês"></textarea>
-        <div class="row"><button class="btn" id="bPedido" type="submit">Enviar ao Diretor</button><span class="note" id="pStatus"></span></div>
-      </form>
-      <div class="out" id="pOut"></div>
-      <h2 style="margin-top:20px">Atividade</h2>
-      <div class="feed" id="feed"><div class="empty">Carregando a atividade da equipe…</div></div>
-    </div>
-    <div class="card">
-      <h2>Quadro de tarefas</h2>
-      <div class="board" id="board">
-        <div class="col" data-s="afazer"><h3>A fazer <b>0</b></h3></div>
-        <div class="col" data-s="fazendo"><h3>Fazendo <b>0</b></h3></div>
-        <div class="col" data-s="aprovar"><h3>Para aprovar <b>0</b></h3></div>
-        <div class="col" data-s="feito"><h3>Feito <b>0</b></h3></div>
+<main>
+  <!-- ESCRITÓRIO -->
+  <section class="view" id="v-escritorio">
+    <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-end">
+      <div><h2 class="t">O escritório</h2><p class="lead">Sua equipe de agentes ao vivo. Clique em alguém para ver e mudar o que está fazendo.</p></div>
+      <div class="strip" aria-live="polite">
+        <div class="stat"><b id="sWork">0</b><small>trabalhando</small></div>
+        <div class="stat"><b id="sAppr">0</b><small>p/ aprovar</small></div>
+        <div class="stat"><b id="sDone">0</b><small>entregues</small></div>
       </div>
-      <p class="note">As tarefas são reais: os agentes atualizam este quadro quando trabalham no repositório <b>bios-ia</b>. "Aprovar" é sempre seu.</p>
     </div>
-  </div>
-</div>
+    <div class="scene">
+      <div class="office">
+        <canvas id="cv" width="640" height="400" aria-label="Escritório da BIOS em pixel art com os sete agentes"></canvas>
+        <div class="ov" id="ov"></div>
+        <div class="legend"><span><i style="background:var(--ok)"></i>trabalhando</span><span><i style="background:var(--warn)"></i>esperando você</span><span><i style="background:var(--muted)"></i>livre</span></div>
+      </div>
+      <aside class="side" id="side" aria-live="polite"></aside>
+    </div>
+  </section>
 
-<dialog id="dlg"><h3 id="dName"></h3><p class="note" id="dRole" style="margin-top:4px"></p><div id="dBody"></div><div class="row"><button class="btn ghost" id="dClose" type="button">Fechar</button></div></dialog>
+  <!-- QUADRO -->
+  <section class="view" id="v-quadro" hidden>
+    <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-end">
+      <div><h2 class="t">Quadro de tarefas</h2><p class="lead">Arraste os cartões entre as colunas. "Aprovar" é sempre seu.</p></div>
+      <div class="tools">
+        <label for="fAg" class="note">Agente</label>
+        <select id="fAg"><option value="">Todos</option></select>
+        <button class="btn ghost" id="bAddT" type="button">+ Tarefa</button>
+      </div>
+    </div>
+    <div class="board" id="board"></div>
+  </section>
+
+  <!-- EQUIPE -->
+  <section class="view" id="v-equipe" hidden>
+    <div><h2 class="t">A equipe</h2><p class="lead">Sete agentes, cada um com uma função. As instruções de cada um ficam em <b>.claude/agents/</b> no repositório bios-ia.</p></div>
+    <div class="cards" id="cards"></div>
+  </section>
+
+  <!-- ATIVIDADE -->
+  <section class="view" id="v-atividade" hidden>
+    <div><h2 class="t">Atividade</h2><p class="lead">Tudo o que a equipe fez, do mais recente para o mais antigo.</p></div>
+    <div class="tline" id="tline"></div>
+  </section>
+</main>
+
+<dialog id="dPed">
+  <h3>Novo pedido</h3>
+  <p class="note">Escreva o que a BIOS precisa. O Diretor reúne a equipe, divide em tarefas e coloca no quadro.</p>
+  <form id="fPed">
+    <label for="pedido" class="note" hidden>Pedido</label>
+    <textarea id="pedido" placeholder="Ex.: Lançar o cardápio digital para pizzarias de Campina Grande este mês"></textarea>
+    <div class="row"><button class="btn" id="bPed" type="submit">Enviar ao Diretor</button><button class="btn ghost" type="button" id="cPed">Fechar</button><span class="note" id="pSt"></span></div>
+  </form>
+  <div class="plan" id="pOut"></div>
+</dialog>
+
+<dialog id="dTask">
+  <h3>Nova tarefa</h3>
+  <form id="fTask">
+    <div class="row" style="flex-direction:column;align-items:stretch">
+      <label for="tTit" class="note">Título</label><input id="tTit" maxlength="80" required>
+      <label for="tAg" class="note">Responsável</label><select id="tAg"></select>
+      <label for="tDet" class="note">Detalhe (opcional)</label><input id="tDet" maxlength="200">
+    </div>
+    <div class="row"><button class="btn" type="submit">Criar</button><button class="btn ghost" type="button" id="cTask">Cancelar</button></div>
+  </form>
+</dialog>
 
 <script>
-// ---------- equipe (identidade fixa; estado vem do banco)
+// ================= equipe
 const TEAM={
-  diretor:{nome:"Diretor",setor:"Direção",cor:"#2EC5FF",pele:"#E8B48A",cab:"#1b1b1b",desk:[60,64],papel:"Planeja e distribui o trabalho"},
-  conteudo:{nome:"Conteúdo",setor:"Conteúdo",cor:"#FFC447",pele:"#C98B5E",cab:"#3a2414",desk:[180,64],papel:"Ganchos, roteiros e legendas"},
-  designer:{nome:"Designer",setor:"Design",cor:"#FF6FB1",pele:"#F1C7A0",cab:"#5a2d82",desk:[300,64],papel:"Posts, stories e carrosséis"},
-  video:{nome:"Vídeo",setor:"Vídeo",cor:"#A77BFF",pele:"#8A5A3C",cab:"#111",desk:[420,64],papel:"Reels, filmes e convites"},
-  "dev-sites":{nome:"Dev Sites",setor:"Desenvolvimento",cor:"#3DDC84",pele:"#E0A97E",cab:"#2a2a2a",desk:[60,170],papel:"Sites e cardápios digitais"},
-  comercial:{nome:"Comercial",setor:"Comercial",cor:"#FF8A3D",pele:"#B87A52",cab:"#1e120a",desk:[180,170],papel:"Propostas e atendimento"},
-  relatorios:{nome:"Relatórios",setor:"Análise",cor:"#7FD3FF",pele:"#F0C9A6",cab:"#6b4a2b",desk:[300,170],papel:"Números e próximos passos"}
+  diretor:{nome:"Diretor",setor:"Direção",cor:"#2EC5FF",pele:"#E8B48A",cab:"#1b1b1b",hair:0,desk:[90,128],papel:"Planeja e distribui o trabalho"},
+  conteudo:{nome:"Conteúdo",setor:"Conteúdo",cor:"#FFC447",pele:"#C98B5E",cab:"#3a2414",hair:1,desk:[220,128],papel:"Ganchos, roteiros e legendas"},
+  designer:{nome:"Designer",setor:"Design",cor:"#FF6FB1",pele:"#F1C7A0",cab:"#7a3db0",hair:2,desk:[350,128],papel:"Posts, stories e carrosséis"},
+  video:{nome:"Vídeo",setor:"Vídeo",cor:"#A77BFF",pele:"#8A5A3C",cab:"#111",hair:3,desk:[90,238],papel:"Reels, filmes e convites"},
+  "dev-sites":{nome:"Dev Sites",setor:"Dev",cor:"#3DDC84",pele:"#E0A97E",cab:"#2a2a2a",hair:0,desk:[220,238],papel:"Sites e cardápios digitais"},
+  comercial:{nome:"Comercial",setor:"Comercial",cor:"#FF8A3D",pele:"#B87A52",cab:"#1e120a",hair:2,desk:[350,238],papel:"Propostas e atendimento"},
+  relatorios:{nome:"Relatórios",setor:"Análise",cor:"#7FD3FF",pele:"#F0C9A6",cab:"#6b4a2b",hair:1,desk:[90,346],papel:"Números e próximos passos"}
 };
 const IDS=Object.keys(TEAM);
-const MEET=[[400,150],[430,150],[400,190],[430,190],[385,170],[445,170],[415,205]];
-const LOUNGE=[[40,262],[80,272],[150,262],[200,272],[250,262],[300,270],[350,262],[120,250]];
-const STATUS_LABEL={afazer:"A fazer",fazendo:"Fazendo",aprovar:"Para aprovar",feito:"Feito"};
+const ST={afazer:"A fazer",fazendo:"Fazendo",aprovar:"Para aprovar",feito:"Feito"};
+const MEET=[[500,120],[540,120],[580,120],[500,176],[540,176],[580,176],[610,148]];
+const SPOTS=[[226,352,"café"],[300,346,"sofá"],[340,346,"sofá"],[590,350,"arcade"],[260,370,"café"],[180,360,"planta"]];
+const PONG=[[418,352],[512,352]];
+let tasks=[],acts=[],db=null,sample=null,meetingUntil=0,selected=null,hover=null;
 
-// ---------- estado local
-let tasks=[],acts=[],db=null,meetingUntil=0,lastSeed=1;
-const chars={};IDS.forEach((id,i)=>{const d=TEAM[id].desk;chars[id]={x:d[0],y:d[1]+16,tx:d[0],ty:d[1]+16,mode:"livre",wait:0,step:0,face:1,idleSpot:i%LOUNGE.length}});
+// ================= personagens
+const chars={};IDS.forEach((id,i)=>{const d=TEAM[id].desk;chars[id]={x:d[0],y:d[1]+2,tx:d[0],ty:d[1]+2,mode:"",wait:0,face:1,spot:i,moving:false}});
 
-// ---------- desenho em pixel art
+// ================= desenho
 const cv=document.getElementById("cv"),g=cv.getContext("2d");g.imageSmoothingEnabled=false;
-const W=480,H=300;
-function R(x,y,w,h,c){g.fillStyle=c;g.fillRect(Math.round(x),Math.round(y),w,h)}
-function floor(){
-  for(let y=0;y<H;y+=12)for(let x=0;x<W;x+=12)R(x,y,12,12,((x+y)/12)%2?"#14214a":"#172756");
-  R(0,0,W,22,"#0a1330");for(let x=6;x<W;x+=40){R(x,4,26,12,"#06102a");R(x+2,6,22,8,"#1f4fa8")} // janelas noturnas
-  R(0,22,W,3,"#2b3f78");
-  // divisória das áreas
-  R(0,128,360,2,"#22346a");R(360,22,2,210,"#22346a");R(0,232,W,2,"#22346a");
-  // sala de reunião
-  R(380,140,70,60,"#5a3b22");R(382,142,66,56,"#7a5232");
-  // lounge: café, sofá, ping-pong, planta
-  R(18,244,22,30,"#3b3b48");R(21,248,16,8,"#1a1a22");R(24,258,10,4,"#c0392b");
-  R(120,246,70,10,"#2E7BFF");R(120,256,70,14,"#1f5fd0");
-  R(230,250,60,26,"#1e6b3a");R(259,250,2,26,"#e8eef9");R(230,262,60,1,"#e8eef9");
-  R(330,250,14,10,"#3a2a1a");R(326,236,22,16,"#2fa24a");R(330,232,14,8,"#3cc45b");
-  R(420,246,40,30,"#2a2a36");R(424,250,32,16,"#0965FA");
-  // placas de setor
-  g.font="8px Silkscreen, monospace";g.textAlign="center";
-  IDS.forEach(id=>{const t=TEAM[id];g.fillStyle="#a4b4d0";g.fillText(t.setor.toUpperCase(),t.desk[0],t.desk[1]-26)});
-  g.fillStyle="#a4b4d0";g.fillText("REUNIÃO",415,134);g.fillText("CAFÉ & LOUNGE",240,242);
+const W=640,H=400;
+function R(x,y,w,h,c){g.fillStyle=c;g.fillRect(Math.round(x),Math.round(y),Math.round(w),Math.round(h))}
+function hourRecife(){const d=new Date();return (d.getUTCHours()-3+24)%24+d.getUTCMinutes()/60}
+function sky(h){if(h<5||h>=19.5)return["#050b24","#0b1a44"];if(h<7)return["#2b2a6a","#e98a5a"];if(h<17)return["#2f8cf0","#9fd6ff"];return["#3a2a6a","#ff8a4a"]}
+const STARS=Array.from({length:40},(_,i)=>[(i*97)%640,(i*53)%40+4,(i%3)+1]);
+function backdrop(t){
+  const h=hourRecife(),[s1,s2]=sky(h),night=h<5.5||h>=19;
+  // parede
+  R(0,0,W,78,"#0d1838");
+  for(let x=16;x<W;x+=104){
+    const gr=g.createLinearGradient(0,10,0,62);gr.addColorStop(0,s1);gr.addColorStop(1,s2);g.fillStyle=gr;g.fillRect(x,10,80,52);
+    if(night)STARS.forEach(([sx,sy,k])=>{if(sx>=x&&sx<x+80&&((t*k|0)+sx)%7)R(sx,10+sy,1,1,"#cfe3ff")});
+    // skyline de Campina Grande
+    g.fillStyle=night?"#081028":"#3a5a8a";[[0,30],[10,22],[22,34],[30,18],[44,28],[54,24],[66,32]].forEach(([bx,bh])=>g.fillRect(x+bx,62-bh,12,bh));
+    if(night){g.fillStyle="#ffd36a";for(let k=0;k<7;k++){const wx=x+3+((k*29)%74),wy=40+((k*17)%18);if(((t/3|0)+k)%5)g.fillRect(wx,wy,2,2)}}
+    R(x-3,8,86,3,"#2a3d70");R(x-3,61,86,4,"#2a3d70");R(x+38,10,3,52,"#2a3d70");
+  }
+  // letreiro neon
+  const nx=W/2-46;R(nx-4,64,100,14,"#050b20");g.font="bold 13px Silkscreen, monospace";g.textAlign="center";
+  g.shadowColor="#2EC5FF";g.shadowBlur=10+Math.sin(t*3)*3;g.fillStyle="#BFF0FF";g.fillText("BIOS IA",W/2+4,75);g.shadowBlur=0;
+  // relógio real
+  const cx=600,cy=40;g.fillStyle="#e8eef9";g.beginPath();g.arc(cx,cy,12,0,7);g.fill();g.strokeStyle="#0d1838";g.lineWidth=2;
+  const hh=h%12/12*Math.PI*2,mm=(h%1)*Math.PI*2;g.beginPath();g.moveTo(cx,cy);g.lineTo(cx+Math.sin(hh)*6,cy-Math.cos(hh)*6);g.moveTo(cx,cy);g.lineTo(cx+Math.sin(mm)*9,cy-Math.cos(mm)*9);g.stroke();
+  R(0,78,W,4,"#2a3d70");
+  // piso de madeira
+  for(let y=82;y<H;y+=10)for(let x=-((y/10)%3)*20;x<W;x+=60)R(x,y,59,9,((x+y)/10|0)%2?"#1a2650":"#1d2a58");
+  // tapetes dos setores
+  IDS.forEach(id=>{const T=TEAM[id],[x,y]=T.desk;g.fillStyle=T.cor+"22";g.fillRect(x-52,y-34,104,66);g.strokeStyle=T.cor+"55";g.lineWidth=1;g.strokeRect(x-52.5,y-34.5,105,67)});
+  // sala de reunião (vidro)
+  R(470,92,164,128,"#12204a");g.fillStyle="rgba(120,200,255,.08)";g.fillRect(470,92,164,128);g.strokeStyle="#5fb0ff";g.lineWidth=2;g.strokeRect(470,92,164,128);
+  R(492,136,108,26,"#5a3b22");R(494,138,104,22,"#7a5232");
+  // TV com números
+  R(512,96,68,26,"#050b20");R(514,98,64,22,"#0b2a6a");
+  g.font="8px Silkscreen, monospace";g.fillStyle="#BFF0FF";g.textAlign="left";
+  const n=k=>tasks.filter(x=>x.status===k).length;g.fillText(`FAZ ${n("fazendo")}  APR ${n("aprovar")}`,517,108);g.fillText(`FEITO ${n("feito")}`,517,117);
+  // lounge
+  R(176,300,458,96,"#152048");
+  R(200,318,58,22,"#4a3424");R(200,316,58,4,"#6b4a2e");R(208,306,14,12,"#2b2b38");R(211,309,8,4,"#c0392b"); // café
+  for(let k=0;k<3;k++){const s=(t*.8+k*.33)%1;g.fillStyle=`rgba(230,240,255,${.5*(1-s)})`;g.fillRect(214+Math.sin(t*3+k)*2,304-s*14,2,2)}
+  R(282,326,76,12,"#2E7BFF");R(282,338,76,12,"#1f5fd0");R(280,322,6,28,"#1f5fd0");R(354,322,6,28,"#1f5fd0"); // sofá
+  R(432,340,72,30,"#1e6b3a");R(467,340,2,30,"#e8eef9");R(432,354,72,1,"#e8eef9");R(436,370,4,8,"#333");R(496,370,4,8,"#333"); // ping-pong
+  R(576,318,30,40,"#2a2a36");R(580,322,22,16,"#0965FA");R(582,340,6,4,"#FF6B5A");R(592,342,4,4,"#FFC447"); // fliperama
+  [[176,296],[620,296],[455,96]].forEach(([px,py])=>{R(px-6,py+10,12,10,"#5a3b22");R(px-10,py-4,20,16,"#2fa24a");R(px-6,py-10,12,10,"#3cc45b")});
+  // rótulos
+  g.font="8px Silkscreen, monospace";g.textAlign="center";g.fillStyle="#a4b4d0";
+  IDS.forEach(id=>{const [x,y]=TEAM[id].desk;g.fillText(TEAM[id].setor.toUpperCase(),x,y-38)});
+  g.fillText("REUNIÃO",552,230);g.fillText("CAFÉ & LOUNGE",400,310);
 }
-function desk(id,t){
-  const d=TEAM[id].desk,x=d[0],y=d[1],busy=chars[id].mode==="trabalhando";
-  R(x-24,y-4,48,14,"#6b4a2e");R(x-24,y+10,48,3,"#4a321e");R(x-22,y+13,4,8,"#4a321e");R(x+18,y+13,4,8,"#4a321e");
-  R(x-10,y-18,20,14,"#1a1f2e");R(x-8,y-16,16,10,busy?TEAM[id].cor:"#0d1526");
-  if(busy){for(let i=0;i<3;i++)R(x-6,y-14+i*3,4+((t*7+i*5)|0)%9,1,"#fff")}
-  R(x-2,y-4,4,2,"#1a1f2e");R(x+12,y-2,6,4,"#e8eef9");
+function deskTop(id,t){
+  const [x,y]=TEAM[id].desk,busy=chars[id].mode==="trabalhando"&&!chars[id].moving;
+  R(x-30,y-2,60,14,"#6b4a2e");R(x-30,y-2,60,2,"#8a6440");R(x-30,y+12,60,3,"#4a321e");R(x-27,y+15,4,10,"#4a321e");R(x+23,y+15,4,10,"#4a321e");
+  // monitor (de costas para nós) + caneca + papéis
+  R(x-12,y-16,24,14,"#1a1f2e");R(x-2,y-2,4,2,"#1a1f2e");
+  if(busy){g.globalCompositeOperation="lighter";const gr=g.createRadialGradient(x,y-12,2,x,y-12,30);gr.addColorStop(0,TEAM[id].cor+"66");gr.addColorStop(1,"rgba(0,0,0,0)");g.fillStyle=gr;g.fillRect(x-32,y-42,64,60);g.globalCompositeOperation="source-over"}
+  R(x+16,y+1,5,6,"#e8eef9");R(x-24,y+2,10,6,"#d9e2f2");
 }
-function person(id,c,t){
-  const T=TEAM[id],x=Math.round(c.x),y=Math.round(c.y),walk=c.moving?(Math.floor(t*8)%2):0,typing=c.mode==="trabalhando"&&!c.moving;
-  R(x-5,y+9,10,2,"rgba(0,0,0,.35)");
-  R(x-3,y+3,2,6-walk*2,"#22263a");R(x+1,y+3,2,4+walk*2,"#22263a"); // pernas
-  R(x-4,y-5,8,8,T.cor);                                            // corpo
-  const arm=typing?(Math.floor(t*10)%2):0;R(x-6,y-4+arm,2,5,T.cor);R(x+4,y-4+(1-arm),2,5,T.cor);
-  R(x-3,y-12,6,7,T.pele);R(x-3,y-13,6,3,T.cab);                     // cabeça
-  R(x+(c.face>0?1:-2),y-9,1,1,"#111");
-  if(c.mode==="aprovar"&&!c.moving){R(x-1,y-24,2,6,"#FFC447");R(x-1,y-16,2,2,"#FFC447")}
+function chair(id){const [x,y]=TEAM[id].desk;R(x-8,y-22,16,12,"#2a2f45");R(x-6,y-10,12,4,"#22263a")}
+function sprite(cx,x,y,T,o){ // o: {walk,sit,typing,face,front}
+  const P=(px,py,w,h,c)=>{cx.fillStyle=c;cx.fillRect(Math.round(x+px),Math.round(y+py),w,h)};
+  const ol="#0a0f1e";
+  if(!o.sit){const a=o.walk%4,l=[0,2,0,-2][a];P(-4,4,4,7+(l>0?-1:0),ol);P(0,4,4,7+(l<0?-1:0),ol);P(-3,4,2,6-(l>0?1:0),"#2a3150");P(1,4,2,6-(l<0?1:0),"#2a3150");P(-4,10+(l>0?-1:0),3,2,"#111");P(1,10+(l<0?-1:0),3,2,"#111")}
+  P(-6,-7,12,12,ol);P(-5,-6,10,10,T.cor);P(-5,-6,10,2,"rgba(255,255,255,.18)");
+  const ar=o.typing?((o.t*12|0)%2):0;P(-8,-5+ar,3,7,ol);P(5,-5+(1-ar),3,7,ol);P(-7,-4+ar,2,5,T.cor);P(6,-4+(1-ar),2,5,T.cor);P(-7,1+ar,2,2,T.pele);P(6,1+(1-ar),2,2,T.pele);
+  P(-5,-16,10,10,ol);P(-4,-15,8,8,T.pele);
+  const hc=T.cab;if(T.hair===0){P(-4,-16,8,3,hc)}else if(T.hair===1){P(-5,-17,10,4,hc);P(-5,-14,2,4,hc)}else if(T.hair===2){P(-5,-17,10,4,hc);P(-5,-14,2,7,hc);P(3,-14,2,7,hc)}else{P(-4,-18,8,4,hc);P(-2,-20,4,3,hc)}
+  if(o.front!==false){const f=o.face>0?1:-1;P(-2+f,-11,1,2,"#111");P(1+f,-11,1,2,"#111");P(-1+f,-8,3,1,"#9a5a4a")}
 }
-function draw(t){
-  floor();IDS.forEach(id=>desk(id,t));
-  IDS.slice().sort((a,b)=>chars[a].y-chars[b].y).forEach(id=>person(id,chars[id],t));
+function personAt(id,t){
+  const c=chars[id],T=TEAM[id],sit=c.mode==="trabalhando"&&!c.moving;
+  const x=c.x,y=sit?TEAM[id].desk[1]-14:c.y;
+  if(!sit){g.fillStyle="rgba(0,0,0,.35)";g.beginPath();g.ellipse(x,y+12,7,2.5,0,0,7);g.fill()}
+  sprite(g,x,y,T,{walk:c.moving?(t*10|0):0,sit,typing:sit,face:c.face,t});
+  if(c.mode==="aprovar"&&!c.moving){const b=Math.sin(t*5)*1.5;R(x-2,y-34+b,4,8,"#0a0f1e");R(x-1,y-33+b,2,6,"#FFC447");R(x-1,y-25+b,2,2,"#FFC447")}
+  if(selected===id){g.strokeStyle="#2EC5FF";g.lineWidth=1;g.beginPath();g.ellipse(x,(sit?TEAM[id].desk[1]+10:y+12),11,4,0,0,7);g.stroke()}
+}
+function pongBall(t){const players=IDS.filter(id=>chars[id].pong&&!chars[id].moving);if(players.length<2)return;
+  const k=(Math.sin(t*3)+1)/2,x=422+k*86,y=350-Math.abs(Math.sin(t*6))*10;R(x,y,3,3,"#fff");g.fillStyle="rgba(0,0,0,.3)";g.fillRect(x,358,3,1)}
+function frame(t){
+  backdrop(t);
+  IDS.forEach(chair);
+  // ordem de profundidade: quem está sentado fica atrás da própria mesa
+  const order=IDS.slice().sort((a,b)=>(chars[a].mode==="trabalhando"&&!chars[a].moving?TEAM[a].desk[1]-1:chars[a].y)-(chars[b].mode==="trabalhando"&&!chars[b].moving?TEAM[b].desk[1]-1:chars[b].y));
+  const items=[];IDS.forEach(id=>items.push({y:TEAM[id].desk[1],f:()=>deskTop(id,t)}));
+  order.forEach(id=>{const c=chars[id],sit=c.mode==="trabalhando"&&!c.moving;items.push({y:sit?TEAM[id].desk[1]-1:c.y+10,f:()=>personAt(id,t)})});
+  items.sort((a,b)=>a.y-b.y).forEach(i=>i.f());
+  pongBall(t);
+  // vinheta suave
+  const v=g.createRadialGradient(W/2,H/2,H*.35,W/2,H/2,H*.85);v.addColorStop(0,"rgba(0,0,0,0)");v.addColorStop(1,"rgba(0,0,12,.45)");g.fillStyle=v;g.fillRect(0,0,W,H);
 }
 
-// ---------- comportamento
-function curTask(id){return tasks.find(k=>k.agente===id&&k.status==="fazendo")||tasks.find(k=>k.agente===id&&k.status==="aprovar")}
-function updateModes(){
-  const meeting=Date.now()<meetingUntil;
-  IDS.forEach((id,i)=>{const c=chars[id],d=TEAM[id].desk,k=curTask(id);
-    let mode=meeting?"reuniao":k?(k.status==="fazendo"?"trabalhando":"aprovar"):"livre";
-    if(mode!==c.mode||(mode==="livre"&&c.wait<=0)){
-      if(mode==="reuniao"){[c.tx,c.ty]=MEET[i]}
-      else if(mode==="livre"){c.idleSpot=(c.idleSpot+1+Math.floor(Math.random()*3))%LOUNGE.length;[c.tx,c.ty]=LOUNGE[c.idleSpot];c.wait=4+Math.random()*6}
-      else{c.tx=d[0];c.ty=d[1]+16}
-      c.mode=mode}
-  })
+// ================= comportamento
+const cur=id=>tasks.find(k=>k.agente===id&&k.status==="fazendo")||tasks.find(k=>k.agente===id&&k.status==="aprovar");
+function think(dt){
+  const meeting=Date.now()<meetingUntil;const idle=[];
+  IDS.forEach((id,i)=>{const c=chars[id],[dx,dy]=TEAM[id].desk,k=cur(id);
+    const mode=meeting?"reuniao":k?(k.status==="fazendo"?"trabalhando":"aprovar"):"livre";
+    if(mode==="livre")idle.push(id);
+    if(mode!==c.mode){c.mode=mode;c.pong=false;c.wait=0;
+      if(mode==="reuniao")[c.tx,c.ty]=MEET[i];else if(mode!=="livre"){c.tx=dx;c.ty=dy+26}}
+  });
+  // os dois primeiros livres jogam ping-pong; os outros passeiam pelo lounge
+  idle.forEach((id,j)=>{const c=chars[id];
+    if(j<2&&idle.length>=2){if(!c.pong){c.pong=true;[c.tx,c.ty]=PONG[j]}}
+    else{c.pong=false;c.wait-=dt;if(c.wait<=0){c.spot=(c.spot+1+((Math.random()*3)|0))%SPOTS.length;[c.tx,c.ty]=SPOTS[c.spot];c.wait=5+Math.random()*7}}
+  });
+  IDS.forEach(id=>{const c=chars[id],dx=c.tx-c.x,dy=c.ty-c.y,d=Math.hypot(dx,dy);c.moving=d>1;
+    if(c.moving){const s=Math.min(d,60*dt);c.x+=dx/d*s;c.y+=dy/d*s;c.face=dx>=0?1:-1}else if(c.pong)c.face=c.tx<460?1:-1});
 }
 let last=performance.now();
-function tick(now){
-  const dt=Math.min(.05,(now-last)/1000);last=now;const t=now/1000;
-  updateModes();
-  IDS.forEach(id=>{const c=chars[id],dx=c.tx-c.x,dy=c.ty-c.y,dist=Math.hypot(dx,dy);
-    c.moving=dist>1;if(c.moving){const sp=Math.min(dist,48*dt);c.x+=dx/dist*sp;c.y+=dy/dist*sp;c.face=dx>=0?1:-1}else if(c.mode==="livre")c.wait-=dt});
-  draw(t);bubbles();requestAnimationFrame(tick);
-}
-const bubEl=document.getElementById("bubbles");
-function bubbles(){
-  let h="";IDS.forEach(id=>{const c=chars[id];let txt="",cls="";
-    if(c.mode==="reuniao"){txt=id==="diretor"?"Equipe, novo pedido!":"";cls="meet"}
-    else if(!c.moving){const k=curTask(id);if(k){txt=(k.status==="aprovar"?"Esperando você: ":"")+k.titulo;cls=k.status==="aprovar"?"warn":""}}
-    if(txt)h+=`<div class="bub ${cls}" style="left:${c.x/W*100}%;top:${(c.y-26)/H*100}%">${esc(txt)}</div>`});
-  if(bubEl.innerHTML!==h)bubEl.innerHTML=h;
-}
+function loop(now){const dt=Math.min(.05,(now-last)/1000);last=now;think(dt);frame(now/1000);overlay();requestAnimationFrame(loop)}
+const ov=document.getElementById("ov");
+function headPos(id){const c=chars[id],sit=c.mode==="trabalhando"&&!c.moving;return [c.x,(sit?TEAM[id].desk[1]-14:c.y)-26]}
+function overlay(){let h="";
+  IDS.forEach(id=>{const c=chars[id],[x,y]=headPos(id);let txt="",cls="";
+    if(c.mode==="reuniao"){if(id==="diretor"){txt="Equipe, novo pedido!";cls="meet"}}
+    else if(!c.moving){const k=cur(id);if(k){txt=(k.status==="aprovar"?"Esperando você: ":"")+k.titulo;cls=k.status==="aprovar"?"warn":""}}
+    if(!txt&&(hover===id||selected===id)){txt=TEAM[id].nome;cls="tag"}
+    if(txt)h+=`<div class="bub ${cls}" style="left:${x/W*100}%;top:${(y-(c.mode==="aprovar"?10:0))/H*100}%">${esc(txt)}</div>`});
+  if(ov.innerHTML!==h)ov.innerHTML=h}
 function esc(s){return String(s??"").replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]))}
+function pick(e){const r=cv.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*W,y=(e.clientY-r.top)/r.height*H;let best=null,bd=20;
+  IDS.forEach(id=>{const c=chars[id],sit=c.mode==="trabalhando"&&!c.moving,py=sit?TEAM[id].desk[1]-18:c.y-4,d=Math.hypot(c.x-x,py-y);if(d<bd){bd=d;best=id}});return best}
+cv.addEventListener("mousemove",e=>{hover=pick(e);cv.style.cursor=hover?"pointer":"default"});
+cv.addEventListener("mouseleave",()=>hover=null);
+cv.addEventListener("click",e=>{const id=pick(e);if(id){selected=id;renderSide()}});
 
-// ---------- quadro, atividade, contadores
-function render(){
-  document.getElementById("sWork").textContent=tasks.filter(k=>k.status==="fazendo").length;
-  document.getElementById("sAppr").textContent=tasks.filter(k=>k.status==="aprovar").length;
-  document.getElementById("sDone").textContent=tasks.filter(k=>k.status==="feito").length;
-  document.querySelectorAll(".col").forEach(col=>{const s=col.dataset.s,list=tasks.filter(k=>k.status===s).sort((a,b)=>(b.ts||0)-(a.ts||0));
-    col.querySelector("h3 b").textContent=list.length;col.querySelectorAll(".task,.empty").forEach(e=>e.remove());
-    if(!list.length)col.insertAdjacentHTML("beforeend",`<div class="empty">${db?"Nada aqui":"Conectando…"}</div>`);
-    list.forEach(k=>{const T=TEAM[k.agente]||{nome:k.agente,cor:"#888"};
-      const opts=Object.keys(STATUS_LABEL).map(v=>`<option value="${v}"${v===k.status?" selected":""}>${STATUS_LABEL[v]}</option>`).join("");
-      col.insertAdjacentHTML("beforeend",`<div class="task" style="--c:${T.cor}"><p>${esc(k.titulo)}</p><div class="meta"><span>${esc(T.nome)}</span>${s==="aprovar"?`<button class="ok" data-ok="${k.id}" type="button">Aprovar</button>`:""}<select aria-label="Status de ${esc(k.titulo)}" data-mv="${k.id}" id="mv-${k.id}">${opts}</select></div></div>`)})});
-  const feed=document.getElementById("feed");
-  feed.innerHTML=acts.length?acts.slice(0,40).map(a=>{const T=TEAM[a.agente]||{nome:"Você",cor:"#F5F8FF"};const d=new Date(a.ts);
-    return `<div><time>${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}</time><span><span class="chip" style="background:${T.cor}">${esc(T.nome)}</span>${esc(a.texto)}</span></div>`}).join(""):`<div class="empty">${db?"Ainda sem atividade. Mande um pedido ao Diretor.":"Abra no claude.ai para ver a equipe ao vivo."}</div>`;
+// ================= avatares (mesmo sprite, ampliado)
+function avatar(id,size){const c=document.createElement("canvas");c.width=24;c.height=24;const x=c.getContext("2d");x.imageSmoothingEnabled=false;
+  sprite(x,12,18,TEAM[id],{walk:0,sit:true,typing:false,face:1,t:0});c.className=size>40?"av":"";c.setAttribute("aria-hidden","true");return c}
+
+// ================= estados
+const stateOf=id=>{if(Date.now()<meetingUntil)return["meet","Em reunião"];const k=cur(id);return k?(k.status==="fazendo"?["work","Trabalhando"]:["wait","Esperando você"]):["","Livre"]};
+function renderSide(){const el=document.getElementById("side");
+  if(!selected){el.innerHTML=`<h3>Equipe</h3><p class="note">Escolha um agente no escritório ou aqui.</p><div class="team-list" id="tlist"></div>`;
+    const l=el.querySelector("#tlist");IDS.forEach(id=>{const b=document.createElement("button");b.className="tl";b.type="button";b.append(avatar(id,32));
+      const [cls,lab]=stateOf(id),sp=document.createElement("span");sp.innerHTML=`<b>${esc(TEAM[id].nome)}</b><small>${lab}</small>`;b.append(sp);b.onclick=()=>{selected=id;renderSide()};l.append(b)});return}
+  const id=selected,T=TEAM[id],[cls,lab]=stateOf(id),mine=tasks.filter(k=>k.agente===id&&k.status!=="feito").sort((a,b)=>(b.ts||0)-(a.ts||0)),done=tasks.filter(k=>k.agente===id&&k.status==="feito").length;
+  el.innerHTML=`<div class="prof"><span id="avs"></span><div><h3 style="color:${T.cor}">${esc(T.nome)}</h3><p class="note">${esc(T.setor)} · ${esc(T.papel)}</p></div></div>
+    <span class="pill ${cls}"><i></i>${lab}</span>
+    <div class="mini">${mine.length?mine.map(k=>`<div class="mt" style="--c:${T.cor}"><p>${esc(k.titulo)}</p>${k.detalhe?`<span>${esc(k.detalhe)}</span>`:""}
+      <div class="seg" role="group" aria-label="Status">${Object.keys(ST).map(s=>`<button type="button" data-set="${k.id}" data-s="${s}" aria-pressed="${s===k.status}">${ST[s]}</button>`).join("")}</div></div>`).join(""):`<p class="note">Sem tarefas abertas. ${chars[id].pong?"Está jogando ping-pong.":"Está no lounge."}</p>`}</div>
+    <p class="note">${done} entregue(s).</p>
+    <div class="row" style="margin:0"><button class="btn sm" type="button" id="sAdd">+ Tarefa para ${esc(T.nome)}</button><button class="btn ghost sm" type="button" id="sBack">Ver equipe</button></div>`;
+  el.querySelector("#avs").append(avatar(id,56));
+  el.querySelector("#sBack").onclick=()=>{selected=null;renderSide()};
+  el.querySelector("#sAdd").onclick=()=>openTask(id);
 }
-document.getElementById("board").addEventListener("change",async e=>{const id=e.target.dataset.mv;if(!id||!db)return;const k=tasks.find(x=>x.id===id);
-  await db.doc("tarefas/"+id).update({status:e.target.value,ts:Date.now()});log(k.agente,`moveu "${k.titulo}" para ${STATUS_LABEL[e.target.value]}`)});
-document.getElementById("board").addEventListener("click",async e=>{const id=e.target.dataset.ok;if(!id||!db)return;const k=tasks.find(x=>x.id===id);
-  await db.doc("tarefas/"+id).update({status:"feito",ts:Date.now()});log(null,`aprovou "${k.titulo}"`)});
+document.getElementById("side").addEventListener("click",e=>{const b=e.target.closest("[data-set]");if(b)setStatus(b.dataset.set,b.dataset.s)});
+
+// ================= quadro
+const fAg=document.getElementById("fAg"),tAg=document.getElementById("tAg");
+IDS.forEach(id=>{fAg.add(new Option(TEAM[id].nome,id));tAg.add(new Option(TEAM[id].nome,id))});
+fAg.onchange=renderBoard;
+function renderBoard(){const b=document.getElementById("board"),f=fAg.value;b.innerHTML="";
+  Object.keys(ST).forEach(s=>{const list=tasks.filter(k=>k.status===s&&(!f||k.agente===f)).sort((a,c)=>(c.ts||0)-(a.ts||0));
+    const col=document.createElement("div");col.className="col";col.dataset.s=s;col.innerHTML=`<h3>${ST[s]} <b>${list.length}</b></h3>`;
+    if(!list.length)col.insertAdjacentHTML("beforeend",`<div class="empty">${db?"Solte um cartão aqui":"Conectando ao banco…"}</div>`);
+    list.forEach(k=>{const T=TEAM[k.agente]||{nome:k.agente,cor:"#888"};
+      col.insertAdjacentHTML("beforeend",`<div class="task" draggable="true" data-id="${k.id}" style="--c:${T.cor}"><p>${esc(k.titulo)}</p>
+      <div class="meta"><span class="who" style="--c:${T.cor}"><i></i>${esc(T.nome)}</span>${s==="aprovar"?`<button class="ok" data-ok="${k.id}" type="button">Aprovar</button>`:""}
+      <select aria-label="Mover ${esc(k.titulo)}" data-mv="${k.id}" id="mv-${k.id}">${Object.keys(ST).map(v=>`<option value="${v}"${v===s?" selected":""}>${ST[v]}</option>`).join("")}</select></div></div>`)});
+    col.addEventListener("dragover",e=>{e.preventDefault();col.classList.add("over")});col.addEventListener("dragleave",()=>col.classList.remove("over"));
+    col.addEventListener("drop",e=>{e.preventDefault();col.classList.remove("over");const id=e.dataTransfer.getData("text/plain");if(id)setStatus(id,s)});
+    b.append(col)});
+  b.querySelectorAll(".task").forEach(t=>{t.addEventListener("dragstart",e=>{e.dataTransfer.setData("text/plain",t.dataset.id);t.classList.add("dragging")});t.addEventListener("dragend",()=>t.classList.remove("dragging"))});
+}
+document.getElementById("board").addEventListener("change",e=>{const id=e.target.dataset.mv;if(id)setStatus(id,e.target.value)});
+document.getElementById("board").addEventListener("click",e=>{const id=e.target.dataset.ok;if(id)setStatus(id,"feito",true)});
+async function setStatus(id,s,approved){if(!db)return;const k=tasks.find(x=>x.id===id);if(!k||k.status===s)return;
+  try{await db.doc("tarefas/"+id).update({status:s,ts:Date.now()});log(approved?null:k.agente,approved?`aprovou "${k.titulo}"`:`"${k.titulo}" → ${ST[s]}`)}catch(_){}}
 function log(agente,texto){if(db)db.collection("atividade").add({agente,texto,ts:Date.now()}).catch(()=>{})}
 
-// ---------- clique no personagem
-cv.addEventListener("click",e=>{const r=cv.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*W,y=(e.clientY-r.top)/r.height*H;
-  let best=null,bd=18;IDS.forEach(id=>{const c=chars[id],d=Math.hypot(c.x-x,c.y-4-y);if(d<bd){bd=d;best=id}});if(best)openAgent(best)});
-function openAgent(id){const T=TEAM[id],mine=tasks.filter(k=>k.agente===id&&k.status!=="feito"),done=tasks.filter(k=>k.agente===id&&k.status==="feito").length;
-  document.getElementById("dName").textContent=T.nome;document.getElementById("dName").style.color=T.cor;
-  document.getElementById("dRole").textContent=`${T.setor} · ${T.papel}`;
-  document.getElementById("dBody").innerHTML=(mine.length?`<ul>${mine.map(k=>`<li><b>${STATUS_LABEL[k.status]}:</b> ${esc(k.titulo)}${k.detalhe?`<br><span class="note">${esc(k.detalhe)}</span>`:""}</li>`).join("")}</ul>`:`<p>Livre agora. Está no café esperando a próxima tarefa.</p>`)+`<p class="note">${done} tarefa(s) entregue(s).</p>`;
-  document.getElementById("dlg").showModal()}
-document.getElementById("dClose").onclick=()=>document.getElementById("dlg").close();
+// ================= equipe e atividade
+function renderCards(){const el=document.getElementById("cards");el.innerHTML="";
+  IDS.forEach(id=>{const T=TEAM[id],c={};Object.keys(ST).forEach(s=>c[s]=tasks.filter(k=>k.agente===id&&k.status===s).length);const tot=Object.values(c).reduce((a,b)=>a+b,0)||1,[cls,lab]=stateOf(id);
+    const d=document.createElement("article");d.className="ac";d.innerHTML=`<div class="top"><span class="avh"></span><div><h4 style="color:${T.cor}">${esc(T.nome)}</h4><p class="note">${esc(T.papel)}</p></div></div>
+      <span class="pill ${cls}"><i></i>${lab}</span>
+      <div class="load" aria-hidden="true"><i style="width:${c.fazendo/tot*100}%;background:var(--ok)"></i><i style="width:${c.aprovar/tot*100}%;background:var(--warn)"></i><i style="width:${c.afazer/tot*100}%;background:var(--line2)"></i><i style="width:${c.feito/tot*100}%;background:var(--cyan)"></i></div>
+      <dl><div><dt>A fazer</dt><dd>${c.afazer}</dd></div><div><dt>Fazendo</dt><dd>${c.fazendo}</dd></div><div><dt>Aprovar</dt><dd>${c.aprovar}</dd></div><div><dt>Feito</dt><dd>${c.feito}</dd></div></dl>
+      <div class="row" style="margin:0"><button class="btn ghost sm" type="button" data-see="${id}">Ver no escritório</button><button class="btn ghost sm" type="button" data-new="${id}">+ Tarefa</button></div>`;
+    d.querySelector(".avh").append(avatar(id,56));el.append(d)})}
+document.getElementById("cards").addEventListener("click",e=>{const s=e.target.dataset.see,n=e.target.dataset.new;if(s){selected=s;go("escritorio");renderSide()}if(n)openTask(n)});
+function renderTimeline(){const el=document.getElementById("tline");
+  if(!acts.length){el.innerHTML=`<div class="empty">${db?"Ainda sem atividade. Mande um pedido ao Diretor.":"Abra no claude.ai para ver a atividade ao vivo."}</div>`;return}
+  const days={};acts.forEach(a=>{const d=new Date(a.ts),k=d.toLocaleDateString("pt-BR",{weekday:"long",day:"2-digit",month:"2-digit"});(days[k]=days[k]||[]).push(a)});
+  el.innerHTML=Object.entries(days).map(([k,list])=>`<div class="day"><h4>${esc(k)}</h4>${list.map(a=>{const T=TEAM[a.agente]||{nome:"Você",cor:"#F5F8FF"},d=new Date(a.ts);
+    return `<div class="ev"><time>${d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})}</time><span><span class="chip" style="background:${T.cor}">${esc(T.nome)}</span>${esc(a.texto)}</span></div>`}).join("")}</div>`).join("")}
 
-// ---------- pedido ao Diretor (Claude planeja e distribui)
-const fP=document.getElementById("fPedido"),bP=document.getElementById("bPedido"),pS=document.getElementById("pStatus"),pO=document.getElementById("pOut");
-let sample=null;
-fP.addEventListener("submit",async e=>{e.preventDefault();const txt=document.getElementById("pedido").value.trim();
-  if(!txt){pS.textContent="Escreva o pedido primeiro.";return}
-  if(!sample||!db){pS.textContent="O Diretor só atende com a página aberta no claude.ai.";return}
-  bP.disabled=true;pS.textContent="O Diretor está reunindo a equipe…";pO.textContent="";meetingUntil=Date.now()+60000;
+function renderAll(){const n=s=>tasks.filter(k=>k.status===s).length;
+  document.getElementById("sWork").textContent=n("fazendo");document.getElementById("sAppr").textContent=n("aprovar");document.getElementById("sDone").textContent=n("feito");
+  const na=document.getElementById("nAppr");na.textContent=n("aprovar");na.hidden=!n("aprovar");
+  renderSide();renderBoard();renderCards();renderTimeline()}
+
+// ================= navegação por abas
+const VIEWS=["escritorio","quadro","equipe","atividade"];
+function go(v){if(!VIEWS.includes(v))v="escritorio";VIEWS.forEach(x=>document.getElementById("v-"+x).hidden=x!==v);
+  document.querySelectorAll("nav a").forEach(a=>a.toggleAttribute("aria-current",a.dataset.v===v)||a.setAttribute("aria-current","page"));
+  document.querySelectorAll("nav a").forEach(a=>{if(a.dataset.v===v)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
+  if(location.hash!=="#"+v)history.replaceState(null,"","#"+v)}
+document.querySelectorAll("nav a").forEach(a=>a.addEventListener("click",e=>{e.preventDefault();go(a.dataset.v)}));
+window.addEventListener("hashchange",()=>go(location.hash.slice(1)));
+
+// ================= nova tarefa manual
+const dTask=document.getElementById("dTask");
+function openTask(id){tAg.value=id||"diretor";document.getElementById("tTit").value="";document.getElementById("tDet").value="";dTask.showModal()}
+document.getElementById("bAddT").onclick=()=>openTask(fAg.value);
+document.getElementById("cTask").onclick=()=>dTask.close();
+document.getElementById("fTask").addEventListener("submit",async e=>{e.preventDefault();if(!db){dTask.close();return}
+  const titulo=document.getElementById("tTit").value.trim(),agente=tAg.value,detalhe=document.getElementById("tDet").value.trim();if(!titulo)return;
+  try{await db.collection("tarefas").add({titulo,agente,detalhe,status:"afazer",ts:Date.now()});log(agente,`recebeu: ${titulo}`)}catch(_){}
+  dTask.close()});
+
+// ================= pedido ao Diretor
+const dPed=document.getElementById("dPed"),bPed=document.getElementById("bPed"),pSt=document.getElementById("pSt"),pOut=document.getElementById("pOut");
+document.getElementById("bNovo").onclick=()=>{pSt.textContent="";dPed.showModal()};
+document.getElementById("cPed").onclick=()=>dPed.close();
+document.getElementById("fPed").addEventListener("submit",async e=>{e.preventDefault();const txt=document.getElementById("pedido").value.trim();
+  if(!txt){pSt.textContent="Escreva o pedido primeiro.";return}
+  if(!sample||!db){pSt.textContent="O Diretor só atende com a página aberta no claude.ai.";return}
+  bPed.disabled=true;pSt.textContent="O Diretor está reunindo a equipe…";pOut.innerHTML="";meetingUntil=Date.now()+90000;
   log("diretor",`recebeu o pedido: "${txt.slice(0,120)}"`);
-  const prompt=`Você é o Diretor da BIOS, empresa de Campina Grande-PB que faz sites, cardápios digitais, apps de agendamento, sistemas de gestão e automação de atendimento para pequenos negócios (Instagram @b1os.fc). Regras: nada é publicado ou enviado sem aprovação do dono (Mathias); não invente números, clientes ou depoimentos; não use personagens/marcas de terceiros em peças comerciais.
-Equipe disponível (use exatamente estes ids): diretor, conteudo, designer, video, dev-sites, comercial, relatorios.
+  const prompt=`Você é o Diretor da BIOS, empresa de Campina Grande-PB que faz sites, cardápios digitais, apps de agendamento, sistemas de gestão e automação de atendimento para pequenos negócios (Instagram @b1os.fc). Regras: nada é publicado ou enviado sem aprovação do dono (Mathias); não invente números, clientes ou depoimentos; não use personagens ou marcas de terceiros em peças comerciais.
+Equipe (use exatamente estes ids): diretor, conteudo, designer, video, dev-sites, comercial, relatorios.
 Pedido do Mathias: """${txt}"""
-Divida em 3 a 7 tarefas concretas e curtas. Responda SOMENTE com JSON no formato:
-{"resumo":"1-2 frases do plano","tarefas":[{"titulo":"até 60 caracteres","agente":"id","detalhe":"o que exatamente entregar, 1 frase"}]}`;
-  try{
-    const r=await sample.json(prompt,{cache:false});
-    const list=(Array.isArray(r?.tarefas)?r.tarefas:[]).filter(k=>TEAM[k.agente]).slice(0,7);
-    if(!list.length)throw{code:"invalid_json"};
+Divida em 3 a 7 tarefas concretas. Responda SOMENTE com JSON:
+{"resumo":"1-2 frases do plano","tarefas":[{"titulo":"até 60 caracteres","agente":"id","detalhe":"o que entregar, 1 frase"}]}`;
+  try{const r=await sample.json(prompt,{cache:false});
+    const list=(Array.isArray(r?.tarefas)?r.tarefas:[]).filter(k=>TEAM[k.agente]).slice(0,7);if(!list.length)throw{code:"invalid_json"};
     const ref=await db.collection("pedidos").add({texto:txt,resumo:String(r.resumo||""),ts:Date.now()});
-    for(const k of list){await db.collection("tarefas").add({titulo:String(k.titulo).slice(0,80),agente:k.agente,detalhe:String(k.detalhe||""),status:"afazer",pedido:ref.id,ts:Date.now()});
-      log(k.agente,`recebeu: ${String(k.titulo).slice(0,80)}`)}
-    pO.textContent=String(r.resumo||"");pS.textContent=`${list.length} tarefas criadas no quadro.`;document.getElementById("pedido").value="";
-  }catch(err){const c=err?.code;pS.textContent=c==="not_granted"||c==="sampling_disabled"?"O Diretor precisa da sua permissão para usar o Claude nesta página.":c==="rate_limited"?"Muitos pedidos seguidos. Tente de novo em alguns minutos.":"O Diretor não conseguiu montar o plano. Reescreva o pedido e tente de novo."}
-  finally{bP.disabled=false;meetingUntil=Date.now()+2500}
-});
+    for(const k of list){await db.collection("tarefas").add({titulo:String(k.titulo).slice(0,80),agente:k.agente,detalhe:String(k.detalhe||""),status:"afazer",pedido:ref.id,ts:Date.now()});log(k.agente,`recebeu: ${String(k.titulo).slice(0,80)}`)}
+    pOut.innerHTML=`<div><b>Plano:</b> ${esc(r.resumo||"")}</div>`+list.map(k=>`<div><span class="chip" style="background:${TEAM[k.agente].cor}">${esc(TEAM[k.agente].nome)}</span>${esc(k.titulo)}</div>`).join("");
+    pSt.textContent=`${list.length} tarefas no quadro.`;document.getElementById("pedido").value="";
+  }catch(err){const c=err?.code;pSt.textContent=c==="not_granted"||c==="sampling_disabled"?"Permita o uso do Claude nesta página para o Diretor trabalhar.":c==="rate_limited"?"Muitos pedidos seguidos. Tente de novo em alguns minutos.":"O Diretor não conseguiu montar o plano. Reescreva o pedido e tente de novo."}
+  finally{bPed.disabled=false;meetingUntil=Date.now()+3000}});
 
-// ---------- conexão com o banco
-render();requestAnimationFrame(tick);
+// ================= início
+go(location.hash.slice(1)||"escritorio");renderAll();requestAnimationFrame(loop);
 (async()=>{
   try{sample=await claude.use("sample")}catch(_){}
   try{db=await claude.use("db")}catch(_){db=null}
-  if(!db){render();return}
-  db.collection("tarefas").onSnapshot(s=>{tasks=s.docs.map(d=>({id:d.id,...d.data()}));render()},()=>{});
-  db.collection("atividade").orderBy("ts","desc").limit(60).onSnapshot(s=>{acts=s.docs.map(d=>d.data());render()},()=>{});
+  if(!db){renderAll();return}
+  db.collection("tarefas").onSnapshot(s=>{tasks=s.docs.map(d=>({id:d.id,...d.data()}));renderAll()},()=>{});
+  db.collection("atividade").orderBy("ts","desc").limit(120).onSnapshot(s=>{acts=s.docs.map(d=>d.data());renderTimeline()},()=>{});
 })();
 </script>
