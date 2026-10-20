@@ -1,0 +1,510 @@
+<title>Escritório BIOS IA</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Anton&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: barra fixa com abas (Escritório · Quadro · Equipe · Atividade); o escritório em pixel art ocupa a cena com painel lateral do agente; visual noturno único da BIOS. */
+:root{
+  --bg:#020A1C; --panel:#0A1A3A; --panel2:#0E2148; --line:#1C2E55; --line2:#2A4170;
+  --fg:#F5F8FF; --muted:#A4B4D0; --blue:#0965FA; --cyan:#2EC5FF;
+  --ok:#3DDC84; --warn:#FFC447; --bad:#FF6B5A;
+  --f-pix:"Silkscreen","Courier New",monospace; --f-disp:"Anton",Impact,sans-serif; --f-ui:"Inter",system-ui,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{background:var(--bg)}
+body{color:var(--fg);font-family:var(--f-ui);font-size:15px;line-height:1.45}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:rgba(2,10,28,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.bar-in{max-width:1240px;margin:0 auto;display:flex;align-items:center;gap:14px;padding-block:10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));flex-wrap:wrap}
+.brand{font-family:var(--f-disp);font-size:24px;letter-spacing:.5px;text-transform:uppercase;white-space:nowrap}
+.brand span{color:var(--cyan)}
+nav{display:flex;gap:4px;flex:1 1 auto;overflow-x:auto;scrollbar-width:none}
+nav a{color:var(--muted);text-decoration:none;font-family:var(--f-pix);font-size:12px;letter-spacing:.6px;text-transform:uppercase;padding:8px 12px;border-radius:8px;white-space:nowrap;display:flex;gap:6px;align-items:center}
+nav a:hover{color:var(--fg);background:var(--panel)}
+nav a[aria-current="page"]{color:var(--fg);background:var(--panel2);box-shadow:inset 0 -2px 0 var(--cyan)}
+nav a .n{font-family:var(--f-ui);font-size:11px;font-weight:700;background:var(--warn);color:#2a1a00;border-radius:999px;padding:0 6px;line-height:16px}
+.btn{background:var(--blue);color:#fff;border:0;border-radius:999px;padding:9px 16px;font:inherit;font-weight:700;cursor:pointer;white-space:nowrap}
+.btn:hover{filter:brightness(1.1)} .btn[disabled]{opacity:.55;cursor:wait}
+.btn.ghost{background:transparent;border:1px solid var(--line2);color:var(--fg)}
+.btn.sm{padding:5px 10px;font-size:13px}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+main{max-width:1240px;margin:0 auto;padding-block:18px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.view{display:flex;flex-direction:column;gap:16px}
+.view[hidden]{display:none!important}
+h2.t{font-family:var(--f-disp);font-weight:400;font-size:clamp(28px,4vw,40px);text-transform:uppercase;margin:0;line-height:1;text-wrap:balance}
+.lead{color:var(--muted);margin:4px 0 0;max-width:68ch}
+.strip{display:flex;gap:10px;flex-wrap:wrap}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px 14px;display:flex;align-items:baseline;gap:8px}
+.stat b{font-family:var(--f-disp);font-weight:400;font-size:26px;font-variant-numeric:tabular-nums}
+.stat small{color:var(--muted);font-family:var(--f-pix);font-size:11px;text-transform:uppercase}
+.scene{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:16px;align-items:start}
+@media (max-width:980px){.scene{grid-template-columns:minmax(0,1fr)}}
+.office{position:relative;border-radius:14px;overflow:hidden;border:2px solid var(--line2);background:#0b1430;box-shadow:0 24px 70px rgba(0,0,0,.5)}
+#cv{display:block;width:100%;height:auto;image-rendering:pixelated;cursor:default}
+.ov{position:absolute;inset:0;pointer-events:none}
+.bub{position:absolute;transform:translate(-50%,-100%);background:var(--fg);color:#061233;font-family:var(--f-pix);font-size:clamp(8px,.95vw,11px);line-height:1.2;padding:4px 7px;border-radius:6px;white-space:nowrap;max-width:26vw;overflow:hidden;text-overflow:ellipsis;box-shadow:0 3px 0 rgba(0,0,0,.35)}
+.bub::after{content:"";position:absolute;left:50%;bottom:-5px;margin-left:-5px;border:5px solid transparent;border-top-color:inherit;border-bottom:0}
+.bub{border-color:var(--fg)} .bub.warn{background:var(--warn);border-color:var(--warn)} .bub.meet{background:var(--cyan);border-color:var(--cyan)} .bub.tag{background:#061233;color:var(--fg);border-color:#061233}
+.legend{position:absolute;left:10px;bottom:8px;display:flex;gap:10px;flex-wrap:wrap;font-family:var(--f-pix);font-size:10px;background:rgba(2,10,28,.78);padding:5px 9px;border-radius:8px}
+.legend i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:4px;vertical-align:middle}
+.side{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.side h3{font-family:var(--f-disp);font-weight:400;font-size:30px;text-transform:uppercase;margin:0;line-height:1}
+.prof{display:flex;gap:12px;align-items:center}
+.av{width:56px;height:56px;image-rendering:pixelated;background:var(--panel2);border-radius:12px;flex-shrink:0}
+.pill{display:inline-flex;align-items:center;gap:6px;font-family:var(--f-pix);font-size:11px;text-transform:uppercase;padding:3px 8px;border-radius:999px;background:var(--panel2);color:var(--muted)}
+.pill i{width:8px;height:8px;border-radius:9px;background:var(--muted)}
+.pill.work i{background:var(--ok)} .pill.wait i{background:var(--warn)} .pill.meet i{background:var(--cyan)}
+.mini{display:flex;flex-direction:column;gap:8px}
+.mt{background:var(--bg);border:1px solid var(--line);border-left:4px solid var(--c,#888);border-radius:10px;padding:8px 10px;display:flex;flex-direction:column;gap:6px}
+.mt p{margin:0;font-weight:600;font-size:14px;overflow-wrap:anywhere}
+.mt span{color:var(--muted);font-size:12.5px}
+.seg{display:flex;gap:4px;flex-wrap:wrap}
+.seg button{font:inherit;font-size:11.5px;border:1px solid var(--line2);background:transparent;color:var(--muted);border-radius:999px;padding:2px 8px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--cyan);color:#021226;border-color:var(--cyan);font-weight:700}
+.note{color:var(--muted);font-size:13px;margin:0}
+.team-list{display:flex;flex-direction:column;gap:6px}
+.tl{display:flex;align-items:center;gap:10px;background:transparent;border:1px solid transparent;border-radius:10px;padding:6px;cursor:pointer;color:var(--fg);font:inherit;text-align:left;width:100%}
+.tl:hover{background:var(--panel2)} .tl canvas{width:32px;height:32px;image-rendering:pixelated;border-radius:8px;background:var(--panel2)}
+.tl b{display:block;font-size:14px} .tl small{color:var(--muted);font-size:12px}
+.tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+select,input,textarea{font:inherit;background:var(--bg);color:var(--fg);border:1px solid var(--line2);border-radius:10px;padding:8px 10px}
+.board{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+@media (max-width:900px){.board{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:540px){.board{grid-template-columns:minmax(0,1fr)}}
+.col{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:10px;display:flex;flex-direction:column;gap:8px;min-height:140px;min-width:0;transition:border-color .15s,background .15s}
+.col.over{border-color:var(--cyan);background:var(--panel2)}
+.col h3{margin:0 0 2px;font-family:var(--f-pix);font-size:12px;letter-spacing:.6px;text-transform:uppercase;display:flex;justify-content:space-between;color:var(--muted)}
+.col h3 b{color:var(--fg);font-variant-numeric:tabular-nums}
+.task{background:var(--panel2);border-radius:10px;padding:10px;border-left:4px solid var(--c,#888);display:flex;flex-direction:column;gap:8px;cursor:grab;min-width:0}
+.task.dragging{opacity:.4}
+.task p{margin:0;font-size:14px;font-weight:600;overflow-wrap:anywhere}
+.task .meta{display:flex;justify-content:space-between;gap:6px;align-items:center;font-size:12px;color:var(--muted);flex-wrap:wrap}
+.task select{font-size:12px;padding:2px 4px;border-radius:6px;max-width:130px}
+.who{display:inline-flex;align-items:center;gap:6px}
+.who i{width:10px;height:10px;border-radius:3px;background:var(--c)}
+.ok{background:var(--ok);color:#03210f;border:0;border-radius:6px;font:inherit;font-size:12px;font-weight:700;padding:3px 8px;cursor:pointer}
+.empty{color:var(--muted);font-size:13px;text-align:center;padding:14px 4px;border:1px dashed var(--line2);border-radius:10px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.ac{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.ac .top{display:flex;gap:12px;align-items:center}
+.ac h4{margin:0;font-family:var(--f-disp);font-weight:400;font-size:24px;text-transform:uppercase;line-height:1}
+.load{height:8px;background:var(--bg);border-radius:9px;overflow:hidden;display:flex}
+.load i{display:block;height:100%}
+.ac dl{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:0;text-align:center}
+.ac dt{font-family:var(--f-pix);font-size:9.5px;color:var(--muted);text-transform:uppercase}
+.ac dd{margin:0;font-family:var(--f-disp);font-size:22px;font-variant-numeric:tabular-nums}
+.tline{display:flex;flex-direction:column;gap:18px}
+.day h4{font-family:var(--f-pix);font-size:12px;color:var(--cyan);text-transform:uppercase;margin:0 0 8px;letter-spacing:.8px}
+.ev{display:grid;grid-template-columns:56px minmax(0,1fr);gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}
+.ev time{font-family:var(--f-pix);font-size:11px;color:var(--muted);padding-top:2px;font-variant-numeric:tabular-nums}
+.chip{display:inline-block;font-family:var(--f-pix);font-size:10px;padding:1px 6px;border-radius:4px;color:#061233;margin-right:6px}
+dialog{background:var(--panel);color:var(--fg);border:1px solid var(--line2);border-radius:18px;width:min(560px,94vw);padding:20px}
+dialog::backdrop{background:rgba(0,4,16,.65)}
+dialog h3{font-family:var(--f-disp);font-weight:400;font-size:32px;text-transform:uppercase;margin:0}
+dialog textarea{width:100%;min-height:110px;resize:vertical;margin-top:10px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:12px}
+.plan{margin-top:12px;display:flex;flex-direction:column;gap:6px}
+.plan div{font-size:14px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="bar"><div class="bar-in">
+  <div class="brand">BIOS <span>IA</span></div>
+  <nav aria-label="Seções">
+    <a href="#escritorio" data-v="escritorio">Escritório</a>
+    <a href="#quadro" data-v="quadro">Quadro <span class="n" id="nAppr" hidden>0</span></a>
+    <a href="#equipe" data-v="equipe">Equipe</a>
+    <a href="#atividade" data-v="atividade">Atividade</a>
+  </nav>
+  <button class="btn ghost" id="bCfg" type="button">Claude</button>
+  <button class="btn" id="bNovo" type="button">+ Novo pedido</button>
+</div></div>
+
+<main>
+  <!-- ESCRITÓRIO -->
+  <section class="view" id="v-escritorio">
+    <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-end">
+      <div><h2 class="t">O escritório</h2><p class="lead">Sua equipe de agentes ao vivo. Clique em alguém para ver e mudar o que está fazendo.</p></div>
+      <div class="strip" aria-live="polite">
+        <div class="stat"><b id="sWork">0</b><small>trabalhando</small></div>
+        <div class="stat"><b id="sAppr">0</b><small>p/ aprovar</small></div>
+        <div class="stat"><b id="sDone">0</b><small>entregues</small></div>
+      </div>
+    </div>
+    <div class="scene">
+      <div class="office">
+        <canvas id="cv" width="640" height="400" aria-label="Escritório da BIOS em pixel art com os sete agentes"></canvas>
+        <div class="ov" id="ov"></div>
+        <div class="legend"><span><i style="background:var(--ok)"></i>trabalhando</span><span><i style="background:var(--warn)"></i>esperando você</span><span><i style="background:var(--muted)"></i>livre</span></div>
+      </div>
+      <aside class="side" id="side" aria-live="polite"></aside>
+    </div>
+  </section>
+
+  <!-- QUADRO -->
+  <section class="view" id="v-quadro" hidden>
+    <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-end">
+      <div><h2 class="t">Quadro de tarefas</h2><p class="lead">Arraste os cartões entre as colunas. "Aprovar" é sempre seu.</p></div>
+      <div class="tools">
+        <label for="fAg" class="note">Agente</label>
+        <select id="fAg"><option value="">Todos</option></select>
+        <button class="btn ghost" id="bAddT" type="button">+ Tarefa</button>
+      </div>
+    </div>
+    <div class="board" id="board"></div>
+  </section>
+
+  <!-- EQUIPE -->
+  <section class="view" id="v-equipe" hidden>
+    <div><h2 class="t">A equipe</h2><p class="lead">Sete agentes, cada um com uma função. As instruções de cada um ficam em <b>.claude/agents/</b> no repositório bios-ia.</p></div>
+    <div class="cards" id="cards"></div>
+  </section>
+
+  <!-- ATIVIDADE -->
+  <section class="view" id="v-atividade" hidden>
+    <div><h2 class="t">Atividade</h2><p class="lead">Tudo o que a equipe fez, do mais recente para o mais antigo.</p></div>
+    <div class="tline" id="tline"></div>
+  </section>
+</main>
+
+<dialog id="dPed">
+  <h3>Novo pedido</h3>
+  <p class="note">Escreva o que a BIOS precisa. O Diretor reúne a equipe, divide em tarefas e coloca no quadro.</p>
+  <form id="fPed">
+    <label for="pedido" class="note" hidden>Pedido</label>
+    <textarea id="pedido" placeholder="Ex.: Lançar o cardápio digital para pizzarias de Campina Grande este mês"></textarea>
+    <div class="row"><button class="btn" id="bPed" type="submit">Enviar ao Diretor</button><button class="btn ghost" type="button" id="cPed">Fechar</button><span class="note" id="pSt"></span></div>
+  </form>
+  <div class="plan" id="pOut"></div>
+</dialog>
+
+<dialog id="dLogin">
+  <h3>Conectar o Claude</h3>
+  <p class="note">Cole a sua chave da API do Claude. Ela fica guardada criptografada neste computador e é usada só pelo Diretor e pelos agentes. Crie a chave em console.anthropic.com/settings/keys.</p>
+  <form id="fLogin">
+    <div class="row" style="flex-direction:column;align-items:stretch">
+      <label for="lSenha" class="note">Chave da API (sk-ant-…)</label><input id="lSenha" type="password" autocomplete="off" required>
+    </div>
+    <div class="row"><button class="btn" type="submit">Salvar chave</button><button class="btn ghost" type="button" id="lPular">Agora não</button><button class="btn ghost" type="button" id="lPasta">Abrir pasta dos dados</button></div>
+    <p class="note" id="lMsg" style="margin-top:8px"></p>
+  </form>
+</dialog>
+
+<dialog id="dRes" style="width:min(820px,94vw)">
+  <h3 id="rTit"></h3>
+  <p class="note" id="rWho" style="margin-top:6px"></p>
+  <pre id="rTxt" style="white-space:pre-wrap;font:14px/1.55 var(--f-ui);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:14px;max-height:58vh;overflow:auto;margin:12px 0 0"></pre>
+  <div class="row"><button class="btn" type="button" id="rAprovar">Aprovar</button><button class="btn ghost" type="button" id="rCopiar">Copiar texto</button><button class="btn ghost" type="button" id="rRefazer">Refazer</button><button class="btn ghost" type="button" id="rFechar">Fechar</button></div>
+</dialog>
+<div id="aviso" hidden style="position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--bad);color:#fff;padding:10px 16px;border-radius:12px;font-weight:600;z-index:40;max-width:90vw"></div>
+
+<dialog id="dTask">
+  <h3>Nova tarefa</h3>
+  <form id="fTask">
+    <div class="row" style="flex-direction:column;align-items:stretch">
+      <label for="tTit" class="note">Título</label><input id="tTit" maxlength="80" required>
+      <label for="tAg" class="note">Responsável</label><select id="tAg"></select>
+      <label for="tDet" class="note">Detalhe (opcional)</label><input id="tDet" maxlength="200">
+    </div>
+    <div class="row"><button class="btn" type="submit">Criar</button><button class="btn ghost" type="button" id="cTask">Cancelar</button></div>
+  </form>
+</dialog>
+
+<script>
+// ================= equipe
+const TEAM={
+  diretor:{nome:"Diretor",setor:"Direção",cor:"#2EC5FF",pele:"#E8B48A",cab:"#1b1b1b",hair:0,desk:[90,128],papel:"Planeja e distribui o trabalho"},
+  conteudo:{nome:"Conteúdo",setor:"Conteúdo",cor:"#FFC447",pele:"#C98B5E",cab:"#3a2414",hair:1,desk:[220,128],papel:"Ganchos, roteiros e legendas"},
+  designer:{nome:"Designer",setor:"Design",cor:"#FF6FB1",pele:"#F1C7A0",cab:"#7a3db0",hair:2,desk:[350,128],papel:"Posts, stories e carrosséis"},
+  video:{nome:"Vídeo",setor:"Vídeo",cor:"#A77BFF",pele:"#8A5A3C",cab:"#111",hair:3,desk:[90,238],papel:"Reels, filmes e convites"},
+  "dev-sites":{nome:"Dev Sites",setor:"Dev",cor:"#3DDC84",pele:"#E0A97E",cab:"#2a2a2a",hair:0,desk:[220,238],papel:"Sites e cardápios digitais"},
+  comercial:{nome:"Comercial",setor:"Comercial",cor:"#FF8A3D",pele:"#B87A52",cab:"#1e120a",hair:2,desk:[350,238],papel:"Propostas e atendimento"},
+  relatorios:{nome:"Relatórios",setor:"Análise",cor:"#7FD3FF",pele:"#F0C9A6",cab:"#6b4a2b",hair:1,desk:[90,346],papel:"Números e próximos passos"}
+};
+const IDS=Object.keys(TEAM);
+const ST={afazer:"A fazer",fazendo:"Fazendo",aprovar:"Para aprovar",feito:"Feito"};
+const MEET=[[500,120],[540,120],[580,120],[500,176],[540,176],[580,176],[610,148]];
+const SPOTS=[[226,352,"café"],[300,346,"sofá"],[340,346,"sofá"],[590,350,"arcade"],[260,370,"café"],[180,360,"planta"]];
+const PONG=[[418,352],[512,352]];
+let tasks=[],acts=[],db=null,sample=null,meetingUntil=0,selected=null,hover=null;
+
+// ================= personagens
+const chars={};IDS.forEach((id,i)=>{const d=TEAM[id].desk;chars[id]={x:d[0],y:d[1]+2,tx:d[0],ty:d[1]+2,mode:"",wait:0,face:1,spot:i,moving:false}});
+
+// ================= desenho
+const cv=document.getElementById("cv"),g=cv.getContext("2d");g.imageSmoothingEnabled=false;
+const W=640,H=400;
+function R(x,y,w,h,c){g.fillStyle=c;g.fillRect(Math.round(x),Math.round(y),Math.round(w),Math.round(h))}
+function hourRecife(){const d=new Date();return (d.getUTCHours()-3+24)%24+d.getUTCMinutes()/60}
+function sky(h){if(h<5||h>=19.5)return["#050b24","#0b1a44"];if(h<7)return["#2b2a6a","#e98a5a"];if(h<17)return["#2f8cf0","#9fd6ff"];return["#3a2a6a","#ff8a4a"]}
+const STARS=Array.from({length:40},(_,i)=>[(i*97)%640,(i*53)%40+4,(i%3)+1]);
+function backdrop(t){
+  const h=hourRecife(),[s1,s2]=sky(h),night=h<5.5||h>=19;
+  // parede
+  R(0,0,W,78,"#0d1838");
+  for(let x=16;x<W;x+=104){
+    const gr=g.createLinearGradient(0,10,0,62);gr.addColorStop(0,s1);gr.addColorStop(1,s2);g.fillStyle=gr;g.fillRect(x,10,80,52);
+    if(night)STARS.forEach(([sx,sy,k])=>{if(sx>=x&&sx<x+80&&((t*k|0)+sx)%7)R(sx,10+sy,1,1,"#cfe3ff")});
+    // skyline de Campina Grande
+    g.fillStyle=night?"#081028":"#3a5a8a";[[0,30],[10,22],[22,34],[30,18],[44,28],[54,24],[66,32]].forEach(([bx,bh])=>g.fillRect(x+bx,62-bh,12,bh));
+    if(night){g.fillStyle="#ffd36a";for(let k=0;k<7;k++){const wx=x+3+((k*29)%74),wy=40+((k*17)%18);if(((t/3|0)+k)%5)g.fillRect(wx,wy,2,2)}}
+    R(x-3,8,86,3,"#2a3d70");R(x-3,61,86,4,"#2a3d70");R(x+38,10,3,52,"#2a3d70");
+  }
+  // letreiro neon
+  const nx=W/2-46;R(nx-4,64,100,14,"#050b20");g.font="bold 13px Silkscreen, monospace";g.textAlign="center";
+  g.shadowColor="#2EC5FF";g.shadowBlur=10+Math.sin(t*3)*3;g.fillStyle="#BFF0FF";g.fillText("BIOS IA",W/2+4,75);g.shadowBlur=0;
+  // relógio real
+  const cx=600,cy=40;g.fillStyle="#e8eef9";g.beginPath();g.arc(cx,cy,12,0,7);g.fill();g.strokeStyle="#0d1838";g.lineWidth=2;
+  const hh=h%12/12*Math.PI*2,mm=(h%1)*Math.PI*2;g.beginPath();g.moveTo(cx,cy);g.lineTo(cx+Math.sin(hh)*6,cy-Math.cos(hh)*6);g.moveTo(cx,cy);g.lineTo(cx+Math.sin(mm)*9,cy-Math.cos(mm)*9);g.stroke();
+  R(0,78,W,4,"#2a3d70");
+  // piso de madeira
+  for(let y=82;y<H;y+=10)for(let x=-((y/10)%3)*20;x<W;x+=60)R(x,y,59,9,((x+y)/10|0)%2?"#1a2650":"#1d2a58");
+  // tapetes dos setores
+  IDS.forEach(id=>{const T=TEAM[id],[x,y]=T.desk;g.fillStyle=T.cor+"22";g.fillRect(x-52,y-34,104,66);g.strokeStyle=T.cor+"55";g.lineWidth=1;g.strokeRect(x-52.5,y-34.5,105,67)});
+  // sala de reunião (vidro)
+  R(470,92,164,128,"#12204a");g.fillStyle="rgba(120,200,255,.08)";g.fillRect(470,92,164,128);g.strokeStyle="#5fb0ff";g.lineWidth=2;g.strokeRect(470,92,164,128);
+  R(492,136,108,26,"#5a3b22");R(494,138,104,22,"#7a5232");
+  // TV com números
+  R(512,96,68,26,"#050b20");R(514,98,64,22,"#0b2a6a");
+  g.font="8px Silkscreen, monospace";g.fillStyle="#BFF0FF";g.textAlign="left";
+  const n=k=>tasks.filter(x=>x.status===k).length;g.fillText(`FAZ ${n("fazendo")}  APR ${n("aprovar")}`,517,108);g.fillText(`FEITO ${n("feito")}`,517,117);
+  // lounge
+  R(176,300,458,96,"#152048");
+  R(200,318,58,22,"#4a3424");R(200,316,58,4,"#6b4a2e");R(208,306,14,12,"#2b2b38");R(211,309,8,4,"#c0392b"); // café
+  for(let k=0;k<3;k++){const s=(t*.8+k*.33)%1;g.fillStyle=`rgba(230,240,255,${.5*(1-s)})`;g.fillRect(214+Math.sin(t*3+k)*2,304-s*14,2,2)}
+  R(282,326,76,12,"#2E7BFF");R(282,338,76,12,"#1f5fd0");R(280,322,6,28,"#1f5fd0");R(354,322,6,28,"#1f5fd0"); // sofá
+  R(432,340,72,30,"#1e6b3a");R(467,340,2,30,"#e8eef9");R(432,354,72,1,"#e8eef9");R(436,370,4,8,"#333");R(496,370,4,8,"#333"); // ping-pong
+  R(576,318,30,40,"#2a2a36");R(580,322,22,16,"#0965FA");R(582,340,6,4,"#FF6B5A");R(592,342,4,4,"#FFC447"); // fliperama
+  [[176,296],[620,296],[455,96]].forEach(([px,py])=>{R(px-6,py+10,12,10,"#5a3b22");R(px-10,py-4,20,16,"#2fa24a");R(px-6,py-10,12,10,"#3cc45b")});
+  // rótulos
+  g.font="8px Silkscreen, monospace";g.textAlign="center";g.fillStyle="#a4b4d0";
+  IDS.forEach(id=>{const [x,y]=TEAM[id].desk;g.fillText(TEAM[id].setor.toUpperCase(),x,y-38)});
+  g.fillText("REUNIÃO",552,230);g.fillText("CAFÉ & LOUNGE",400,310);
+}
+function deskTop(id,t){
+  const [x,y]=TEAM[id].desk,busy=chars[id].mode==="trabalhando"&&!chars[id].moving;
+  R(x-30,y-2,60,14,"#6b4a2e");R(x-30,y-2,60,2,"#8a6440");R(x-30,y+12,60,3,"#4a321e");R(x-27,y+15,4,10,"#4a321e");R(x+23,y+15,4,10,"#4a321e");
+  // monitor (de costas para nós) + caneca + papéis
+  R(x-12,y-16,24,14,"#1a1f2e");R(x-2,y-2,4,2,"#1a1f2e");
+  if(busy){g.globalCompositeOperation="lighter";const gr=g.createRadialGradient(x,y-12,2,x,y-12,30);gr.addColorStop(0,TEAM[id].cor+"66");gr.addColorStop(1,"rgba(0,0,0,0)");g.fillStyle=gr;g.fillRect(x-32,y-42,64,60);g.globalCompositeOperation="source-over"}
+  R(x+16,y+1,5,6,"#e8eef9");R(x-24,y+2,10,6,"#d9e2f2");
+}
+function chair(id){const [x,y]=TEAM[id].desk;R(x-8,y-22,16,12,"#2a2f45");R(x-6,y-10,12,4,"#22263a")}
+function sprite(cx,x,y,T,o){ // o: {walk,sit,typing,face,front}
+  const P=(px,py,w,h,c)=>{cx.fillStyle=c;cx.fillRect(Math.round(x+px),Math.round(y+py),w,h)};
+  const ol="#0a0f1e";
+  if(!o.sit){const a=o.walk%4,l=[0,2,0,-2][a];P(-4,4,4,7+(l>0?-1:0),ol);P(0,4,4,7+(l<0?-1:0),ol);P(-3,4,2,6-(l>0?1:0),"#2a3150");P(1,4,2,6-(l<0?1:0),"#2a3150");P(-4,10+(l>0?-1:0),3,2,"#111");P(1,10+(l<0?-1:0),3,2,"#111")}
+  P(-6,-7,12,12,ol);P(-5,-6,10,10,T.cor);P(-5,-6,10,2,"rgba(255,255,255,.18)");
+  const ar=o.typing?((o.t*12|0)%2):0;P(-8,-5+ar,3,7,ol);P(5,-5+(1-ar),3,7,ol);P(-7,-4+ar,2,5,T.cor);P(6,-4+(1-ar),2,5,T.cor);P(-7,1+ar,2,2,T.pele);P(6,1+(1-ar),2,2,T.pele);
+  P(-5,-16,10,10,ol);P(-4,-15,8,8,T.pele);
+  const hc=T.cab;if(T.hair===0){P(-4,-16,8,3,hc)}else if(T.hair===1){P(-5,-17,10,4,hc);P(-5,-14,2,4,hc)}else if(T.hair===2){P(-5,-17,10,4,hc);P(-5,-14,2,7,hc);P(3,-14,2,7,hc)}else{P(-4,-18,8,4,hc);P(-2,-20,4,3,hc)}
+  if(o.front!==false){const f=o.face>0?1:-1;P(-2+f,-11,1,2,"#111");P(1+f,-11,1,2,"#111");P(-1+f,-8,3,1,"#9a5a4a")}
+}
+function personAt(id,t){
+  const c=chars[id],T=TEAM[id],sit=c.mode==="trabalhando"&&!c.moving;
+  const x=c.x,y=sit?TEAM[id].desk[1]-14:c.y;
+  if(!sit){g.fillStyle="rgba(0,0,0,.35)";g.beginPath();g.ellipse(x,y+12,7,2.5,0,0,7);g.fill()}
+  sprite(g,x,y,T,{walk:c.moving?(t*10|0):0,sit,typing:sit,face:c.face,t});
+  if(c.mode==="aprovar"&&!c.moving){const b=Math.sin(t*5)*1.5;R(x-2,y-34+b,4,8,"#0a0f1e");R(x-1,y-33+b,2,6,"#FFC447");R(x-1,y-25+b,2,2,"#FFC447")}
+  if(selected===id){g.strokeStyle="#2EC5FF";g.lineWidth=1;g.beginPath();g.ellipse(x,(sit?TEAM[id].desk[1]+10:y+12),11,4,0,0,7);g.stroke()}
+}
+function pongBall(t){const players=IDS.filter(id=>chars[id].pong&&!chars[id].moving);if(players.length<2)return;
+  const k=(Math.sin(t*3)+1)/2,x=422+k*86,y=350-Math.abs(Math.sin(t*6))*10;R(x,y,3,3,"#fff");g.fillStyle="rgba(0,0,0,.3)";g.fillRect(x,358,3,1)}
+function frame(t){
+  backdrop(t);
+  IDS.forEach(chair);
+  // ordem de profundidade: quem está sentado fica atrás da própria mesa
+  const order=IDS.slice().sort((a,b)=>(chars[a].mode==="trabalhando"&&!chars[a].moving?TEAM[a].desk[1]-1:chars[a].y)-(chars[b].mode==="trabalhando"&&!chars[b].moving?TEAM[b].desk[1]-1:chars[b].y));
+  const items=[];IDS.forEach(id=>items.push({y:TEAM[id].desk[1],f:()=>deskTop(id,t)}));
+  order.forEach(id=>{const c=chars[id],sit=c.mode==="trabalhando"&&!c.moving;items.push({y:sit?TEAM[id].desk[1]-1:c.y+10,f:()=>personAt(id,t)})});
+  items.sort((a,b)=>a.y-b.y).forEach(i=>i.f());
+  pongBall(t);
+  // vinheta suave
+  const v=g.createRadialGradient(W/2,H/2,H*.35,W/2,H/2,H*.85);v.addColorStop(0,"rgba(0,0,0,0)");v.addColorStop(1,"rgba(0,0,12,.45)");g.fillStyle=v;g.fillRect(0,0,W,H);
+}
+
+// ================= comportamento
+const cur=id=>tasks.find(k=>k.agente===id&&k.status==="fazendo")||tasks.find(k=>k.agente===id&&k.status==="aprovar");
+function think(dt){
+  const meeting=Date.now()<meetingUntil;const idle=[];
+  IDS.forEach((id,i)=>{const c=chars[id],[dx,dy]=TEAM[id].desk,k=cur(id);
+    const mode=meeting?"reuniao":k?(k.status==="fazendo"?"trabalhando":"aprovar"):"livre";
+    if(mode==="livre")idle.push(id);
+    if(mode!==c.mode){c.mode=mode;c.pong=false;c.wait=0;
+      if(mode==="reuniao")[c.tx,c.ty]=MEET[i];else if(mode!=="livre"){c.tx=dx;c.ty=dy+26}}
+  });
+  // os dois primeiros livres jogam ping-pong; os outros passeiam pelo lounge
+  idle.forEach((id,j)=>{const c=chars[id];
+    if(j<2&&idle.length>=2){if(!c.pong){c.pong=true;[c.tx,c.ty]=PONG[j]}}
+    else{c.pong=false;c.wait-=dt;if(c.wait<=0){c.spot=(c.spot+1+((Math.random()*3)|0))%SPOTS.length;[c.tx,c.ty]=SPOTS[c.spot];c.wait=5+Math.random()*7}}
+  });
+  IDS.forEach(id=>{const c=chars[id],dx=c.tx-c.x,dy=c.ty-c.y,d=Math.hypot(dx,dy);c.moving=d>1;
+    if(c.moving){const s=Math.min(d,60*dt);c.x+=dx/d*s;c.y+=dy/d*s;c.face=dx>=0?1:-1}else if(c.pong)c.face=c.tx<460?1:-1});
+}
+let last=performance.now();
+function loop(now){const dt=Math.min(.05,(now-last)/1000);last=now;think(dt);frame(now/1000);overlay();requestAnimationFrame(loop)}
+const ov=document.getElementById("ov");
+function headPos(id){const c=chars[id],sit=c.mode==="trabalhando"&&!c.moving;return [c.x,(sit?TEAM[id].desk[1]-14:c.y)-26]}
+function overlay(){let h="";
+  IDS.forEach(id=>{const c=chars[id],[x,y]=headPos(id);let txt="",cls="";
+    if(c.mode==="reuniao"){if(id==="diretor"){txt="Equipe, novo pedido!";cls="meet"}}
+    else if(!c.moving){const k=cur(id);if(k){txt=(k.status==="aprovar"?"Esperando você: ":"")+k.titulo;cls=k.status==="aprovar"?"warn":""}}
+    if(!txt&&(hover===id||selected===id)){txt=TEAM[id].nome;cls="tag"}
+    if(txt)h+=`<div class="bub ${cls}" style="left:${x/W*100}%;top:${(y-(c.mode==="aprovar"?10:0))/H*100}%">${esc(txt)}</div>`});
+  if(ov.innerHTML!==h)ov.innerHTML=h}
+function esc(s){return String(s??"").replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]))}
+function pick(e){const r=cv.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*W,y=(e.clientY-r.top)/r.height*H;let best=null,bd=20;
+  IDS.forEach(id=>{const c=chars[id],sit=c.mode==="trabalhando"&&!c.moving,py=sit?TEAM[id].desk[1]-18:c.y-4,d=Math.hypot(c.x-x,py-y);if(d<bd){bd=d;best=id}});return best}
+cv.addEventListener("mousemove",e=>{hover=pick(e);cv.style.cursor=hover?"pointer":"default"});
+cv.addEventListener("mouseleave",()=>hover=null);
+cv.addEventListener("click",e=>{const id=pick(e);if(id){selected=id;renderSide()}});
+
+// ================= avatares (mesmo sprite, ampliado)
+function avatar(id,size){const c=document.createElement("canvas");c.width=24;c.height=24;const x=c.getContext("2d");x.imageSmoothingEnabled=false;
+  sprite(x,12,18,TEAM[id],{walk:0,sit:true,typing:false,face:1,t:0});c.className=size>40?"av":"";c.setAttribute("aria-hidden","true");return c}
+
+// ================= estados
+const stateOf=id=>{if(Date.now()<meetingUntil)return["meet","Em reunião"];const k=cur(id);return k?(k.status==="fazendo"?["work","Trabalhando"]:["wait","Esperando você"]):["","Livre"]};
+function renderSide(){const el=document.getElementById("side");
+  if(!selected){el.innerHTML=`<h3>Equipe</h3><p class="note">Escolha um agente no escritório ou aqui.</p><div class="team-list" id="tlist"></div>`;
+    const l=el.querySelector("#tlist");IDS.forEach(id=>{const b=document.createElement("button");b.className="tl";b.type="button";b.append(avatar(id,32));
+      const [cls,lab]=stateOf(id),sp=document.createElement("span");sp.innerHTML=`<b>${esc(TEAM[id].nome)}</b><small>${lab}</small>`;b.append(sp);b.onclick=()=>{selected=id;renderSide()};l.append(b)});return}
+  const id=selected,T=TEAM[id],[cls,lab]=stateOf(id),mine=tasks.filter(k=>k.agente===id&&k.status!=="feito").sort((a,b)=>(b.ts||0)-(a.ts||0)),done=tasks.filter(k=>k.agente===id&&k.status==="feito").length;
+  el.innerHTML=`<div class="prof"><span id="avs"></span><div><h3 style="color:${T.cor}">${esc(T.nome)}</h3><p class="note">${esc(T.setor)} · ${esc(T.papel)}</p></div></div>
+    <span class="pill ${cls}"><i></i>${lab}</span>
+    <div class="mini">${mine.length?mine.map(k=>`<div class="mt" style="--c:${T.cor}"><p>${esc(k.titulo)}</p>${k.detalhe?`<span>${esc(k.detalhe)}</span>`:""}
+      <div class="seg" role="group" aria-label="Status">${Object.keys(ST).map(s=>`<button type="button" data-set="${k.id}" data-s="${s}" aria-pressed="${s===k.status}">${ST[s]}</button>`).join("")}</div>
+      <div class="row" style="margin:0">${k.status!=="fazendo"?`<button class="btn sm" type="button" data-run="${k.id}">Executar com IA</button>`:`<span class="note">Trabalhando…</span>`}${k.resultado?`<button class="btn ghost sm" type="button" data-ver="${k.id}">Ver entrega</button>`:""}</div></div>`).join(""):`<p class="note">Sem tarefas abertas. ${chars[id].pong?"Está jogando ping-pong.":"Está no lounge."}</p>`}</div>
+    <p class="note">${done} entregue(s).</p>
+    <div class="row" style="margin:0"><button class="btn sm" type="button" id="sAdd">+ Tarefa para ${esc(T.nome)}</button><button class="btn ghost sm" type="button" id="sBack">Ver equipe</button></div>`;
+  el.querySelector("#avs").append(avatar(id,56));
+  el.querySelector("#sBack").onclick=()=>{selected=null;renderSide()};
+  el.querySelector("#sAdd").onclick=()=>openTask(id);
+}
+document.getElementById("side").addEventListener("click",e=>{const b=e.target.closest("[data-set]");if(b)setStatus(b.dataset.set,b.dataset.s)});
+
+// ================= quadro
+const fAg=document.getElementById("fAg"),tAg=document.getElementById("tAg");
+IDS.forEach(id=>{fAg.add(new Option(TEAM[id].nome,id));tAg.add(new Option(TEAM[id].nome,id))});
+fAg.onchange=renderBoard;
+function renderBoard(){const b=document.getElementById("board"),f=fAg.value;b.innerHTML="";
+  Object.keys(ST).forEach(s=>{const list=tasks.filter(k=>k.status===s&&(!f||k.agente===f)).sort((a,c)=>(c.ts||0)-(a.ts||0));
+    const col=document.createElement("div");col.className="col";col.dataset.s=s;col.innerHTML=`<h3>${ST[s]} <b>${list.length}</b></h3>`;
+    if(!list.length)col.insertAdjacentHTML("beforeend",`<div class="empty">${db?"Solte um cartão aqui":"Conectando ao banco…"}</div>`);
+    list.forEach(k=>{const T=TEAM[k.agente]||{nome:k.agente,cor:"#888"};
+      col.insertAdjacentHTML("beforeend",`<div class="task" draggable="true" data-id="${k.id}" style="--c:${T.cor}"><p>${esc(k.titulo)}</p>
+      <div class="meta"><span class="who" style="--c:${T.cor}"><i></i>${esc(T.nome)}</span>${s==="aprovar"?`<button class="ok" data-ok="${k.id}" type="button">Aprovar</button>`:""}${k.resultado?`<button class="btn ghost sm" type="button" data-ver="${k.id}">Entrega</button>`:""}${s==="afazer"?`<button class="btn sm" type="button" data-run="${k.id}">Executar</button>`:""}
+      <select aria-label="Mover ${esc(k.titulo)}" data-mv="${k.id}" id="mv-${k.id}">${Object.keys(ST).map(v=>`<option value="${v}"${v===s?" selected":""}>${ST[v]}</option>`).join("")}</select></div></div>`)});
+    col.addEventListener("dragover",e=>{e.preventDefault();col.classList.add("over")});col.addEventListener("dragleave",()=>col.classList.remove("over"));
+    col.addEventListener("drop",e=>{e.preventDefault();col.classList.remove("over");const id=e.dataTransfer.getData("text/plain");if(id)setStatus(id,s)});
+    b.append(col)});
+  b.querySelectorAll(".task").forEach(t=>{t.addEventListener("dragstart",e=>{e.dataTransfer.setData("text/plain",t.dataset.id);t.classList.add("dragging")});t.addEventListener("dragend",()=>t.classList.remove("dragging"))});
+}
+document.getElementById("board").addEventListener("change",e=>{const id=e.target.dataset.mv;if(id)setStatus(id,e.target.value)});
+document.getElementById("board").addEventListener("click",e=>{const id=e.target.dataset.ok;if(id)setStatus(id,"feito",true)});
+async function setStatus(id,s,approved){if(!db)return;const k=tasks.find(x=>x.id===id);if(!k||k.status===s)return;
+  try{await db.doc("tarefas/"+id).update({status:s,ts:Date.now()});log(approved?null:k.agente,approved?`aprovou "${k.titulo}"`:`"${k.titulo}" → ${ST[s]}`)}catch(_){}}
+function log(agente,texto){if(db)db.collection("atividade").add({agente,texto,ts:Date.now()}).catch(()=>{})}
+
+// ================= equipe e atividade
+function renderCards(){const el=document.getElementById("cards");el.innerHTML="";
+  IDS.forEach(id=>{const T=TEAM[id],c={};Object.keys(ST).forEach(s=>c[s]=tasks.filter(k=>k.agente===id&&k.status===s).length);const tot=Object.values(c).reduce((a,b)=>a+b,0)||1,[cls,lab]=stateOf(id);
+    const d=document.createElement("article");d.className="ac";d.innerHTML=`<div class="top"><span class="avh"></span><div><h4 style="color:${T.cor}">${esc(T.nome)}</h4><p class="note">${esc(T.papel)}</p></div></div>
+      <span class="pill ${cls}"><i></i>${lab}</span>
+      <div class="load" aria-hidden="true"><i style="width:${c.fazendo/tot*100}%;background:var(--ok)"></i><i style="width:${c.aprovar/tot*100}%;background:var(--warn)"></i><i style="width:${c.afazer/tot*100}%;background:var(--line2)"></i><i style="width:${c.feito/tot*100}%;background:var(--cyan)"></i></div>
+      <dl><div><dt>A fazer</dt><dd>${c.afazer}</dd></div><div><dt>Fazendo</dt><dd>${c.fazendo}</dd></div><div><dt>Aprovar</dt><dd>${c.aprovar}</dd></div><div><dt>Feito</dt><dd>${c.feito}</dd></div></dl>
+      <div class="row" style="margin:0"><button class="btn ghost sm" type="button" data-see="${id}">Ver no escritório</button><button class="btn ghost sm" type="button" data-new="${id}">+ Tarefa</button></div>`;
+    d.querySelector(".avh").append(avatar(id,56));el.append(d)})}
+document.getElementById("cards").addEventListener("click",e=>{const s=e.target.dataset.see,n=e.target.dataset.new;if(s){selected=s;go("escritorio");renderSide()}if(n)openTask(n)});
+function renderTimeline(){const el=document.getElementById("tline");
+  if(!acts.length){el.innerHTML=`<div class="empty">${db?"Ainda sem atividade. Mande um pedido ao Diretor.":"Entre com a senha para ver a atividade."}</div>`;return}
+  const days={};acts.forEach(a=>{const d=new Date(a.ts),k=d.toLocaleDateString("pt-BR",{weekday:"long",day:"2-digit",month:"2-digit"});(days[k]=days[k]||[]).push(a)});
+  el.innerHTML=Object.entries(days).map(([k,list])=>`<div class="day"><h4>${esc(k)}</h4>${list.map(a=>{const T=TEAM[a.agente]||{nome:"Você",cor:"#F5F8FF"},d=new Date(a.ts);
+    return `<div class="ev"><time>${d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})}</time><span><span class="chip" style="background:${T.cor}">${esc(T.nome)}</span>${esc(a.texto)}</span></div>`}).join("")}</div>`).join("")}
+
+function renderAll(){const n=s=>tasks.filter(k=>k.status===s).length;
+  document.getElementById("sWork").textContent=n("fazendo");document.getElementById("sAppr").textContent=n("aprovar");document.getElementById("sDone").textContent=n("feito");
+  const na=document.getElementById("nAppr");na.textContent=n("aprovar");na.hidden=!n("aprovar");
+  renderSide();renderBoard();renderCards();renderTimeline()}
+
+// ================= navegação por abas
+const VIEWS=["escritorio","quadro","equipe","atividade"];
+function go(v){if(!VIEWS.includes(v))v="escritorio";VIEWS.forEach(x=>document.getElementById("v-"+x).hidden=x!==v);
+  document.querySelectorAll("nav a").forEach(a=>a.toggleAttribute("aria-current",a.dataset.v===v)||a.setAttribute("aria-current","page"));
+  document.querySelectorAll("nav a").forEach(a=>{if(a.dataset.v===v)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
+  if(location.hash!=="#"+v)history.replaceState(null,"","#"+v)}
+document.querySelectorAll("nav a").forEach(a=>a.addEventListener("click",e=>{e.preventDefault();go(a.dataset.v)}));
+window.addEventListener("hashchange",()=>go(location.hash.slice(1)));
+
+// ================= nova tarefa manual
+const dTask=document.getElementById("dTask");
+function openTask(id){tAg.value=id||"diretor";document.getElementById("tTit").value="";document.getElementById("tDet").value="";dTask.showModal()}
+document.getElementById("bAddT").onclick=()=>openTask(fAg.value);
+document.getElementById("cTask").onclick=()=>dTask.close();
+document.getElementById("fTask").addEventListener("submit",async e=>{e.preventDefault();if(!db){dTask.close();return}
+  const titulo=document.getElementById("tTit").value.trim(),agente=tAg.value,detalhe=document.getElementById("tDet").value.trim();if(!titulo)return;
+  try{await db.collection("tarefas").add({titulo,agente,detalhe,status:"afazer",ts:Date.now()});log(agente,`recebeu: ${titulo}`)}catch(_){}
+  dTask.close()});
+
+// ================= pedido ao Diretor
+const dPed=document.getElementById("dPed"),bPed=document.getElementById("bPed"),pSt=document.getElementById("pSt"),pOut=document.getElementById("pOut");
+document.getElementById("bNovo").onclick=()=>{pSt.textContent="";dPed.showModal()};
+document.getElementById("cPed").onclick=()=>dPed.close();
+document.getElementById("fPed").addEventListener("submit",async e=>{e.preventDefault();const txt=document.getElementById("pedido").value.trim();
+  if(!txt){pSt.textContent="Escreva o pedido primeiro.";return}
+  if(!db){pedirSenha();return}
+  bPed.disabled=true;pSt.textContent="O Diretor está reunindo a equipe…";pOut.innerHTML="";meetingUntil=Date.now()+90000;
+  try{const r=await diretorServidor(txt);
+    const list=(Array.isArray(r?.tarefas)?r.tarefas:[]).filter(k=>TEAM[k.agente]);if(!list.length)throw{code:"vazio"};
+    pOut.innerHTML=`<div><b>Plano:</b> ${esc(r.resumo||"")}</div>`+list.map(k=>`<div><span class="chip" style="background:${TEAM[k.agente].cor}">${esc(TEAM[k.agente].nome)}</span>${esc(k.titulo)}</div>`).join("");
+    pSt.textContent=`${list.length} tarefas no quadro.`;document.getElementById("pedido").value="";refresh();
+  }catch(err){if(err?.code!=="auth")pSt.textContent=err?.erro||"O Diretor não conseguiu montar o plano. Reescreva o pedido e tente de novo."}
+  finally{bPed.disabled=false;meetingUntil=Date.now()+3000}});
+
+// ================= conexão com o aplicativo (processo principal do Electron)
+async function api(path,opt={}){
+  const r=await window.bios.call(opt.method||"GET",path,opt.body||{});
+  if(!r.ok){if(r.codigo==="sem_chave")pedirSenha(r.erro);throw{code:r.codigo||"erro",erro:r.erro}}
+  return r.dados}
+// mesma interface que o resto da página já usa
+const apiDb={
+  doc(p){const [col,id]=p.split("/");return{update:async d=>{await api(`${col}/${id}`,{method:"PATCH",body:d});refresh()}}},
+  collection(col){return{add:async d=>{const r=await api(col,{method:"POST",body:d});refresh();return{id:r.id}}}}
+};
+async function refresh(){try{const s=await api("estado");db=apiDb;tasks=s.tarefas||[];acts=s.atividade||[];renderAll()}catch(_){}}
+const dLogin=document.getElementById("dLogin");
+function pedirSenha(msg){document.getElementById("lMsg").textContent=msg||"";if(!dLogin.open)dLogin.showModal()}
+document.getElementById("fLogin").addEventListener("submit",async e=>{e.preventDefault();const k=document.getElementById("lSenha").value.trim();
+  if(!k.startsWith("sk-ant-")){document.getElementById("lMsg").textContent="A chave começa com sk-ant-.";return}
+  await window.bios.salvarChave(k);document.getElementById("lSenha").value="";dLogin.close();await refresh()});
+document.getElementById("lPular").onclick=()=>dLogin.close();
+document.getElementById("bCfg").onclick=()=>pedirSenha("");
+document.getElementById("lPasta").onclick=()=>window.bios.abrirPasta();
+// executar uma tarefa com o agente responsável
+const dRes=document.getElementById("dRes");
+async function executarTarefa(id,btn){const k=tasks.find(x=>x.id===id);if(!k)return;
+  if(btn){btn.disabled=true;btn.textContent="Trabalhando…"}
+  k.status="fazendo";renderAll();
+  try{const t=await api("executar/"+id,{method:"POST"});await refresh();verEntrega(t.id)}
+  catch(err){await refresh();if(err.code!=="sem_chave")alertar(err.erro||"Não deu certo. Tente de novo.")}}
+function alertar(msg){const el=document.getElementById("aviso");el.textContent=msg;el.hidden=false;clearTimeout(alertar.t);alertar.t=setTimeout(()=>el.hidden=true,6000)}
+function verEntrega(id){const k=tasks.find(x=>x.id===id);if(!k||!k.resultado)return;const T=TEAM[k.agente]||{nome:k.agente,cor:"#888"};
+  document.getElementById("rTit").textContent=k.titulo;document.getElementById("rWho").innerHTML=`<span class="chip" style="background:${T.cor}">${esc(T.nome)}</span>${ST[k.status]}`;
+  document.getElementById("rTxt").textContent=k.resultado;dRes.dataset.id=id;
+  document.getElementById("rAprovar").hidden=k.status!=="aprovar";dRes.showModal()}
+document.getElementById("rFechar").onclick=()=>dRes.close();
+document.getElementById("rCopiar").onclick=async()=>{try{await navigator.clipboard.writeText(document.getElementById("rTxt").textContent);document.getElementById("rCopiar").textContent="Copiado"}catch(_){}
+  setTimeout(()=>document.getElementById("rCopiar").textContent="Copiar texto",1500)};
+document.getElementById("rAprovar").onclick=async()=>{await setStatus(dRes.dataset.id,"feito",true);dRes.close()};
+document.getElementById("rRefazer").onclick=()=>{const id=dRes.dataset.id;dRes.close();executarTarefa(id)};
+document.addEventListener("click",e=>{const x=e.target.closest("[data-run]");if(x)executarTarefa(x.dataset.run,x);const v=e.target.closest("[data-ver]");if(v)verEntrega(v.dataset.ver)});
+// pedido ao Diretor: o servidor chama o Claude, cria as tarefas e registra a atividade
+sample={json:null};
+async function diretorServidor(txt){return api("diretor",{method:"POST",body:{texto:txt}})}
+
+// ================= início
+go(location.hash.slice(1)||"escritorio");renderAll();requestAnimationFrame(loop);
+refresh();window.bios.temChave().then(t=>{if(!t)pedirSenha("")});
+setInterval(()=>{if(!document.hidden)refresh()},5000);
+</script>

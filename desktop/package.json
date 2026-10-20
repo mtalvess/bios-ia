@@ -1,0 +1,46 @@
+{
+  "name": "bios-ia",
+  "productName": "BIOS IA",
+  "version": "1.0.0",
+  "description": "Escritório da BIOS IA: a equipe de agentes da BIOS com o Claude, no seu computador.",
+  "author": "BIOS",
+  "main": "main.js",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "dist:win": "electron-builder --win nsis",
+    "dist:mac": "electron-builder --mac dmg",
+    "dist:linux": "electron-builder --linux AppImage"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.135.0"
+  },
+  "devDependencies": {
+    "electron": "44.9.1",
+    "electron-builder": "26.15.3"
+  },
+  "build": {
+    "appId": "br.com.bios.escritorio",
+    "productName": "BIOS IA",
+    "copyright": "BIOS",
+    "files": ["main.js", "preload.js", "app/**", "agentes/**", "seed.json", "build/icon.png", "package.json"],
+    "directories": { "output": "dist", "buildResources": "build" },
+    "win": {
+      "target": [{ "target": "nsis", "arch": ["x64"] }],
+      "icon": "build/icon.ico",
+      "signAndEditExecutable": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "BIOS IA",
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "artifactName": "BIOS-IA-Instalador-${version}.${ext}"
+    },
+    "mac": { "target": "dmg", "icon": "build/icon.png", "category": "public.app-category.productivity" },
+    "linux": { "target": "AppImage", "icon": "build/icon.png" }
+  }
+}

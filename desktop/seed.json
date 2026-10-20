@@ -1,0 +1,20 @@
+{
+ "tarefas": [
+  {"id": "t01", "titulo": "Plano de conteúdo 20–24/10", "agente": "conteudo", "detalhe": "5 posts com ganchos A/B/C, roteiros e legendas (planos/plano-2026-10-20.md)", "status": "aprovar", "ts": 1792462000000},
+  {"id": "t02", "titulo": "Reels AUTO com ganchos novos", "agente": "video", "detalhe": "Renderizar de novo o reels de automação com o gancho 'qual o preço?'", "status": "afazer", "ts": 1792462010000},
+  {"id": "t03", "titulo": "Carrossel 7 slides: agendamento", "agente": "designer", "detalhe": "'3 sinais de que sua barbearia precisa de agendamento online'", "status": "afazer", "ts": 1792462020000},
+  {"id": "t04", "titulo": "Autorização da Emilly Lanches p/ case", "agente": "comercial", "detalhe": "Pedir autorização, @ do perfil e depoimento (se houver) antes do post 3", "status": "aprovar", "ts": 1792462030000},
+  {"id": "t05", "titulo": "Capa do filme de marca", "agente": "designer", "detalhe": "Capa do reels do post 5 com o gancho da legenda", "status": "afazer", "ts": 1792462040000},
+  {"id": "t06", "titulo": "Links do ManyChat (SITE, AGENDA, PROJETO)", "agente": "comercial", "detalhe": "Preencher os [LINK] em automacoes/manychat.md", "status": "aprovar", "ts": 1792462050000},
+  {"id": "t07", "titulo": "Organizar a operação da semana", "agente": "diretor", "detalhe": "Acompanhar o plano 20–24/10 e cobrar as pendências de aprovação", "status": "fazendo", "ts": 1792462060000},
+  {"id": "t08", "titulo": "Relatório da semana (sexta)", "agente": "relatorios", "detalhe": "Comparar ganchos e retenção dos posts da semana", "status": "afazer", "ts": 1792462070000},
+  {"id": "t09", "titulo": "Filme de marca BIOS 15s", "agente": "video", "detalhe": "Entregue: filme-bios/BIOS-filme-15s-leve.mp4", "status": "feito", "ts": 1792461000000},
+  {"id": "t10", "titulo": "15 reels narrados dos serviços", "agente": "video", "detalhe": "Entregue: reels-BIOS.zip", "status": "feito", "ts": 1792460000000},
+  {"id": "t11", "titulo": "Repositório e equipe BIOS IA", "agente": "dev-sites", "detalhe": "github.com/mtalvess/bios-ia com 7 agentes e 5 skills", "status": "feito", "ts": 1792462500000}
+ ],
+ "atividade": [
+  {"id": "a01", "agente": "dev-sites", "texto": "publicou a BIOS IA no GitHub", "ts": 1792462500000},
+  {"id": "a02", "agente": "conteudo", "texto": "entregou o plano da semana 20–24/10 para aprovação", "ts": 1792462600000},
+  {"id": "a03", "agente": "diretor", "texto": "abriu as tarefas da semana no quadro", "ts": 1792462700000}
+ ]
+}
