@@ -55,8 +55,8 @@ Section "Atalho"
   WriteUninstaller "$INSTDIR\Remover atalho BIOS IA.exe"
   Call AcharNavegador
   StrCmp $NAV "" semNavegador
-    CreateShortCut "$DESKTOP\${APP}.lnk" "$NAV" "--app=${LINK}" "$INSTDIR\icon.ico" 0 SW_SHOWNORMAL "" "Escritório BIOS IA"
-    CreateShortCut "$SMPROGRAMS\${APP}.lnk" "$NAV" "--app=${LINK}" "$INSTDIR\icon.ico" 0 SW_SHOWNORMAL "" "Escritório BIOS IA"
+    CreateShortCut "$DESKTOP\${APP}.lnk" "$NAV" "--app=${LINK} --start-maximized" "$INSTDIR\icon.ico" 0 SW_SHOWMAXIMIZED "" "Escritório BIOS IA"
+    CreateShortCut "$SMPROGRAMS\${APP}.lnk" "$NAV" "--app=${LINK} --start-maximized" "$INSTDIR\icon.ico" 0 SW_SHOWMAXIMIZED "" "Escritório BIOS IA"
     Goto pronto
   semNavegador:
     ; sem Edge/Chrome: abre no navegador padrão
