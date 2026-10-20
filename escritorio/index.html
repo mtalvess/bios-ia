@@ -1,0 +1,276 @@
+<title>Escritório BIOS IA</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Anton&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: escritório em pixel art no topo (a "câmera" da empresa), pedido + quadro + atividade embaixo. Visual noturno único da BIOS. */
+:root{
+  --bg:#020A1C; --panel:#0A1A3A; --panel2:#0E2148; --line:#1C2E55;
+  --fg:#F5F8FF; --muted:#A4B4D0; --blue:#0965FA; --cyan:#2EC5FF;
+  --ok:#3DDC84; --warn:#FFC447; --bad:#FF6B5A;
+  --f-pix:"Silkscreen","Courier New",monospace; --f-disp:"Anton",Impact,sans-serif; --f-ui:"Inter",system-ui,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-ui);font-size:15px;line-height:1.45;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 40px}
+.wrap{max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px}
+h1{font-family:var(--f-disp);font-weight:400;font-size:clamp(34px,5vw,54px);letter-spacing:.5px;line-height:1;margin:0;text-transform:uppercase;text-wrap:balance}
+h1 span{color:var(--cyan)}
+.sub{color:var(--muted);margin:6px 0 0;max-width:60ch}
+.stats{display:flex;gap:10px;flex-wrap:wrap}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px 14px;min-width:96px}
+.stat b{display:block;font-family:var(--f-disp);font-weight:400;font-size:28px;line-height:1.05;font-variant-numeric:tabular-nums}
+.stat small{color:var(--muted);font-family:var(--f-pix);font-size:11px;letter-spacing:.5px;text-transform:uppercase}
+.office{position:relative;border-radius:14px;overflow:hidden;border:2px solid var(--line);background:#0b1430;box-shadow:0 20px 60px rgba(0,0,0,.45)}
+#cv{display:block;width:100%;height:auto;image-rendering:pixelated;cursor:pointer}
+.bubbles{position:absolute;inset:0;pointer-events:none}
+.bub{position:absolute;transform:translate(-50%,-100%);background:var(--fg);color:#061233;font-family:var(--f-pix);font-size:clamp(8px,1.05vw,11px);line-height:1.2;padding:4px 7px;border-radius:6px;white-space:nowrap;max-width:28vw;overflow:hidden;text-overflow:ellipsis;box-shadow:0 3px 0 rgba(0,0,0,.35)}
+.bub::after{content:"";position:absolute;left:50%;bottom:-5px;margin-left:-5px;border:5px solid transparent;border-top-color:var(--fg);border-bottom:0}
+.bub.warn{background:var(--warn)} .bub.warn::after{border-top-color:var(--warn)}
+.bub.meet{background:var(--cyan)} .bub.meet::after{border-top-color:var(--cyan)}
+.legend{position:absolute;left:10px;bottom:8px;display:flex;gap:10px;flex-wrap:wrap;font-family:var(--f-pix);font-size:10px;color:var(--fg);background:rgba(2,10,28,.75);padding:5px 9px;border-radius:8px}
+.legend i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:4px;vertical-align:middle}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2.2fr);gap:18px}
+@media (max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;min-width:0}
+.card h2{font-family:var(--f-pix);font-weight:700;font-size:13px;letter-spacing:1px;text-transform:uppercase;color:var(--cyan);margin:0 0 12px}
+textarea,select,button{font:inherit}
+textarea{width:100%;min-height:96px;resize:vertical;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+textarea:focus-visible,button:focus-visible,select:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.btn{background:var(--blue);color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer}
+.btn[disabled]{opacity:.55;cursor:wait}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--fg)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px}
+.note{color:var(--muted);font-size:13px;margin:8px 0 0}
+.out{margin-top:12px;font-size:14px;white-space:pre-wrap;color:var(--fg);min-width:0}
+.board{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+@media (max-width:620px){.board{grid-template-columns:minmax(0,1fr)}}
+.col{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.col h3{margin:0;font-family:var(--f-pix);font-size:11px;letter-spacing:.8px;text-transform:uppercase;display:flex;justify-content:space-between;color:var(--muted)}
+.col h3 b{color:var(--fg);font-variant-numeric:tabular-nums}
+.task{background:var(--panel2);border-radius:10px;padding:9px 10px;border-left:4px solid var(--c,#888);display:flex;flex-direction:column;gap:6px;min-width:0}
+.task p{margin:0;font-size:13.5px;font-weight:600;overflow-wrap:anywhere}
+.task .meta{display:flex;justify-content:space-between;gap:6px;align-items:center;font-size:12px;color:var(--muted)}
+.task select{background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:6px;font-size:12px;padding:2px 4px;max-width:120px}
+.ok{background:var(--ok);color:#03210f;border:0;border-radius:6px;font-size:12px;font-weight:700;padding:3px 8px;cursor:pointer}
+.empty{color:var(--muted);font-size:13px;text-align:center;padding:10px 4px}
+.feed{display:flex;flex-direction:column;gap:6px;max-height:280px;overflow:auto}
+.feed div{font-size:13px;display:grid;grid-template-columns:52px minmax(0,1fr);gap:8px}
+.feed time{color:var(--muted);font-variant-numeric:tabular-nums;font-family:var(--f-pix);font-size:11px;padding-top:2px}
+.chip{display:inline-block;font-family:var(--f-pix);font-size:10px;padding:1px 6px;border-radius:4px;color:#061233;margin-right:4px}
+dialog{background:var(--panel);color:var(--fg);border:1px solid var(--line);border-radius:16px;max-width:min(460px,92vw);padding:20px}
+dialog::backdrop{background:rgba(0,0,0,.55)}
+dialog h3{font-family:var(--f-disp);font-weight:400;font-size:30px;margin:0;text-transform:uppercase}
+dialog ul{padding-left:18px;margin:8px 0}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Escritório <span>BIOS IA</span></h1>
+      <p class="sub">A equipe de agentes da BIOS trabalhando em tempo real. Clique num personagem para ver o que ele está fazendo. Mande um pedido e o Diretor reúne a equipe e distribui as tarefas.</p>
+    </div>
+    <div class="stats" aria-live="polite">
+      <div class="stat"><b id="sWork">0</b><small>trabalhando</small></div>
+      <div class="stat"><b id="sAppr">0</b><small>p/ aprovar</small></div>
+      <div class="stat"><b id="sDone">0</b><small>entregues</small></div>
+    </div>
+  </header>
+
+  <div class="office">
+    <canvas id="cv" width="480" height="300" aria-label="Escritório em pixel art com os agentes da BIOS"></canvas>
+    <div class="bubbles" id="bubbles"></div>
+    <div class="legend"><span><i style="background:var(--ok)"></i>trabalhando</span><span><i style="background:var(--warn)"></i>esperando você</span><span><i style="background:var(--muted)"></i>livre</span></div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h2>Novo pedido para o Diretor</h2>
+      <form id="fPedido">
+        <label for="pedido" class="note" style="display:block;margin:0 0 6px">O que a BIOS precisa fazer?</label>
+        <textarea id="pedido" placeholder="Ex.: Lançar o cardápio digital para pizzarias de Campina Grande este mês"></textarea>
+        <div class="row"><button class="btn" id="bPedido" type="submit">Enviar ao Diretor</button><span class="note" id="pStatus"></span></div>
+      </form>
+      <div class="out" id="pOut"></div>
+      <h2 style="margin-top:20px">Atividade</h2>
+      <div class="feed" id="feed"><div class="empty">Carregando a atividade da equipe…</div></div>
+    </div>
+    <div class="card">
+      <h2>Quadro de tarefas</h2>
+      <div class="board" id="board">
+        <div class="col" data-s="afazer"><h3>A fazer <b>0</b></h3></div>
+        <div class="col" data-s="fazendo"><h3>Fazendo <b>0</b></h3></div>
+        <div class="col" data-s="aprovar"><h3>Para aprovar <b>0</b></h3></div>
+        <div class="col" data-s="feito"><h3>Feito <b>0</b></h3></div>
+      </div>
+      <p class="note">As tarefas são reais: os agentes atualizam este quadro quando trabalham no repositório <b>bios-ia</b>. "Aprovar" é sempre seu.</p>
+    </div>
+  </div>
+</div>
+
+<dialog id="dlg"><h3 id="dName"></h3><p class="note" id="dRole" style="margin-top:4px"></p><div id="dBody"></div><div class="row"><button class="btn ghost" id="dClose" type="button">Fechar</button></div></dialog>
+
+<script>
+// ---------- equipe (identidade fixa; estado vem do banco)
+const TEAM={
+  diretor:{nome:"Diretor",setor:"Direção",cor:"#2EC5FF",pele:"#E8B48A",cab:"#1b1b1b",desk:[60,64],papel:"Planeja e distribui o trabalho"},
+  conteudo:{nome:"Conteúdo",setor:"Conteúdo",cor:"#FFC447",pele:"#C98B5E",cab:"#3a2414",desk:[180,64],papel:"Ganchos, roteiros e legendas"},
+  designer:{nome:"Designer",setor:"Design",cor:"#FF6FB1",pele:"#F1C7A0",cab:"#5a2d82",desk:[300,64],papel:"Posts, stories e carrosséis"},
+  video:{nome:"Vídeo",setor:"Vídeo",cor:"#A77BFF",pele:"#8A5A3C",cab:"#111",desk:[420,64],papel:"Reels, filmes e convites"},
+  "dev-sites":{nome:"Dev Sites",setor:"Desenvolvimento",cor:"#3DDC84",pele:"#E0A97E",cab:"#2a2a2a",desk:[60,170],papel:"Sites e cardápios digitais"},
+  comercial:{nome:"Comercial",setor:"Comercial",cor:"#FF8A3D",pele:"#B87A52",cab:"#1e120a",desk:[180,170],papel:"Propostas e atendimento"},
+  relatorios:{nome:"Relatórios",setor:"Análise",cor:"#7FD3FF",pele:"#F0C9A6",cab:"#6b4a2b",desk:[300,170],papel:"Números e próximos passos"}
+};
+const IDS=Object.keys(TEAM);
+const MEET=[[400,150],[430,150],[400,190],[430,190],[385,170],[445,170],[415,205]];
+const LOUNGE=[[40,262],[80,272],[150,262],[200,272],[250,262],[300,270],[350,262],[120,250]];
+const STATUS_LABEL={afazer:"A fazer",fazendo:"Fazendo",aprovar:"Para aprovar",feito:"Feito"};
+
+// ---------- estado local
+let tasks=[],acts=[],db=null,meetingUntil=0,lastSeed=1;
+const chars={};IDS.forEach((id,i)=>{const d=TEAM[id].desk;chars[id]={x:d[0],y:d[1]+16,tx:d[0],ty:d[1]+16,mode:"livre",wait:0,step:0,face:1,idleSpot:i%LOUNGE.length}});
+
+// ---------- desenho em pixel art
+const cv=document.getElementById("cv"),g=cv.getContext("2d");g.imageSmoothingEnabled=false;
+const W=480,H=300;
+function R(x,y,w,h,c){g.fillStyle=c;g.fillRect(Math.round(x),Math.round(y),w,h)}
+function floor(){
+  for(let y=0;y<H;y+=12)for(let x=0;x<W;x+=12)R(x,y,12,12,((x+y)/12)%2?"#14214a":"#172756");
+  R(0,0,W,22,"#0a1330");for(let x=6;x<W;x+=40){R(x,4,26,12,"#06102a");R(x+2,6,22,8,"#1f4fa8")} // janelas noturnas
+  R(0,22,W,3,"#2b3f78");
+  // divisória das áreas
+  R(0,128,360,2,"#22346a");R(360,22,2,210,"#22346a");R(0,232,W,2,"#22346a");
+  // sala de reunião
+  R(380,140,70,60,"#5a3b22");R(382,142,66,56,"#7a5232");
+  // lounge: café, sofá, ping-pong, planta
+  R(18,244,22,30,"#3b3b48");R(21,248,16,8,"#1a1a22");R(24,258,10,4,"#c0392b");
+  R(120,246,70,10,"#2E7BFF");R(120,256,70,14,"#1f5fd0");
+  R(230,250,60,26,"#1e6b3a");R(259,250,2,26,"#e8eef9");R(230,262,60,1,"#e8eef9");
+  R(330,250,14,10,"#3a2a1a");R(326,236,22,16,"#2fa24a");R(330,232,14,8,"#3cc45b");
+  R(420,246,40,30,"#2a2a36");R(424,250,32,16,"#0965FA");
+  // placas de setor
+  g.font="8px Silkscreen, monospace";g.textAlign="center";
+  IDS.forEach(id=>{const t=TEAM[id];g.fillStyle="#a4b4d0";g.fillText(t.setor.toUpperCase(),t.desk[0],t.desk[1]-26)});
+  g.fillStyle="#a4b4d0";g.fillText("REUNIÃO",415,134);g.fillText("CAFÉ & LOUNGE",240,242);
+}
+function desk(id,t){
+  const d=TEAM[id].desk,x=d[0],y=d[1],busy=chars[id].mode==="trabalhando";
+  R(x-24,y-4,48,14,"#6b4a2e");R(x-24,y+10,48,3,"#4a321e");R(x-22,y+13,4,8,"#4a321e");R(x+18,y+13,4,8,"#4a321e");
+  R(x-10,y-18,20,14,"#1a1f2e");R(x-8,y-16,16,10,busy?TEAM[id].cor:"#0d1526");
+  if(busy){for(let i=0;i<3;i++)R(x-6,y-14+i*3,4+((t*7+i*5)|0)%9,1,"#fff")}
+  R(x-2,y-4,4,2,"#1a1f2e");R(x+12,y-2,6,4,"#e8eef9");
+}
+function person(id,c,t){
+  const T=TEAM[id],x=Math.round(c.x),y=Math.round(c.y),walk=c.moving?(Math.floor(t*8)%2):0,typing=c.mode==="trabalhando"&&!c.moving;
+  R(x-5,y+9,10,2,"rgba(0,0,0,.35)");
+  R(x-3,y+3,2,6-walk*2,"#22263a");R(x+1,y+3,2,4+walk*2,"#22263a"); // pernas
+  R(x-4,y-5,8,8,T.cor);                                            // corpo
+  const arm=typing?(Math.floor(t*10)%2):0;R(x-6,y-4+arm,2,5,T.cor);R(x+4,y-4+(1-arm),2,5,T.cor);
+  R(x-3,y-12,6,7,T.pele);R(x-3,y-13,6,3,T.cab);                     // cabeça
+  R(x+(c.face>0?1:-2),y-9,1,1,"#111");
+  if(c.mode==="aprovar"&&!c.moving){R(x-1,y-24,2,6,"#FFC447");R(x-1,y-16,2,2,"#FFC447")}
+}
+function draw(t){
+  floor();IDS.forEach(id=>desk(id,t));
+  IDS.slice().sort((a,b)=>chars[a].y-chars[b].y).forEach(id=>person(id,chars[id],t));
+}
+
+// ---------- comportamento
+function curTask(id){return tasks.find(k=>k.agente===id&&k.status==="fazendo")||tasks.find(k=>k.agente===id&&k.status==="aprovar")}
+function updateModes(){
+  const meeting=Date.now()<meetingUntil;
+  IDS.forEach((id,i)=>{const c=chars[id],d=TEAM[id].desk,k=curTask(id);
+    let mode=meeting?"reuniao":k?(k.status==="fazendo"?"trabalhando":"aprovar"):"livre";
+    if(mode!==c.mode||(mode==="livre"&&c.wait<=0)){
+      if(mode==="reuniao"){[c.tx,c.ty]=MEET[i]}
+      else if(mode==="livre"){c.idleSpot=(c.idleSpot+1+Math.floor(Math.random()*3))%LOUNGE.length;[c.tx,c.ty]=LOUNGE[c.idleSpot];c.wait=4+Math.random()*6}
+      else{c.tx=d[0];c.ty=d[1]+16}
+      c.mode=mode}
+  })
+}
+let last=performance.now();
+function tick(now){
+  const dt=Math.min(.05,(now-last)/1000);last=now;const t=now/1000;
+  updateModes();
+  IDS.forEach(id=>{const c=chars[id],dx=c.tx-c.x,dy=c.ty-c.y,dist=Math.hypot(dx,dy);
+    c.moving=dist>1;if(c.moving){const sp=Math.min(dist,48*dt);c.x+=dx/dist*sp;c.y+=dy/dist*sp;c.face=dx>=0?1:-1}else if(c.mode==="livre")c.wait-=dt});
+  draw(t);bubbles();requestAnimationFrame(tick);
+}
+const bubEl=document.getElementById("bubbles");
+function bubbles(){
+  let h="";IDS.forEach(id=>{const c=chars[id];let txt="",cls="";
+    if(c.mode==="reuniao"){txt=id==="diretor"?"Equipe, novo pedido!":"";cls="meet"}
+    else if(!c.moving){const k=curTask(id);if(k){txt=(k.status==="aprovar"?"Esperando você: ":"")+k.titulo;cls=k.status==="aprovar"?"warn":""}}
+    if(txt)h+=`<div class="bub ${cls}" style="left:${c.x/W*100}%;top:${(c.y-26)/H*100}%">${esc(txt)}</div>`});
+  if(bubEl.innerHTML!==h)bubEl.innerHTML=h;
+}
+function esc(s){return String(s??"").replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]))}
+
+// ---------- quadro, atividade, contadores
+function render(){
+  document.getElementById("sWork").textContent=tasks.filter(k=>k.status==="fazendo").length;
+  document.getElementById("sAppr").textContent=tasks.filter(k=>k.status==="aprovar").length;
+  document.getElementById("sDone").textContent=tasks.filter(k=>k.status==="feito").length;
+  document.querySelectorAll(".col").forEach(col=>{const s=col.dataset.s,list=tasks.filter(k=>k.status===s).sort((a,b)=>(b.ts||0)-(a.ts||0));
+    col.querySelector("h3 b").textContent=list.length;col.querySelectorAll(".task,.empty").forEach(e=>e.remove());
+    if(!list.length)col.insertAdjacentHTML("beforeend",`<div class="empty">${db?"Nada aqui":"Conectando…"}</div>`);
+    list.forEach(k=>{const T=TEAM[k.agente]||{nome:k.agente,cor:"#888"};
+      const opts=Object.keys(STATUS_LABEL).map(v=>`<option value="${v}"${v===k.status?" selected":""}>${STATUS_LABEL[v]}</option>`).join("");
+      col.insertAdjacentHTML("beforeend",`<div class="task" style="--c:${T.cor}"><p>${esc(k.titulo)}</p><div class="meta"><span>${esc(T.nome)}</span>${s==="aprovar"?`<button class="ok" data-ok="${k.id}" type="button">Aprovar</button>`:""}<select aria-label="Status de ${esc(k.titulo)}" data-mv="${k.id}" id="mv-${k.id}">${opts}</select></div></div>`)})});
+  const feed=document.getElementById("feed");
+  feed.innerHTML=acts.length?acts.slice(0,40).map(a=>{const T=TEAM[a.agente]||{nome:"Você",cor:"#F5F8FF"};const d=new Date(a.ts);
+    return `<div><time>${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}</time><span><span class="chip" style="background:${T.cor}">${esc(T.nome)}</span>${esc(a.texto)}</span></div>`}).join(""):`<div class="empty">${db?"Ainda sem atividade. Mande um pedido ao Diretor.":"Abra no claude.ai para ver a equipe ao vivo."}</div>`;
+}
+document.getElementById("board").addEventListener("change",async e=>{const id=e.target.dataset.mv;if(!id||!db)return;const k=tasks.find(x=>x.id===id);
+  await db.doc("tarefas/"+id).update({status:e.target.value,ts:Date.now()});log(k.agente,`moveu "${k.titulo}" para ${STATUS_LABEL[e.target.value]}`)});
+document.getElementById("board").addEventListener("click",async e=>{const id=e.target.dataset.ok;if(!id||!db)return;const k=tasks.find(x=>x.id===id);
+  await db.doc("tarefas/"+id).update({status:"feito",ts:Date.now()});log(null,`aprovou "${k.titulo}"`)});
+function log(agente,texto){if(db)db.collection("atividade").add({agente,texto,ts:Date.now()}).catch(()=>{})}
+
+// ---------- clique no personagem
+cv.addEventListener("click",e=>{const r=cv.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*W,y=(e.clientY-r.top)/r.height*H;
+  let best=null,bd=18;IDS.forEach(id=>{const c=chars[id],d=Math.hypot(c.x-x,c.y-4-y);if(d<bd){bd=d;best=id}});if(best)openAgent(best)});
+function openAgent(id){const T=TEAM[id],mine=tasks.filter(k=>k.agente===id&&k.status!=="feito"),done=tasks.filter(k=>k.agente===id&&k.status==="feito").length;
+  document.getElementById("dName").textContent=T.nome;document.getElementById("dName").style.color=T.cor;
+  document.getElementById("dRole").textContent=`${T.setor} · ${T.papel}`;
+  document.getElementById("dBody").innerHTML=(mine.length?`<ul>${mine.map(k=>`<li><b>${STATUS_LABEL[k.status]}:</b> ${esc(k.titulo)}${k.detalhe?`<br><span class="note">${esc(k.detalhe)}</span>`:""}</li>`).join("")}</ul>`:`<p>Livre agora. Está no café esperando a próxima tarefa.</p>`)+`<p class="note">${done} tarefa(s) entregue(s).</p>`;
+  document.getElementById("dlg").showModal()}
+document.getElementById("dClose").onclick=()=>document.getElementById("dlg").close();
+
+// ---------- pedido ao Diretor (Claude planeja e distribui)
+const fP=document.getElementById("fPedido"),bP=document.getElementById("bPedido"),pS=document.getElementById("pStatus"),pO=document.getElementById("pOut");
+let sample=null;
+fP.addEventListener("submit",async e=>{e.preventDefault();const txt=document.getElementById("pedido").value.trim();
+  if(!txt){pS.textContent="Escreva o pedido primeiro.";return}
+  if(!sample||!db){pS.textContent="O Diretor só atende com a página aberta no claude.ai.";return}
+  bP.disabled=true;pS.textContent="O Diretor está reunindo a equipe…";pO.textContent="";meetingUntil=Date.now()+60000;
+  log("diretor",`recebeu o pedido: "${txt.slice(0,120)}"`);
+  const prompt=`Você é o Diretor da BIOS, empresa de Campina Grande-PB que faz sites, cardápios digitais, apps de agendamento, sistemas de gestão e automação de atendimento para pequenos negócios (Instagram @b1os.fc). Regras: nada é publicado ou enviado sem aprovação do dono (Mathias); não invente números, clientes ou depoimentos; não use personagens/marcas de terceiros em peças comerciais.
+Equipe disponível (use exatamente estes ids): diretor, conteudo, designer, video, dev-sites, comercial, relatorios.
+Pedido do Mathias: """${txt}"""
+Divida em 3 a 7 tarefas concretas e curtas. Responda SOMENTE com JSON no formato:
+{"resumo":"1-2 frases do plano","tarefas":[{"titulo":"até 60 caracteres","agente":"id","detalhe":"o que exatamente entregar, 1 frase"}]}`;
+  try{
+    const r=await sample.json(prompt,{cache:false});
+    const list=(Array.isArray(r?.tarefas)?r.tarefas:[]).filter(k=>TEAM[k.agente]).slice(0,7);
+    if(!list.length)throw{code:"invalid_json"};
+    const ref=await db.collection("pedidos").add({texto:txt,resumo:String(r.resumo||""),ts:Date.now()});
+    for(const k of list){await db.collection("tarefas").add({titulo:String(k.titulo).slice(0,80),agente:k.agente,detalhe:String(k.detalhe||""),status:"afazer",pedido:ref.id,ts:Date.now()});
+      log(k.agente,`recebeu: ${String(k.titulo).slice(0,80)}`)}
+    pO.textContent=String(r.resumo||"");pS.textContent=`${list.length} tarefas criadas no quadro.`;document.getElementById("pedido").value="";
+  }catch(err){const c=err?.code;pS.textContent=c==="not_granted"||c==="sampling_disabled"?"O Diretor precisa da sua permissão para usar o Claude nesta página.":c==="rate_limited"?"Muitos pedidos seguidos. Tente de novo em alguns minutos.":"O Diretor não conseguiu montar o plano. Reescreva o pedido e tente de novo."}
+  finally{bP.disabled=false;meetingUntil=Date.now()+2500}
+});
+
+// ---------- conexão com o banco
+render();requestAnimationFrame(tick);
+(async()=>{
+  try{sample=await claude.use("sample")}catch(_){}
+  try{db=await claude.use("db")}catch(_){db=null}
+  if(!db){render();return}
+  db.collection("tarefas").onSnapshot(s=>{tasks=s.docs.map(d=>({id:d.id,...d.data()}));render()},()=>{});
+  db.collection("atividade").orderBy("ts","desc").limit(60).onSnapshot(s=>{acts=s.docs.map(d=>d.data());render()},()=>{});
+})();
+</script>

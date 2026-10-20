@@ -30,3 +30,7 @@
 - `modelos/`: código-fonte dos modelos já produzidos (reels, filme, convite, criativos).
 - `automacoes/`: tarefas agendadas, ManyChat, prompts de rotina.
 - `scripts/setup.sh`: instala tudo que os modelos precisam (Node, Playwright, ffmpeg, vozes).
+
+## Escritório BIOS IA (painel da equipe)
+- Painel ao vivo: https://claude.ai/artifact/BCy8bwKmWfscNjWPtFYifH (código em `escritorio/index.html`).
+- Ao começar uma tarefa, o agente atualiza o banco do painel com a ferramenta ArtifactData (coleção `tarefas`: `titulo`, `agente` = id do agente, `detalhe`, `status` = afazer|fazendo|aprovar|feito, `ts` = epoch ms). Ao terminar, `status: "aprovar"` (o Mathias aprova) e uma linha em `atividade` (`agente`, `texto`, `ts`).
