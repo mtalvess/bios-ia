@@ -1,0 +1,8 @@
+saida/
+**/saida/
+vozes/
+node_modules/
+work/
+*.mp4
+*.wav
+__pycache__/

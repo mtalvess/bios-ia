@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<style>
+@font-face{font-family:Lucky;src:url(Luckiest.ttf)}
+@font-face{font-family:Fred;src:url(Fredoka500.ttf);font-weight:500}
+@font-face{font-family:Fred;src:url(Fredoka700.ttf);font-weight:700}
+*{box-sizing:border-box}
+body{margin:0;background:#4FB3F6}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden;background:linear-gradient(#3FA9F5,#7CCBFF 70%,#A6DCFF);font-family:Fred,sans-serif;color:#3B2414}
+.abs{position:absolute}
+.lucky{font-family:Lucky,sans-serif;text-transform:uppercase;line-height:.95;color:#FFD23F;-webkit-text-stroke:10px #8B3A1A;paint-order:stroke fill;text-shadow:0 12px 0 #5A2410,0 22px 30px rgba(0,0,0,.25);letter-spacing:2px;white-space:nowrap}
+.cloud{position:absolute;opacity:.95}
+.wood{background:repeating-linear-gradient(92deg,#C98A4B 0 34px,#B97A3E 34px 70px,#D19555 70px 110px);border:8px solid #7A4520;border-radius:22px;box-shadow:0 14px 0 #5A3214,0 24px 40px rgba(0,0,0,.25)}
+.nail{position:absolute;width:18px;height:18px;border-radius:99px;background:radial-gradient(circle at 35% 35%,#eee,#777)}
+.block{position:absolute;width:150px;height:150px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-family:Lucky;font-size:110px;color:#fff;-webkit-text-stroke:6px rgba(0,0,0,.25);paint-order:stroke fill;box-shadow:inset 0 -14px 0 rgba(0,0,0,.18),inset 0 0 0 8px rgba(255,255,255,.35),0 16px 26px rgba(0,0,0,.25)}
+.conf{position:absolute;width:22px;height:34px;border-radius:5px}
+.row{display:flex;align-items:center;gap:26px;font-size:40px;font-weight:700;color:#3B2414}
+.ico{width:86px;height:86px;border-radius:24px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:inset 0 -8px 0 rgba(0,0,0,.18)}
+.balloon{position:absolute;width:150px;height:185px;border-radius:50% 50% 48% 48%;box-shadow:inset -18px -18px 0 rgba(0,0,0,.12),inset 14px 14px 0 rgba(255,255,255,.25)}
+.balloon::after{content:"";position:absolute;left:73px;top:185px;width:3px;height:260px;background:rgba(255,255,255,.8)}
+</style>
+</head>
+<body>
+<div id="stage">
+ <div id="clouds"></div>
+ <!-- piso de madeira -->
+ <div class="abs" style="left:0;bottom:0;width:1080px;height:230px;background:repeating-linear-gradient(90deg,#B9773D 0 180px,#A86A34 180px 186px,#C4844A 186px 360px,#A86A34 360px 366px);box-shadow:inset 0 14px 0 rgba(0,0,0,.18)"></div>
+ <div id="balloons"></div>
+
+ <!-- cena 1 -->
+ <div id="s1" class="abs" style="inset:0">
+  <svg id="rocket" class="abs" viewBox="0 0 120 240" style="width:200px;height:400px;left:0;top:0">
+   <path d="M60 6 C88 40 92 90 88 150 L32 150 C28 90 32 40 60 6Z" fill="#F4F4F0" stroke="#3B2414" stroke-width="5"/>
+   <path d="M60 6 C74 22 82 40 85 58 L35 58 C38 40 46 22 60 6Z" fill="#E8322B" stroke="#3B2414" stroke-width="5"/>
+   <circle cx="60" cy="92" r="17" fill="#6FD0FF" stroke="#3B2414" stroke-width="5"/>
+   <path d="M32 115 L8 165 L34 158Z M88 115 L112 165 L86 158Z" fill="#7BC043" stroke="#3B2414" stroke-width="5" stroke-linejoin="round"/>
+   <path d="M40 150 L80 150 L72 168 L48 168Z" fill="#9B9B9B" stroke="#3B2414" stroke-width="5"/>
+   <path id="flame" d="M48 170 Q60 235 72 170Z" fill="#FFB000"/>
+  </svg>
+  <div id="trail"></div>
+  <div id="sign" class="abs wood" style="left:170px;top:430px;width:740px;height:150px;display:flex;align-items:center;justify-content:center;transform-origin:50% -120px">
+   <div class="nail" style="left:18px;top:18px"></div><div class="nail" style="right:18px;top:18px"></div>
+   <div style="font-family:Lucky;font-size:60px;color:#FFF3D6;-webkit-text-stroke:6px #5A3214;paint-order:stroke fill;letter-spacing:2px;white-space:nowrap;margin-top:8px">Atenção, parceiros!</div>
+  </div>
+  <div class="abs" style="left:540px;top:200px;width:6px;height:230px;margin-left:-250px;background:#7A4520" id="rope1"></div>
+  <div class="abs" style="left:540px;top:200px;width:6px;height:230px;margin-left:244px;background:#7A4520" id="rope2"></div>
+  <div id="t1" class="abs" style="top:760px;left:0;width:1080px;display:flex;flex-direction:column;align-items:center;gap:10px"></div>
+ </div>
+
+ <!-- cena 2 -->
+ <div id="s2" class="abs" style="inset:0">
+  <div id="name" class="abs" style="top:250px;left:0;width:1080px;display:flex;justify-content:center"></div>
+  <svg id="lasso" class="abs" viewBox="0 0 700 700" style="left:190px;top:560px;width:700px;height:700px;overflow:visible">
+   <ellipse cx="350" cy="350" rx="330" ry="320" fill="none" stroke="#C9974F" stroke-width="22" stroke-linecap="round" pathLength="1" id="lp" stroke-dasharray="1" stroke-dashoffset="1"/>
+   <ellipse cx="350" cy="350" rx="330" ry="320" fill="none" stroke="#8B5A2B" stroke-width="22" stroke-dasharray="0.012 0.02" pathLength="1" id="lp2" opacity=".55"/>
+  </svg>
+  <svg id="star" class="abs" viewBox="-100 -100 200 200" style="left:290px;top:660px;width:500px;height:500px;overflow:visible">
+   <g id="starg">
+    <path d="M0,-92 L22,-38 L80,-46 L44,0 L80,46 L22,38 L0,92 L-22,38 L-80,46 L-44,0 L-80,-46 L-22,-38Z" fill="#FFC928" stroke="#8B5A12" stroke-width="7" stroke-linejoin="round"/>
+    <g fill="#FFC928" stroke="#8B5A12" stroke-width="6"><circle cx="0" cy="-92" r="10"/><circle cx="80" cy="-46" r="10"/><circle cx="80" cy="46" r="10"/><circle cx="0" cy="92" r="10"/><circle cx="-80" cy="46" r="10"/><circle cx="-80" cy="-46" r="10"/></g>
+    <circle r="44" fill="#FFE07A" stroke="#8B5A12" stroke-width="6"/>
+    <text id="age" y="30" text-anchor="middle" font-family="Lucky" font-size="84" fill="#E8322B" stroke="#7A1D12" stroke-width="5" paint-order="stroke"></text>
+   </g>
+  </svg>
+  <div id="ribbon" class="abs" style="top:1290px;left:150px;width:780px;height:150px">
+   <svg viewBox="0 0 780 150" style="width:780px;height:150px;position:absolute;inset:0"><path d="M0 40 L70 40 L50 85 L70 130 L0 130 L20 85Z M780 40 L710 40 L730 85 L710 130 L780 130 L760 85Z" fill="#B3221C"/><path d="M60 20 L720 20 L720 120 L60 120Z" fill="#E8322B" stroke="#7A1D12" stroke-width="6"/></svg>
+   <div id="ribtxt" class="abs" style="top:28px;left:60px;width:660px;text-align:center;font-family:Lucky;font-size:64px;color:#fff;-webkit-text-stroke:5px #7A1D12;paint-order:stroke fill"></div>
+  </div>
+  <div id="confetti"></div>
+ </div>
+
+ <!-- cena 3 -->
+ <div id="s3" class="abs" style="inset:0">
+  <div id="blocks"></div>
+  <div id="adv" class="abs" style="top:520px;left:90px;width:900px;text-align:center;font-weight:700;font-size:68px;line-height:1.2;color:#fff;-webkit-text-stroke:7px #1D5F9E;paint-order:stroke fill;text-shadow:0 8px 0 #134A80"></div>
+ </div>
+
+ <!-- cena 4: cartão final -->
+ <div id="s4" class="abs" style="inset:0">
+  <div id="card" class="abs" style="left:70px;top:300px;width:940px;height:1330px;border-radius:56px;background:#FFF8EA;border:14px solid #7A4520;box-shadow:0 18px 0 #5A3214,0 40px 70px rgba(0,0,0,.3);overflow:hidden">
+   <svg class="abs" viewBox="0 0 940 160" style="left:0;top:0;width:940px;height:160px" preserveAspectRatio="none"><rect width="940" height="160" fill="#fff"/><g fill="#2B1A10"><path d="M40 20 q60 -10 70 40 q-10 50 -70 30 q-40 -30 0 -70z"/><path d="M260 60 q50 -40 90 0 q10 60 -60 50 q-50 -10 -30 -50z"/><path d="M520 10 q70 0 60 50 q-30 40 -80 10 q-20 -40 20 -60z"/><path d="M760 70 q60 -30 90 10 q0 50 -70 40 q-40 -20 -20 -50z"/><path d="M150 120 q40 -10 50 20 q-20 30 -50 10z"/><path d="M640 120 q30 -20 50 10 q-10 30 -50 10z"/></g></svg>
+   <div class="abs" style="left:0;top:150px;width:940px;height:14px;background:#7A4520"></div>
+   <div id="c-title" class="abs" style="top:200px;left:0;width:912px;display:flex;flex-direction:column;align-items:center"></div>
+   <div id="c-rows" class="abs" style="top:620px;left:70px;width:780px;display:flex;flex-direction:column;gap:34px">
+    <div class="row cr"><div class="ico" style="background:#E8322B"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></div><div id="r-date"></div></div>
+    <div class="row cr"><div class="ico" style="background:#1D7FE0"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><div id="r-time"></div></div>
+    <div class="row cr"><div class="ico" style="background:#7BC043"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></div><div id="r-place" style="font-size:34px;line-height:1.25"></div></div>
+   </div>
+   <div id="c-btn" class="abs" style="top:1050px;left:100px;width:712px;display:flex;flex-direction:column;align-items:center;gap:18px">
+    <div style="width:712px;border-radius:999px;background:#25B04A;color:#fff;font-weight:700;font-size:44px;padding:32px 0;text-align:center;box-shadow:inset 0 -10px 0 rgba(0,0,0,.18),0 12px 26px rgba(37,176,74,.4)">Confirmar presença</div>
+    <div id="rsvp" style="font-size:30px;font-weight:500;color:#6B4A2F"></div>
+   </div>
+  </div>
+  <svg id="ministar" class="abs" viewBox="-100 -100 200 200" style="left:800px;top:200px;width:230px;height:230px;overflow:visible"><path d="M0,-92 L22,-38 L80,-46 L44,0 L80,46 L22,38 L0,92 L-22,38 L-80,46 L-44,0 L-80,-46 L-22,-38Z" fill="#FFC928" stroke="#8B5A12" stroke-width="8" stroke-linejoin="round"/><circle r="40" fill="#FFE07A" stroke="#8B5A12" stroke-width="6"/><text id="age2" y="28" text-anchor="middle" font-family="Lucky" font-size="76" fill="#E8322B" stroke="#7A1D12" stroke-width="5" paint-order="stroke"></text></svg>
+  <div id="credit" class="abs" style="bottom:70px;left:0;width:1080px;text-align:center;font-size:28px;font-weight:700;color:#FFF3D6;text-shadow:0 3px 0 #5A3214"></div>
+ </div>
+</div>
+<script>
+// ====== DADOS DO CONVITE (troque aqui para cada cliente) ======
+const D={
+  nome:'Miguel', idade:'4', idadeTxt:'faz 4 aninhos!',
+  convocado:['Você foi','convocado!'],
+  aventura:'Prepare as botas e o capacete espacial: a aventura vai ser infinita!',
+  data:'Sábado, 15 de novembro', hora:'às 16h',
+  local:'Espaço Kids Alegria<br>Rua das Flores, 120 · Catolé<br>Campina Grande-PB',
+  rsvp:'Confirme até 08/11 com a mamãe Ana',
+  credito:'Convite digital por BIOS · @b1os.fc'
+};
+// ===============================================================
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const cl=x=>Math.max(0,Math.min(1,x)),p=(t,a,b)=>cl((t-a)/(b-a));
+const out=x=>1-Math.pow(1-x,3),io=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
+const back=x=>{const c=1.9;return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2)};
+const elas=x=>x<=0?0:x>=1?1:Math.pow(2,-10*x)*Math.sin((x*10-.75)*2*Math.PI/3)+1;
+let seed=1;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
+function tf(el,o,x=0,y=0,s=1,r=0){el.style.opacity=o;el.style.transform=`translate(${x}px,${y}px) scale(${s}) rotate(${r}deg)`}
+function vis(el,a,b,t){el.style.visibility=(t>=a&&t<b)?'visible':'hidden'}
+const CLOUD='<svg viewBox="0 0 200 100" width="100%" height="100%"><g fill="#fff"><circle cx="55" cy="62" r="30"/><circle cx="90" cy="45" r="38"/><circle cx="135" cy="58" r="30"/><rect x="40" y="60" width="115" height="32" rx="16"/></g></svg>';
+seed=4;$('#clouds').innerHTML=Array.from({length:14},(_,i)=>{const w=220+rnd()*200;return `<div class="cloud" data-x="${rnd()*1300-200}" data-y="${(i%7)*270+rnd()*80-60}" data-v="${8+rnd()*14}" style="width:${w}px;height:${w/2}px">${CLOUD}</div>`}).join('');
+// letras saltitantes
+function letters(box,lines,size){box.innerHTML=lines.map(l=>`<div style="display:flex;justify-content:center">${[...l].map(c=>`<span class="lucky lt" style="display:inline-block;font-size:${size}px;${c===' '?'width:'+size*.35+'px':''}">${c===' '?'&nbsp;':c}</span>`).join('')}</div>`).join('');return [...box.querySelectorAll('.lt')]}
+const L1=letters($('#t1'),D.convocado,150), LN=letters($('#name'),[D.nome],230);
+$('#age').textContent=D.idade;$('#age2').textContent=D.idade;$('#ribtxt').textContent=D.idadeTxt;
+$('#adv').textContent=D.aventura;
+$('#c-title').innerHTML=`<div class="lucky" style="font-size:150px">${D.nome}</div><div style="margin-top:22px;font-family:Lucky;font-size:58px;color:#E8322B;-webkit-text-stroke:4px #7A1D12;paint-order:stroke fill">Festa dos brinquedos</div><div style="margin-top:26px;font-size:40px;font-weight:700;color:#6B4A2F">Você é nosso convidado especial!</div>`;
+$('#r-date').textContent=D.data;$('#r-time').textContent=D.hora;$('#r-place').innerHTML=D.local;$('#rsvp').textContent=D.rsvp;$('#credit').textContent=D.credito;
+// blocos FESTA
+const BC=['#E8322B','#FFC928','#1D7FE0','#7BC043','#FF8A1F'];
+$('#blocks').innerHTML=[...'FESTA'].map((c,i)=>`<div class="block bk" style="background:${BC[i]};left:${105+i*178}px;top:1080px">${c}</div>`).join('');
+// confete
+seed=9;$('#confetti').innerHTML=Array.from({length:60},()=>`<div class="conf cf" data-a="${rnd()*Math.PI*2}" data-v="${500+rnd()*900}" data-r="${rnd()*720}" style="background:${BC[Math.floor(rnd()*5)]}"></div>`).join('');
+// balões
+seed=21;$('#balloons').innerHTML=Array.from({length:6},(_,i)=>`<div class="balloon bl" data-x="${[40,860,130,780,-20,930][i]}" data-d="${rnd()*.6}" style="background:${BC[i%5]}"></div>`).join('');
+// rastro do foguete
+$('#trail').innerHTML=Array.from({length:14},()=>`<div class="abs tr" style="width:30px;height:30px"><svg viewBox="-10 -10 20 20" width="30" height="30"><path d="M0-9L2.5-2.5L9 0L2.5 2.5L0 9L-2.5 2.5L-9 0L-2.5-2.5Z" fill="#FFF7B0"/></svg></div>`).join('');
+const RP=t=>{const k=io(p(t,.15,1.7));return [-220+1500*k, 1500-1550*k+180*Math.sin(k*Math.PI)]};
+
+window.render=function(t){
+  // nuvens
+  $$('.cloud').forEach(c=>{const w=parseFloat(c.style.width);let x=(Number(c.dataset.x)+t*Number(c.dataset.v))%(1080+w+200)-w;c.style.transform=`translate(${x}px,${c.dataset.y}px)`});
+  // 1
+  vis($('#s1'),0,3.4,t);const x1=out(p(t,3.1,3.4));
+  const [rx,ry]=RP(t);$('#rocket').style.transform=`translate(${rx}px,${ry}px) rotate(42deg)`;$('#flame').setAttribute('d',`M48 170 Q60 ${215+Math.sin(t*40)*20} 72 170Z`);
+  $$('.tr').forEach((e,i)=>{const tt=t-i*.06;const [x,y]=RP(tt);const a=tt>.2&&tt<1.75?1-i/14:0;e.style.transform=`translate(${x+80}px,${y+260}px) scale(${1-i/20}) rotate(${t*200+i*30}deg)`;e.style.opacity=a*(1-x1)});
+  const ks=p(t,.9,1.6);const sw=Math.sin(ks*9)*14*(1-ks);
+  $('#sign').style.transform=`translateY(${-700*(1-out(p(t,.9,1.2)))}px) rotate(${sw}deg) scale(${1-.4*x1})`;$('#sign').style.opacity=1-x1;
+  ['#rope1','#rope2'].forEach(r=>{$(r).style.transform=`translateY(${-700*(1-out(p(t,.9,1.2)))}px)`;$(r).style.opacity=1-x1});
+  L1.forEach((e,i)=>{const a=1.5+i*.045;const k=p(t,a,a+.4);tf(e,cl(k*4)*(1-x1),0,-200*(1-elas(k)),.4+.6*elas(k)+.04*Math.sin(t*6+i),(1-k)*(i%2?20:-20))});
+  // 2
+  vis($('#s2'),3.4,7.6,t);const x2=out(p(t,7.3,7.6));
+  const k2=p(t,3.5,4.3);$('#star').style.transform=`scale(${back(k2)*(1-x2*.6)}) rotate(${-540*(1-out(k2))+Math.sin(t*2)*4}deg)`;$('#star').style.opacity=cl(k2*4)*(1-x2);
+  $('#lp').setAttribute('stroke-dashoffset',1-io(p(t,4.3,5.1)));$('#lp2').style.opacity=.55*p(t,5.0,5.2);
+  $('#lasso').style.transform=`rotate(${t*10}deg) scale(${1-x2*.4})`;$('#lasso').style.opacity=1-x2;
+  LN.forEach((e,i)=>{const a=4.1+i*.07;const k=p(t,a,a+.45);tf(e,cl(k*4)*(1-x2),0,-260*(1-elas(k)),.3+.7*elas(k),0)});
+  const kr=out(p(t,4.8,5.2));tf($('#ribbon'),kr*(1-x2),0,60*(1-kr),.6+.4*back(p(t,4.8,5.2)));
+  $$('.cf').forEach((e,i)=>{const c=t-4.0;const a=Number(e.dataset.a),v=Number(e.dataset.v);if(c<0||c>3){e.style.opacity=0;return}
+    const x=540+Math.cos(a)*v*c*.6,y=900+Math.sin(a)*v*c*.6+500*c*c;e.style.opacity=1-p(c,2,3);e.style.transform=`translate(${x}px,${y}px) rotate(${Number(e.dataset.r)+c*400}deg)`});
+  // 3
+  vis($('#s3'),7.6,11.2,t);const x3=out(p(t,10.9,11.2));
+  $$('.bk').forEach((e,i)=>{const a=7.75+i*.18;const k=p(t,a,a+.5);const y=-1400*(1-Math.min(1,k*k*1.9))+(k>.72?-60*Math.sin((k-.72)/.28*Math.PI)*(1-k):0);
+    tf(e,k>0?1-x3:0,0,y+(-80*x3),1,(i%2?6:-6)*(1-k)+Math.sin(t*3+i)*2)});
+  const ka=out(p(t,8.8,9.3));tf($('#adv'),ka*(1-x3),0,50*(1-ka),.9+.1*ka);
+  // 4
+  vis($('#s4'),11.2,99,t);
+  const kc=p(t,11.2,11.8);tf($('#card'),cl(kc*3),0,900*(1-out(kc)),.85+.15*back(kc));
+  const kt=p(t,11.7,12.2);tf($('#c-title'),cl(kt*3),0,0,.5+.5*elas(kt));
+  $$('.cr').forEach((e,i)=>{const a=12.2+i*.25;const k=out(p(t,a,a+.35));tf(e,k,-80*(1-k),0)});
+  const kb=p(t,13.0,13.4);tf($('#c-btn'),cl(kb*3),0,0,(.6+.4*back(kb))*(t>13.6?1+.035*Math.sin((t-13.6)*5):1));
+  const km=p(t,12.0,12.6);$('#ministar').style.opacity=cl(km*3);$('#ministar').style.transform=`scale(${back(km)}) rotate(${-200*(1-out(km))+Math.sin(t*2)*8}deg)`;
+  $('#credit').style.opacity=p(t,13.6,14.0);
+  $$('.bl').forEach((e,i)=>{const c=t-11.4-Number(e.dataset.d);const k=out(p(c,0,1.6));e.style.left=e.dataset.x+'px';e.style.top=(1950-560*k+Math.sin(t*1.5+i)*15)+'px';e.style.transform=`rotate(${Math.sin(t+i)*6}deg)`;e.style.opacity=c>0?1:0});
+};
+window.ready=false;document.fonts.ready.then(()=>{render(0);window.ready=true});
+</script>
+</body>
+</html>

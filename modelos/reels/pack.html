@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<style>
+@font-face{font-family:Anton;src:url(Anton.ttf)}
+*{box-sizing:border-box}
+body{margin:0;background:#020A1C}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden;background:#020A1C;color:#F5F8FF;font-family:Inter,sans-serif}
+.abs{position:absolute}
+.xb{font-weight:800}
+.cy{color:#2EC5FF}
+.big{font-family:Anton,sans-serif;font-weight:400;text-transform:uppercase;line-height:.98;letter-spacing:0;white-space:nowrap}
+.big.cy{text-shadow:0 0 40px rgba(46,197,255,.55)}
+.disp{font-family:Anton,sans-serif;font-weight:400;text-transform:uppercase;letter-spacing:1px}
+.label{font-size:30px;font-weight:600;letter-spacing:6px;text-transform:uppercase}
+#glow{position:absolute;left:140px;top:560px;width:800px;height:800px;border-radius:999px;background:radial-gradient(circle,rgba(9,101,250,.35),rgba(9,101,250,0) 65%)}
+.prob{display:flex;align-items:center;gap:28px;border-radius:28px;background:#0A1A3A;border:2px solid #1C2E55;padding:34px 36px;font-size:42px;font-weight:600;color:#DCE4F4}
+.xic{width:72px;height:72px;border-radius:999px;background:#FF6B4A;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+#phone{left:270px;top:300px;width:540px;height:960px;border-radius:76px;background:#0A1A3A;border:3px solid #1C2E55;padding:22px}
+.screen{width:100%;height:100%;border-radius:56px;background:#F5F8FF;color:#061233;overflow:hidden;position:relative;display:none;flex-direction:column}
+.hd{background:#0965FA;color:#fff;padding:66px 34px 30px;display:flex;flex-direction:column;gap:8px}
+.hd b{font-size:38px;font-weight:800}
+.hd span{font-size:22px;color:#DCE8FF}
+.body{padding:28px;display:flex;flex-direction:column;gap:18px;flex:1 1 auto}
+.item{display:flex;align-items:center;gap:20px;background:#fff;border-radius:24px;padding:18px}
+.thumb{width:84px;height:84px;border-radius:18px;background:#D6E4FF;flex-shrink:0}
+.plus{width:52px;height:52px;border-radius:999px;background:#0965FA;color:#fff;display:flex;align-items:center;justify-content:center;font-size:34px;font-weight:600}
+.cta{border-radius:22px;background:#061233;color:#fff;padding:28px;font-weight:600;font-size:26px;text-align:center}
+.slot{border-radius:16px;border:2px solid #C9D6EE;padding:20px 0;text-align:center;font-size:24px}
+.bub{max-width:80%;border-radius:26px;padding:18px 22px;font-size:23px;line-height:1.35}
+.me{align-self:flex-end;background:#0965FA;color:#fff;border-bottom-right-radius:8px}
+.bot{align-self:flex-start;background:#fff;border:2px solid #D6E4FF;border-bottom-left-radius:8px}
+.qr{border-radius:999px;border:2px solid #0965FA;color:#0965FA;padding:12px 20px;font-size:21px;font-weight:600}
+.toast{left:90px;top:70px;width:900px;border-radius:36px;background:#F5F8FF;color:#061233;padding:28px 34px;display:flex;align-items:center;gap:26px;box-shadow:0 30px 60px rgba(0,0,0,.5)}
+#tap{width:104px;height:104px;border-radius:999px;background:rgba(46,197,255,.35);border:5px solid #2EC5FF;pointer-events:none}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="abs" style="inset:0;background-image:radial-gradient(rgba(120,160,255,.13) 1.6px,transparent 1.6px);background-size:44px 44px"></div>
+  <div id="glow"></div>
+  <div class="abs" style="inset:0;background:radial-gradient(ellipse at center,rgba(2,10,28,0) 55%,rgba(0,3,10,.5) 100%);z-index:5;pointer-events:none"></div>
+
+  <div id="head" class="abs" style="left:90px;top:90px;width:900px;display:flex;justify-content:space-between;align-items:center">
+    <div style="display:flex;align-items:center;gap:16px"><img src="logo.svg" style="width:64px;height:64px"><div class="xb" style="font-size:34px">BIOS</div></div>
+    <div id="ep" style="border-radius:999px;border:2px solid #2E4A80;padding:12px 22px;font-size:24px;font-weight:600;color:#A4B4D0"></div>
+  </div>
+
+  <!-- 1. gancho -->
+  <div id="s1" class="abs" style="left:90px;top:0;width:900px;height:1920px">
+    <div id="hook" class="abs" style="top:620px;width:900px;display:flex;flex-direction:column"></div>
+    <div id="svc" class="abs" style="top:1240px;display:flex;align-items:center;gap:16px;border-radius:999px;background:#0965FA;padding:22px 34px;font-size:36px;font-weight:700"></div>
+  </div>
+
+  <!-- 2. problema -->
+  <div id="s2" class="abs" style="left:90px;top:0;width:900px;height:1920px">
+    <div id="plabel" class="abs label" style="top:260px;color:#FF8A6B"></div>
+    <div id="probs" class="abs" style="top:340px;width:900px;display:flex;flex-direction:column;gap:26px"></div>
+    <div id="dor" class="abs" style="top:1120px;width:900px;display:flex;flex-direction:column"></div>
+  </div>
+
+  <!-- 3. demonstração -->
+  <div id="s3" class="abs" style="left:0;top:0;width:1080px;height:1920px">
+    <div id="dlabel" class="abs label cy" style="top:210px;width:1080px;text-align:center"></div>
+    <div id="phone" class="abs">
+      <!-- cardápio -->
+      <div class="screen" id="d-cardapio">
+        <div class="hd"><b>Sua Lanchonete</b><span>Cardápio digital · Aberto agora</span></div>
+        <div class="body">
+          <div class="item"><div class="thumb"></div><div style="flex:1;font-weight:600;font-size:25px">Hambúrguer da casa</div><div class="plus" id="c1">+</div></div>
+          <div class="item"><div class="thumb"></div><div style="flex:1;font-weight:600;font-size:25px">X-Tudo especial</div><div class="plus">+</div></div>
+          <div class="item"><div class="thumb"></div><div style="flex:1;font-weight:600;font-size:25px">Batata frita</div><div class="plus" id="c2">+</div></div>
+          <div class="item"><div class="thumb"></div><div style="flex:1;font-weight:600;font-size:25px">Suco natural</div><div class="plus">+</div></div>
+          <div class="cta" id="c3" style="margin-top:auto;background:#1FA855">Pedir no WhatsApp · <span id="ccount">0</span> itens</div>
+        </div>
+      </div>
+      <!-- site -->
+      <div class="screen" id="d-site">
+        <div style="padding:70px 28px 0;display:flex;flex-direction:column;gap:20px" id="sgoogle">
+          <div style="border-radius:999px;border:2px solid #C9D6EE;background:#fff;padding:22px 28px;font-size:24px;display:flex;align-items:center;gap:14px"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#4A5878" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg><span id="stype"></span></div>
+          <div id="sres" class="item" style="flex-direction:column;align-items:flex-start;gap:6px;border:2px solid #D6E4FF">
+            <div style="font-size:19px;color:#1FA855">suaempresa.com.br</div>
+            <div style="font-size:28px;font-weight:700;color:#0965FA">Sua Empresa · Site oficial</div>
+            <div style="font-size:20px;color:#4A5878">Barbearia no Centro de Campina Grande. Agende online.</div>
+          </div>
+          <div class="item" style="flex-direction:column;align-items:flex-start;gap:10px;opacity:.5"><div style="width:60%;height:18px;border-radius:9px;background:#D6E4FF"></div><div style="width:85%;height:16px;border-radius:8px;background:#E6EEFF"></div></div>
+        </div>
+        <div id="spage" class="abs" style="inset:0;background:#F5F8FF;display:flex;flex-direction:column">
+          <div style="background:#061233;color:#fff;padding:80px 34px 44px;display:flex;flex-direction:column;gap:12px">
+            <div style="font-size:20px;color:#2EC5FF;font-weight:600;letter-spacing:3px">BARBEARIA · CENTRO</div>
+            <div class="xb" style="font-size:52px;line-height:1.05">Sua Empresa</div>
+            <div style="font-size:22px;color:#A4B4D0">Corte, barba e cuidado. Seg a sáb.</div>
+          </div>
+          <div class="body">
+            <div class="cta" id="s1b" style="background:#1FA855">Chamar no WhatsApp</div>
+            <div class="cta" style="background:#fff;color:#061233;border:2px solid #061233">Como chegar</div>
+            <div class="cta" style="background:#fff;color:#061233;border:2px solid #061233">Ver serviços e preços</div>
+            <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:6px">
+              <div style="height:150px;border-radius:20px;background:#D6E4FF"></div><div style="height:150px;border-radius:20px;background:#D6E4FF"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- agenda -->
+      <div class="screen" id="d-agenda">
+        <div class="hd"><b>Sua Barbearia</b><span>Agende online · 24h</span></div>
+        <div class="body">
+          <div class="item" style="border:2px solid #D6E4FF"><div class="thumb" style="border-radius:999px;width:70px;height:70px"></div><div style="display:flex;flex-direction:column;gap:4px"><div style="font-weight:600;font-size:25px">Corte + barba</div><div style="font-size:20px;color:#4A5878">45 min</div></div></div>
+          <div style="font-weight:600;font-size:24px;margin-top:6px">Hoje · escolha o horário</div>
+          <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px">
+            <div class="slot" style="opacity:.35;text-decoration:line-through">09:00</div><div class="slot" id="a1">10:30</div><div class="slot">11:00</div>
+            <div class="slot">14:00</div><div class="slot" style="opacity:.35;text-decoration:line-through">15:30</div><div class="slot">17:00</div>
+          </div>
+          <div class="cta" id="a2" style="margin-top:auto">Confirmar agendamento</div>
+        </div>
+        <div id="aok" class="abs" style="inset:0;background:#0965FA;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;text-align:center;padding:40px">
+          <div style="width:150px;height:150px;border-radius:999px;background:#fff;display:flex;align-items:center;justify-content:center"><svg width="90" height="90" viewBox="0 0 24 24" fill="none" stroke="#0965FA" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg></div>
+          <div class="xb" style="font-size:44px">Horário confirmado!</div>
+          <div style="font-size:26px;color:#DCE8FF">Corte + barba · Hoje, 10:30<br>Lembrete enviado no WhatsApp</div>
+        </div>
+      </div>
+      <!-- sistema -->
+      <div class="screen" id="d-sistema">
+        <div class="hd" style="background:#061233"><b>Painel do negócio</b><span>Hoje · atualizado agora</span></div>
+        <div class="body">
+          <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px">
+            <div class="item" style="flex-direction:column;align-items:flex-start;gap:4px"><div style="font-size:19px;color:#4A5878">Pedidos hoje</div><div class="xb" style="font-size:44px" id="k1">0</div></div>
+            <div class="item" style="flex-direction:column;align-items:flex-start;gap:4px"><div style="font-size:19px;color:#4A5878">Ticket médio</div><div class="xb" style="font-size:44px">R$ <span id="k2">0</span></div></div>
+          </div>
+          <div class="item" style="flex-direction:column;align-items:stretch;gap:14px">
+            <div style="font-size:21px;font-weight:600">Vendas da semana</div>
+            <div style="display:flex;align-items:flex-end;gap:12px;height:170px" id="bars"></div>
+          </div>
+          <div class="item" id="sx1" style="border:3px solid #FF6B4A;justify-content:space-between"><div style="font-weight:600;font-size:22px">Pão de hambúrguer</div><div style="border-radius:999px;background:#FFE4DC;color:#B4321A;padding:8px 16px;font-size:19px;font-weight:600">Estoque baixo</div></div>
+          <div class="item" style="justify-content:space-between"><div style="font-weight:600;font-size:22px">Refrigerante lata</div><div style="border-radius:999px;background:#DDF5E5;color:#137A3A;padding:8px 16px;font-size:19px;font-weight:600">OK</div></div>
+          <div class="item" style="justify-content:space-between"><div style="font-weight:600;font-size:22px">Caixa do dia</div><div style="border-radius:999px;background:#DDF5E5;color:#137A3A;padding:8px 16px;font-size:19px;font-weight:600">Fechado</div></div>
+        </div>
+      </div>
+      <!-- automação -->
+      <div class="screen" id="d-auto">
+        <div class="hd" style="flex-direction:row;align-items:center;gap:18px"><div style="width:64px;height:64px;border-radius:999px;background:#DCE8FF"></div><div style="display:flex;flex-direction:column;gap:4px"><b style="font-size:30px">Sua Loja</b><span>online agora</span></div></div>
+        <div class="body" style="gap:16px;background:#EEF3FC">
+          <div class="bub me" id="m1">Oi, que horas vocês abrem?</div>
+          <div class="bub bot" id="mt" style="font-size:30px;letter-spacing:4px;padding:10px 22px">•••</div>
+          <div class="bub bot" id="m2">Oi! Abrimos de seg a sáb, das 8h às 18h. Como posso ajudar?</div>
+          <div id="m3" style="display:flex;flex-wrap:wrap;gap:10px"><div class="qr">Ver cardápio</div><div class="qr" id="mq">Fazer pedido</div><div class="qr">Atendente</div></div>
+          <div class="bub me" id="m4">Fazer pedido</div>
+          <div class="bub bot" id="m5">Perfeito! Aqui está o link do pedido. É só escolher e confirmar.</div>
+        </div>
+      </div>
+    </div>
+    <div id="tap" class="abs"></div>
+    <div id="toast" class="abs toast" style="z-index:6">
+      <img src="logo.svg" style="width:84px;height:84px;flex-shrink:0">
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <div style="font-weight:600;font-size:30px" id="t1"></div>
+        <div style="font-size:27px;color:#4A5878" id="t2"></div>
+      </div>
+    </div>
+    <div id="result" class="abs" style="top:1340px;left:90px;width:900px;display:flex;flex-direction:column;align-items:center;text-align:center"></div>
+  </div>
+
+  <!-- 4. chamada -->
+  <div id="s4" class="abs" style="left:90px;top:0;width:900px;height:1920px">
+    <div id="c-com" class="abs disp" style="top:220px;width:900px;text-align:center;font-size:150px;line-height:1">Comenta</div>
+    <div id="c-kw" class="abs" style="top:370px;width:900px;display:flex;justify-content:center"><div id="kwbox" class="disp" style="background:#2EC5FF;color:#020A1C;border-radius:32px;padding:10px 60px;white-space:nowrap;line-height:1.1;box-shadow:0 0 80px rgba(46,197,255,.45)"></div></div>
+    <div id="c-sub" class="abs" style="top:670px;width:900px;text-align:center;font-size:46px;line-height:1.3;color:#C9D4EA;font-weight:600">que eu te mando no direct<br>como funciona</div>
+    <div id="c-comment" class="abs" style="top:880px;width:900px;border-radius:32px;background:#0A1A3A;border:2px solid #1C2E55;padding:30px 34px;display:flex;align-items:center;gap:24px">
+      <div style="width:78px;height:78px;border-radius:999px;background:#2E4A80;flex-shrink:0"></div>
+      <div style="display:flex;flex-direction:column;gap:6px"><div style="font-size:26px;font-weight:600;color:#A4B4D0">seu_perfil</div><div style="font-size:40px;font-weight:700"><span id="ctype"></span><span id="caret" style="color:#2EC5FF">|</span></div></div>
+    </div>
+    <div id="c-dm" class="abs" style="top:1110px;width:900px;border-radius:32px;background:#F5F8FF;color:#061233;padding:30px 34px;display:flex;align-items:center;gap:24px;box-shadow:0 30px 60px rgba(0,0,0,.4)">
+      <img src="logo.svg" style="width:78px;height:78px;flex-shrink:0">
+      <div style="display:flex;flex-direction:column;gap:6px"><div style="font-size:26px;font-weight:700">b1os.fc · direct</div><div style="font-size:28px;color:#4A5878" id="dmtxt"></div></div>
+    </div>
+    <div id="c-auto" class="abs" style="top:1350px;width:900px;text-align:center;font-size:36px;line-height:1.35;color:#F5F8FF">Esse direct é <span class="cy xb">automático.</span><br><span style="color:#A4B4D0">A gente faz isso pro seu negócio também.</span></div>
+    <div id="c-foot" class="abs" style="top:1640px;width:900px;display:flex;flex-direction:column;align-items:center;gap:18px">
+      <div style="display:flex;align-items:center;gap:18px"><img src="logo.svg" style="width:80px;height:80px"><div class="xb" style="font-size:48px">BIOS</div></div>
+      <div style="font-size:30px;color:#A4B4D0">@b1os.fc · Campina Grande-PB</div>
+    </div>
+  </div>
+</div>
+<script>
+const REELS={
+ 1:{ep:1,svc:'Cardápio digital',kw:'CARDÁPIO',dm:'Oi! Te mandei como funciona o cardápio digital.',demo:'cardapio',
+  hooks:[[['Sua lanchonete',0],['ainda recebe',0],['pedido por áudio?',1]],[['Pare de anotar',0],['pedido no',0],['caderno.',1]],[['Cardápio em',0],['foto borrada?',1],['Tem jeito melhor.',0]]],
+  probs:['Áudio de 2 minutos pra um pedido','Foto borrada do cardápio','Pedido anotado errado'],
+  dor:[['Pedido errado,',0],['cliente perdido.',1]],
+  toast:['Novo pedido no WhatsApp','1x Hambúrguer · 1x Batata frita'],
+  result:[['O pedido chega pronto',0],['no seu WhatsApp.',1]],
+  taps:[[1.0,'#c1'],[1.8,'#c2'],[2.8,'#c3']]},
+ 2:{ep:2,svc:'Site profissional',kw:'SITE',dm:'Oi! Te mandei como funciona o site profissional.',demo:'site',
+  hooks:[[['Seu cliente',0],['te procura no Google.',0],['Ele te acha?',1]],[['Só Instagram',0],['não é',0],['site.',1]],[['Não tá no Google?',0],['Tá perdendo',0],['pro concorrente.',1]]],
+  probs:['Não aparece no Google','Cliente não acha endereço nem horário','Perfil com cara de amador'],
+  dor:[['Quem não é visto,',0],['não é lembrado.',1]],
+  toast:['Nova mensagem pelo seu site','"Oi! Achei vocês no Google."'],
+  result:[['Seu negócio encontrado',0],['e com cara de profissional.',1]],
+  taps:[[1.7,'#sres'],[3.0,'#s1b']]},
+ 3:{ep:3,svc:'App de agendamento',kw:'AGENDA',dm:'Oi! Te mandei como funciona o app de agendamento.',demo:'agenda',
+  hooks:[[['Você passa o dia',0],['respondendo',0],['"tem horário?"',1]],[['Seu cliente marca',0],['horário sozinho.',0],['Até de madrugada.',1]],[['Sua agenda',0],['ainda é',0],['no papel?',1]]],
+  probs:['"Tem horário hoje?" o dia inteiro','Agenda no papel, horário duplicado','Cliente esquece e não aparece'],
+  dor:[['Horário vazio,',0],['dinheiro perdido.',1]],
+  toast:['Novo agendamento','Hoje, 10:30 · Corte + barba'],
+  result:[['O cliente marca sozinho,',0],['24 horas por dia.',1]],
+  taps:[[1.2,'#a1'],[2.4,'#a2']]},
+ 4:{ep:4,svc:'Sistema de gestão',kw:'SISTEMA',dm:'Oi! Te mandei como funciona o sistema de gestão.',demo:'sistema',
+  hooks:[[['Você sabe',0],['quanto seu negócio',0],['lucrou esse mês?',1]],[['Planilha que',0],['ninguém atualiza',0],['não é gestão.',1]],[['3 sinais de que',0],['você precisa de',0],['um sistema',1]]],
+  plabel:[null,null,'Os 3 sinais'],
+  probs:['Estoque no "acho que tem"','Caixa que não fecha no fim do dia','Planilha sempre desatualizada'],
+  dor:[['Sem controle,',0],['o lucro some.',1]],
+  toast:['Alerta de estoque','Pão de hambúrguer acabando'],
+  result:[['Vendas, estoque e caixa',0],['num painel só.',1]],
+  taps:[[2.9,'#sx1']]},
+ 5:{ep:5,svc:'Automação de atendimento',kw:'AUTO',dm:'Oi! Te mandei como funciona a automação.',demo:'auto',
+  hooks:[[['Seu negócio pode',0],['atender sozinho.',0],['Olha isso.',1]],[['Ainda responde',0],['a mesma pergunta',0],['o dia todo?',1]],[['Cliente mandou',0],['mensagem às 23h.',0],['Quem respondeu?',1]]],
+  probs:['A mesma pergunta o dia todo','Cliente esperando resposta','Venda perdida fora do horário'],
+  dor:[['Demorou pra responder,',0],['perdeu a venda.',1]],
+  toast:['Atendimento automático','Respondido na hora, 24h'],
+  result:[['Atendimento que funciona',0],['até quando você dorme.',1]],
+  taps:[[2.7,'#mq']]}
+};
+const q=new URLSearchParams(location.search);
+const R=REELS[q.get('reel')||1], H=Number(q.get('hook')||0);
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const cl=x=>Math.max(0,Math.min(1,x));
+const p=(t,a,b)=>cl((t-a)/(b-a));
+const out=x=>1-Math.pow(1-x,3);
+const back=x=>{const c=1.7;return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2)};
+function set(el,o,tx=0,ty=0,s=1,r=0){el.style.opacity=o;el.style.transform=`translate(${tx}px,${ty}px) scale(${s}) rotate(${r}deg)`}
+function vis(el,a,b,t){el.style.visibility=(t>=a&&t<b)?'visible':'hidden'}
+const XSVG='<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#020A1C" stroke-width="3.2" stroke-linecap="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>';
+function lines(box,arr,max,align){
+  box.innerHTML=arr.map(([s,h])=>`<div class="big ${h?'cy':''} ln">${s}</div>`).join('');
+  let fs=max;const els=[...box.children];
+  els.forEach(e=>e.style.fontSize=fs+'px');
+  while(fs>40&&els.some(e=>e.scrollWidth>900)){fs-=2;els.forEach(e=>e.style.fontSize=fs+'px')}
+  if(align)els.forEach(e=>e.style.textAlign=align);
+  return els;
+}
+// montagem
+$('#ep').textContent='Digitalizando CG · ep. '+R.ep;
+const hookEls=lines($('#hook'),R.hooks[H],190);
+$('#svc').innerHTML='<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>'+R.svc;
+$('#plabel').textContent=(R.plabel&&R.plabel[H])||'O problema';
+$('#probs').innerHTML=R.probs.map(s=>`<div class="prob"><div class="xic">${XSVG}</div>${s}</div>`).join('');
+const dorEls=lines($('#dor'),R.dor,150);
+$('#dlabel').textContent=R.svc+' · BIOS';
+$('#d-'+R.demo).style.display='flex';
+$('#t1').textContent=R.toast[0];$('#t2').textContent=R.toast[1];
+const resEls=lines($('#result'),R.result,110,'center');
+$('#kwbox').textContent=R.kw;$('#kwbox').style.fontSize=(R.kw.length>6?170:200)+'px';
+$('#dmtxt').textContent=R.dm;
+$('#bars').innerHTML=[45,62,38,70,88,100,55].map(h=>`<div class="bar" data-h="${h}" style="flex:1;border-radius:10px 10px 4px 4px;background:#0965FA;height:0"></div>`).join('');
+const QUERY='barbearia em campina grande';
+
+const T={s2:2.6,s3:5.8,s4:12.4,end:17};['s2','s3','s4','end'].forEach(k=>{if(q.get(k))T[k]=Number(q.get(k))});
+const P=k=>q.has(k)?Number(q.get(k)):null;
+const ST=Math.min(.95,Math.max(.42,(T.s3-T.s2-1.4)/3.6));
+function pressed(d,td){return d>=td&&d<td+.2}
+function cursor(d){
+  const tap=$('#tap'),taps=R.taps.map(([td,id])=>({td,el:$(id)}));
+  const first=taps[0].td,last=taps[taps.length-1].td;
+  const o=cl(p(d,first-.5,first-.25))*(1-p(d,last+.3,last+.5));
+  const pos=a=>{const r=a.el.getBoundingClientRect();return [r.left+r.width/2-52,r.top+r.height/2-52]};
+  let x,y;
+  if(d<first){const [x1,y1]=pos(taps[0]);const k=out(p(d,first-.5,first-.05));x=x1+250*(1-k);y=y1+300*(1-k)}
+  else{let i=taps.length-1;for(let j=0;j<taps.length-1;j++)if(d<taps[j+1].td){i=j;break}
+    const [x1,y1]=pos(taps[i]);if(i<taps.length-1){const [x2,y2]=pos(taps[i+1]);const k=out(p(d,taps[i].td+.25,taps[i+1].td-.05));x=x1+(x2-x1)*k;y=y1+(y2-y1)*k}else{x=x1;y=y1}}
+  tap.style.left=x+'px';tap.style.top=y+'px';
+  const pr=taps.some(a=>pressed(d,a.td));
+  set(tap,o,0,0,pr?.78:1);
+  taps.forEach(a=>{a.el.style.transform=pressed(d,a.td)?'scale(.93)':'';a.el.style.transition='none'});
+}
+const DEMO={
+ cardapio(d){const n=(d>=1.0?1:0)+(d>=1.8?1:0);$('#ccount').textContent=n},
+ site(d){const k=p(d,.1,1.3);$('#stype').textContent=QUERY.slice(0,Math.round(QUERY.length*k))+(k<1?'|':'');
+   const kr=out(p(d,1.3,1.6));set($('#sres'),kr,0,30*(1-kr));
+   const ks=out(p(d,2.0,2.45));set($('#spage'),ks>0?1:0,540*(1-ks),0)},
+ agenda(d){const sel=d>=1.2;const s=$('#a1');s.style.background=sel?'#0965FA':'';s.style.color=sel?'#fff':'';s.style.borderColor=sel?'#0965FA':'';s.style.fontWeight=sel?'700':'';
+   const ko=p(d,2.65,3.0);set($('#aok'),out(ko),0,0,.9+.1*back(ko))},
+ sistema(d){const k=out(p(d,.4,1.8));$('#k1').textContent=Math.round(37*k);$('#k2').textContent=Math.round(28*k);
+   $$('.bar').forEach((b,i)=>{const kb=out(p(d,.5+i*.1,1.1+i*.1));b.style.height=(Number(b.dataset.h)*1.6*kb)+'px'});
+   const pulse=d>2.2?.5+.5*Math.sin(d*8):0;$('#sx1').style.boxShadow=`0 0 0 ${8*pulse}px rgba(255,107,74,.25)`},
+ auto(d){const sh=(id,a)=>{const k=out(p(d,a,a+.3));const e=$(id);e.style.display=d>=a?'':'none';set(e,k,0,20*(1-k))};
+   sh('#m1',.3);const e=$('#mt');e.style.display=(d>=.8&&d<1.5)?'':'none';sh('#m2',1.5);sh('#m3',1.9);sh('#m4',3.0);sh('#m5',3.4)}
+};
+const TOAST_AT={cardapio:3.3,site:3.5,agenda:3.4,sistema:3.4,auto:3.9};
+window.render=function(t){
+  set($('#glow'),.6+.4*Math.sin(t*1.3),0,Math.sin(t*.7)*60,1+.08*Math.sin(t*.9));
+  // cabeçalho
+  set($('#head'),t<T.s4-.3?1:1-p(t,T.s4-.3,T.s4),0,0);
+  // 1. gancho
+  vis($('#s1'),0,T.s2,t);const x1=out(p(t,T.s2-.25,T.s2));
+  hookEls.forEach((el,i)=>{const k=out(p(t,i*.08,i*.08+.4));set(el,1-x1,-30*(1-k)*(i%2?-1:1),-100*x1,1+.07*(1-k))});
+  const kv=out(p(t,.35,.65));set($('#svc'),kv*(1-x1),0,30*(1-kv));
+  // 2. problema
+  vis($('#s2'),T.s2,T.s3,t);const x2=out(p(t,T.s3-.3,T.s3));
+  set($('#plabel'),out(p(t,T.s2,T.s2+.25))*(1-x2));
+  $$('.prob').forEach((el,i)=>{const a=P('p'+i)??(T.s2+.15+i*ST);const k=out(p(t,a,a+.3));const sh=(t>a+.3&&t<a+.55)?Math.sin(t*90)*8*(1-p(t,a+.3,a+.55)):0;set(el,k*(1-x2),-60*(1-k)+sh,0)});
+  $$('.xic').forEach((el,i)=>{const a=(P('p'+i)??(T.s2+.15+i*ST))+.15;const k=p(t,a,a+.3);set(el,cl(k*3),0,0,back(k))});
+  dorEls.forEach((el,i)=>{const a=(P('pd')??(T.s2+.25+3*ST))+i*.22;const k=out(p(t,a,a+.3));set(el,k*(1-x2),0,50*(1-k))});
+  // 3. demonstração
+  vis($('#s3'),T.s3,T.s4,t);const x3=out(p(t,T.s4-.3,T.s4));const DS=P('rs')?Math.min(1.7,Math.max(.8,(P('rs')-T.s3-.6)/TOAST_AT[R.demo])):1;const d=(t-(T.s3+.6))/DS;
+  set($('#dlabel'),out(p(t,T.s3,T.s3+.3))*(1-x3)*(1-out(p(d,TOAST_AT[R.demo]-.2,TOAST_AT[R.demo]))));
+  const kp=out(p(t,T.s3,T.s3+.6));set($('#phone'),1-x3,0,1300*(1-kp)-80*x3,1-.05*x3);
+  DEMO[R.demo](d);
+  if(t>=T.s3&&t<T.s4)cursor(d);else $('#tap').style.opacity=0;
+  const ta=TOAST_AT[R.demo];const ko=out(p(d,ta,ta+.35));set($('#toast'),ko*(1-x3),0,-260*(1-ko));
+  resEls.forEach((el,i)=>{const a=(P('rs')??(T.s3+.9))+i*.22;const k=out(p(t,a,a+.35));set(el,k*(1-x3),0,50*(1-k))});
+  // 4. chamada
+  vis($('#s4'),T.s4,99,t);const c=t-T.s4;
+  set($('#c-com'),out(p(c,0,.3)),0,40*(1-out(p(c,0,.3))));
+  const KW=(P('kw')??(T.s4+.2))-T.s4, CA=(P('ca')??(T.s4+2.9))-T.s4;const TY=Math.min(KW+.75,CA-1.3);
+  const kk=p(c,KW,KW+.35);set($('#c-kw'),cl(kk*3),0,0,back(kk)*(c>.8?1+.03*Math.sin((c-.8)*6):1));
+  set($('#c-sub'),out(p(c,.5,.8)),0,30*(1-out(p(c,.5,.8))));
+  const kc=out(p(c,TY-.35,TY-.05));set($('#c-comment'),kc,0,40*(1-kc));
+  const ty=p(c,TY,TY+R.kw.length*.09);$('#ctype').textContent=R.kw.slice(0,Math.round(R.kw.length*ty));
+  $('#caret').style.opacity=(Math.floor(c*3)%2===0||ty<1)&&c<CA-.5?1:0;
+  const kd=out(p(c,CA-.55,CA-.2));set($('#c-dm'),kd,0,-60*(1-kd));
+  const ka=out(p(c,CA,CA+.3));set($('#c-auto'),ka,0,30*(1-ka));
+  const kf=out(p(c,CA+.3,CA+.6));set($('#c-foot'),kf,0,30*(1-kf));
+};
+document.fonts.ready.then(()=>render(0));
+</script>
+</body>
+</html>
