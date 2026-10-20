@@ -3,7 +3,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Anton&family=Inter:wght@400;500;600;700&display=swap">
 <style>
-/* Layout: barra fixa com abas (Escritório · Quadro · Equipe · Atividade); o escritório em pixel art ocupa a cena com painel lateral do agente; visual noturno único da BIOS. */
+/* Layout: barra fixa com abas; cada aba é uma área da empresa (escritório, quadro, clientes, financeiro, agenda, entregas, equipe, atividade). Visual noturno único da BIOS. */
 :root{
   --bg:#020A1C; --panel:#0A1A3A; --panel2:#0E2148; --line:#1C2E55; --line2:#2A4170;
   --fg:#F5F8FF; --muted:#A4B4D0; --blue:#0965FA; --cyan:#2EC5FF;
@@ -15,46 +15,49 @@
 html,body{background:var(--bg)}
 body{color:var(--fg);font-family:var(--f-ui);font-size:15px;line-height:1.45}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
-.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:rgba(2,10,28,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
-.bar-in{max-width:1240px;margin:0 auto;display:flex;align-items:center;gap:14px;padding-block:10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));flex-wrap:wrap}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:rgba(2,10,28,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.bar-in{max-width:1280px;margin:0 auto;display:flex;align-items:center;gap:12px;padding-block:10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));flex-wrap:wrap}
 .brand{font-family:var(--f-disp);font-size:24px;letter-spacing:.5px;text-transform:uppercase;white-space:nowrap}
 .brand span{color:var(--cyan)}
-nav{display:flex;gap:4px;flex:1 1 auto;overflow-x:auto;scrollbar-width:none}
-nav a{color:var(--muted);text-decoration:none;font-family:var(--f-pix);font-size:12px;letter-spacing:.6px;text-transform:uppercase;padding:8px 12px;border-radius:8px;white-space:nowrap;display:flex;gap:6px;align-items:center}
+nav{display:flex;gap:2px;flex:1 1 auto;overflow-x:auto;scrollbar-width:none;min-width:0}
+nav a{color:var(--muted);text-decoration:none;font-family:var(--f-pix);font-size:11.5px;letter-spacing:.5px;text-transform:uppercase;padding:8px 10px;border-radius:8px;white-space:nowrap;display:flex;gap:6px;align-items:center}
 nav a:hover{color:var(--fg);background:var(--panel)}
 nav a[aria-current="page"]{color:var(--fg);background:var(--panel2);box-shadow:inset 0 -2px 0 var(--cyan)}
-nav a .n{font-family:var(--f-ui);font-size:11px;font-weight:700;background:var(--warn);color:#2a1a00;border-radius:999px;padding:0 6px;line-height:16px}
+.n{font-family:var(--f-ui);font-size:11px;font-weight:700;border-radius:999px;padding:0 6px;line-height:16px;background:var(--warn);color:#2a1a00}
+.n.red{background:var(--bad);color:#fff}
 .btn{background:var(--blue);color:#fff;border:0;border-radius:999px;padding:9px 16px;font:inherit;font-weight:700;cursor:pointer;white-space:nowrap}
 .btn:hover{filter:brightness(1.1)} .btn[disabled]{opacity:.55;cursor:wait}
 .btn.ghost{background:transparent;border:1px solid var(--line2);color:var(--fg)}
-.btn.sm{padding:5px 10px;font-size:13px}
+.btn.sm{padding:5px 11px;font-size:13px}
+.btn.ok2{background:var(--ok);color:#03210f}
 :focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
-main{max-width:1240px;margin:0 auto;padding-block:18px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+main{max-width:1280px;margin:0 auto;padding-block:18px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .view{display:flex;flex-direction:column;gap:16px}
 .view[hidden]{display:none!important}
+.head{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-end}
 h2.t{font-family:var(--f-disp);font-weight:400;font-size:clamp(28px,4vw,40px);text-transform:uppercase;margin:0;line-height:1;text-wrap:balance}
-.lead{color:var(--muted);margin:4px 0 0;max-width:68ch}
+.lead{color:var(--muted);margin:4px 0 0;max-width:70ch}
 .strip{display:flex;gap:10px;flex-wrap:wrap}
 .stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px 14px;display:flex;align-items:baseline;gap:8px}
 .stat b{font-family:var(--f-disp);font-weight:400;font-size:26px;font-variant-numeric:tabular-nums}
 .stat small{color:var(--muted);font-family:var(--f-pix);font-size:11px;text-transform:uppercase}
-.scene{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:16px;align-items:start}
+.scene{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:16px;align-items:start}
 @media (max-width:980px){.scene{grid-template-columns:minmax(0,1fr)}}
 .office{position:relative;border-radius:14px;overflow:hidden;border:2px solid var(--line2);background:#0b1430;box-shadow:0 24px 70px rgba(0,0,0,.5)}
-#cv{display:block;width:100%;height:auto;image-rendering:pixelated;cursor:default}
+#cv{display:block;width:100%;height:auto;image-rendering:pixelated}
 .ov{position:absolute;inset:0;pointer-events:none}
 .bub{position:absolute;transform:translate(-50%,-100%);background:var(--fg);color:#061233;font-family:var(--f-pix);font-size:clamp(8px,.95vw,11px);line-height:1.2;padding:4px 7px;border-radius:6px;white-space:nowrap;max-width:26vw;overflow:hidden;text-overflow:ellipsis;box-shadow:0 3px 0 rgba(0,0,0,.35)}
 .bub::after{content:"";position:absolute;left:50%;bottom:-5px;margin-left:-5px;border:5px solid transparent;border-top-color:inherit;border-bottom:0}
-.bub{border-color:var(--fg)} .bub.warn{background:var(--warn);border-color:var(--warn)} .bub.meet{background:var(--cyan);border-color:var(--cyan)} .bub.tag{background:#061233;color:var(--fg);border-color:#061233}
+.bub{border-color:var(--fg)} .bub.warn{background:var(--warn);border-color:var(--warn)} .bub.meet{background:var(--cyan);border-color:var(--cyan)} .bub.tag{background:#061233;color:var(--fg);border-color:#061233} .bub.work{background:var(--ok);border-color:var(--ok)}
 .legend{position:absolute;left:10px;bottom:8px;display:flex;gap:10px;flex-wrap:wrap;font-family:var(--f-pix);font-size:10px;background:rgba(2,10,28,.78);padding:5px 9px;border-radius:8px}
 .legend i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:4px;vertical-align:middle}
-.side{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
-.side h3{font-family:var(--f-disp);font-weight:400;font-size:30px;text-transform:uppercase;margin:0;line-height:1}
+.card,.side{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.side h3,.card h3{font-family:var(--f-disp);font-weight:400;font-size:28px;text-transform:uppercase;margin:0;line-height:1}
 .prof{display:flex;gap:12px;align-items:center}
 .av{width:56px;height:56px;image-rendering:pixelated;background:var(--panel2);border-radius:12px;flex-shrink:0}
-.pill{display:inline-flex;align-items:center;gap:6px;font-family:var(--f-pix);font-size:11px;text-transform:uppercase;padding:3px 8px;border-radius:999px;background:var(--panel2);color:var(--muted)}
+.pill{display:inline-flex;align-items:center;gap:6px;font-family:var(--f-pix);font-size:11px;text-transform:uppercase;padding:3px 8px;border-radius:999px;background:var(--panel2);color:var(--muted);width:fit-content}
 .pill i{width:8px;height:8px;border-radius:9px;background:var(--muted)}
-.pill.work i{background:var(--ok)} .pill.wait i{background:var(--warn)} .pill.meet i{background:var(--cyan)}
+.pill.work i{background:var(--ok)} .pill.wait i{background:var(--warn)} .pill.meet i{background:var(--cyan)} .pill.bad i{background:var(--bad)}
 .mini{display:flex;flex-direction:column;gap:8px}
 .mt{background:var(--bg);border:1px solid var(--line);border-left:4px solid var(--c,#888);border-radius:10px;padding:8px 10px;display:flex;flex-direction:column;gap:6px}
 .mt p{margin:0;font-weight:600;font-size:14px;overflow-wrap:anywhere}
@@ -63,12 +66,12 @@ h2.t{font-family:var(--f-disp);font-weight:400;font-size:clamp(28px,4vw,40px);te
 .seg button{font:inherit;font-size:11.5px;border:1px solid var(--line2);background:transparent;color:var(--muted);border-radius:999px;padding:2px 8px;cursor:pointer}
 .seg button[aria-pressed="true"]{background:var(--cyan);color:#021226;border-color:var(--cyan);font-weight:700}
 .note{color:var(--muted);font-size:13px;margin:0}
-.team-list{display:flex;flex-direction:column;gap:6px}
+.team-list{display:flex;flex-direction:column;gap:4px}
 .tl{display:flex;align-items:center;gap:10px;background:transparent;border:1px solid transparent;border-radius:10px;padding:6px;cursor:pointer;color:var(--fg);font:inherit;text-align:left;width:100%}
 .tl:hover{background:var(--panel2)} .tl canvas{width:32px;height:32px;image-rendering:pixelated;border-radius:8px;background:var(--panel2)}
 .tl b{display:block;font-size:14px} .tl small{color:var(--muted);font-size:12px}
 .tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-select,input,textarea{font:inherit;background:var(--bg);color:var(--fg);border:1px solid var(--line2);border-radius:10px;padding:8px 10px}
+select,input,textarea{font:inherit;background:var(--bg);color:var(--fg);border:1px solid var(--line2);border-radius:10px;padding:8px 10px;min-width:0}
 .board{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
 @media (max-width:900px){.board{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:540px){.board{grid-template-columns:minmax(0,1fr)}}
@@ -76,19 +79,22 @@ select,input,textarea{font:inherit;background:var(--bg);color:var(--fg);border:1
 .col.over{border-color:var(--cyan);background:var(--panel2)}
 .col h3{margin:0 0 2px;font-family:var(--f-pix);font-size:12px;letter-spacing:.6px;text-transform:uppercase;display:flex;justify-content:space-between;color:var(--muted)}
 .col h3 b{color:var(--fg);font-variant-numeric:tabular-nums}
-.task{background:var(--panel2);border-radius:10px;padding:10px;border-left:4px solid var(--c,#888);display:flex;flex-direction:column;gap:8px;cursor:grab;min-width:0}
+.task{background:var(--panel2);border-radius:10px;padding:10px;border-left:4px solid var(--c,#888);display:flex;flex-direction:column;gap:7px;cursor:grab;min-width:0}
 .task.dragging{opacity:.4}
 .task p{margin:0;font-size:14px;font-weight:600;overflow-wrap:anywhere}
 .task .meta{display:flex;justify-content:space-between;gap:6px;align-items:center;font-size:12px;color:var(--muted);flex-wrap:wrap}
 .task select{font-size:12px;padding:2px 4px;border-radius:6px;max-width:130px}
+.tags{display:flex;gap:6px;flex-wrap:wrap;font-size:11.5px}
+.tag{border:1px solid var(--line2);border-radius:999px;padding:0 7px;color:var(--muted)}
+.tag.late{border-color:var(--bad);color:#ffb3a8}
+.tag.score{border-color:var(--cyan);color:var(--cyan)}
 .who{display:inline-flex;align-items:center;gap:6px}
 .who i{width:10px;height:10px;border-radius:3px;background:var(--c)}
-.ok{background:var(--ok);color:#03210f;border:0;border-radius:6px;font:inherit;font-size:12px;font-weight:700;padding:3px 8px;cursor:pointer}
 .empty{color:var(--muted);font-size:13px;text-align:center;padding:14px 4px;border:1px dashed var(--line2);border-radius:10px}
-.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
 .ac{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px;min-width:0}
 .ac .top{display:flex;gap:12px;align-items:center}
-.ac h4{margin:0;font-family:var(--f-disp);font-weight:400;font-size:24px;text-transform:uppercase;line-height:1}
+.ac h4{margin:0;font-family:var(--f-disp);font-weight:400;font-size:24px;text-transform:uppercase;line-height:1;overflow-wrap:anywhere}
 .load{height:8px;background:var(--bg);border-radius:9px;overflow:hidden;display:flex}
 .load i{display:block;height:100%}
 .ac dl{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:0;text-align:center}
@@ -99,13 +105,33 @@ select,input,textarea{font:inherit;background:var(--bg);color:var(--fg);border:1
 .ev{display:grid;grid-template-columns:56px minmax(0,1fr);gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}
 .ev time{font-family:var(--f-pix);font-size:11px;color:var(--muted);padding-top:2px;font-variant-numeric:tabular-nums}
 .chip{display:inline-block;font-family:var(--f-pix);font-size:10px;padding:1px 6px;border-radius:4px;color:#061233;margin-right:6px}
-dialog{background:var(--panel);color:var(--fg);border:1px solid var(--line2);border-radius:18px;width:min(560px,94vw);padding:20px}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--panel)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font-family:var(--f-pix);font-size:11px;text-transform:uppercase;color:var(--muted);font-weight:400;white-space:nowrap}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+.week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}
+@media (max-width:900px){.week{grid-template-columns:minmax(0,1fr)}}
+.dcol{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px;display:flex;flex-direction:column;gap:6px;min-height:120px;min-width:0}
+.dcol.today{border-color:var(--cyan)}
+.dcol h5{margin:0;font-family:var(--f-pix);font-size:11px;text-transform:uppercase;color:var(--muted)}
+.dcol .it{font-size:13px;background:var(--panel2);border-left:3px solid var(--c,#888);border-radius:8px;padding:6px 8px;cursor:pointer;color:var(--fg);text-align:left;border-top:0;border-right:0;border-bottom:0;font-family:inherit;overflow-wrap:anywhere}
+.fgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media (max-width:620px){.fgrid{grid-template-columns:minmax(0,1fr)}}
+.fgrid label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted)}
+.fgrid .full{grid-column:1/-1}
+dialog{background:var(--panel);color:var(--fg);border:1px solid var(--line2);border-radius:18px;width:min(620px,94vw);padding:20px}
+dialog.wide{width:min(860px,94vw)}
 dialog::backdrop{background:rgba(0,4,16,.65)}
-dialog h3{font-family:var(--f-disp);font-weight:400;font-size:32px;text-transform:uppercase;margin:0}
-dialog textarea{width:100%;min-height:110px;resize:vertical;margin-top:10px}
+dialog h3{font-family:var(--f-disp);font-weight:400;font-size:30px;text-transform:uppercase;margin:0;line-height:1.05}
+dialog textarea{width:100%;min-height:110px;resize:vertical}
 .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:12px}
 .plan{margin-top:12px;display:flex;flex-direction:column;gap:6px}
-.plan div{font-size:14px}
+pre.out{white-space:pre-wrap;font:14px/1.55 var(--f-ui);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:14px;max-height:52vh;overflow:auto;margin:12px 0 0;overflow-wrap:anywhere}
+.rev{border:1px solid var(--line2);border-radius:12px;padding:10px 12px;margin-top:10px;font-size:13.5px}
+.rev b{color:var(--cyan)}
+#toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--panel2);border:1px solid var(--line2);color:var(--fg);padding:10px 16px;border-radius:12px;font-weight:600;z-index:40;max-width:90vw}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 
@@ -114,6 +140,10 @@ dialog textarea{width:100%;min-height:110px;resize:vertical;margin-top:10px}
   <nav aria-label="Seções">
     <a href="#escritorio" data-v="escritorio">Escritório</a>
     <a href="#quadro" data-v="quadro">Quadro <span class="n" id="nAppr" hidden>0</span></a>
+    <a href="#clientes" data-v="clientes">Clientes</a>
+    <a href="#financeiro" data-v="financeiro">Financeiro</a>
+    <a href="#agenda" data-v="agenda">Agenda <span class="n red" id="nLate" hidden>0</span></a>
+    <a href="#entregas" data-v="entregas">Entregas</a>
     <a href="#equipe" data-v="equipe">Equipe</a>
     <a href="#atividade" data-v="atividade">Atividade</a>
   </nav>
@@ -123,12 +153,13 @@ dialog textarea{width:100%;min-height:110px;resize:vertical;margin-top:10px}
 <main>
   <!-- ESCRITÓRIO -->
   <section class="view" id="v-escritorio">
-    <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-end">
-      <div><h2 class="t">O escritório</h2><p class="lead">Sua equipe de agentes ao vivo. Clique em alguém para ver e mudar o que está fazendo.</p></div>
+    <div class="head">
+      <div><h2 class="t">O escritório</h2><p class="lead">Sua equipe ao vivo. Clique em um agente para ver as tarefas dele e mandar executar com IA.</p></div>
       <div class="strip" aria-live="polite">
         <div class="stat"><b id="sWork">0</b><small>trabalhando</small></div>
         <div class="stat"><b id="sAppr">0</b><small>p/ aprovar</small></div>
-        <div class="stat"><b id="sDone">0</b><small>entregues</small></div>
+        <div class="stat"><b id="sLate">0</b><small>atrasadas</small></div>
+        <div class="stat"><b id="sIA">0</b><small>IA hoje</small></div>
       </div>
     </div>
     <div class="scene">
@@ -143,21 +174,70 @@ dialog textarea{width:100%;min-height:110px;resize:vertical;margin-top:10px}
 
   <!-- QUADRO -->
   <section class="view" id="v-quadro" hidden>
-    <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-end">
-      <div><h2 class="t">Quadro de tarefas</h2><p class="lead">Arraste os cartões entre as colunas. "Aprovar" é sempre seu.</p></div>
+    <div class="head">
+      <div><h2 class="t">Quadro de tarefas</h2><p class="lead">Arraste entre colunas. "Executar" chama o agente; o Revisor confere antes de chegar para você aprovar.</p></div>
       <div class="tools">
-        <label for="fAg" class="note">Agente</label>
-        <select id="fAg"><option value="">Todos</option></select>
+        <select id="fAg" aria-label="Filtrar por agente"><option value="">Todos os agentes</option></select>
+        <select id="fCli" aria-label="Filtrar por cliente"><option value="">Todos os clientes</option></select>
         <button class="btn ghost" id="bAddT" type="button">+ Tarefa</button>
       </div>
     </div>
     <div class="board" id="board"></div>
   </section>
 
+  <!-- CLIENTES -->
+  <section class="view" id="v-clientes" hidden>
+    <div class="head">
+      <div><h2 class="t">Clientes</h2><p class="lead">A ficha de cada cliente é lida pelos agentes antes de trabalhar. Quanto mais completa, melhor a entrega.</p></div>
+      <button class="btn" id="bAddC" type="button">+ Cliente</button>
+    </div>
+    <div class="cards" id="clis"></div>
+  </section>
+
+  <!-- FINANCEIRO -->
+  <section class="view" id="v-financeiro" hidden>
+    <div class="head">
+      <div><h2 class="t">Financeiro</h2><p class="lead">Orçamentos e serviços fechados. Os valores são sempre os que você definir; o Comercial só escreve a proposta.</p></div>
+      <button class="btn" id="bAddF" type="button">+ Lançamento</button>
+    </div>
+    <div class="strip">
+      <div class="stat"><b id="fAberto">R$ 0</b><small>em orçamento</small></div>
+      <div class="stat"><b id="fReceber">R$ 0</b><small>a receber</small></div>
+      <div class="stat"><b id="fMes">R$ 0</b><small>recebido no mês</small></div>
+    </div>
+    <div class="tbl"><table><thead><tr><th>Cliente</th><th>Serviço</th><th>Situação</th><th>Vencimento</th><th class="num">Valor</th><th></th></tr></thead><tbody id="fin"></tbody></table></div>
+  </section>
+
+  <!-- AGENDA -->
+  <section class="view" id="v-agenda" hidden>
+    <div class="head">
+      <div><h2 class="t">Agenda</h2><p class="lead">Prazos das tarefas. O que passou do prazo aparece em vermelho no topo.</p></div>
+      <div class="tools"><button class="btn ghost sm" id="wPrev" type="button">← Semana</button><span class="note" id="wLab"></span><button class="btn ghost sm" id="wNext" type="button">Semana →</button><button class="btn ghost sm" id="wHoje" type="button">Hoje</button></div>
+    </div>
+    <div id="lateBox"></div>
+    <div class="week" id="week"></div>
+  </section>
+
+  <!-- ENTREGAS -->
+  <section class="view" id="v-entregas" hidden>
+    <div class="head">
+      <div><h2 class="t">Entregas</h2><p class="lead">Tudo o que os agentes produziram, com a nota do Revisor. Reaproveite o que deu certo.</p></div>
+      <div class="tools">
+        <input id="eBusca" placeholder="Buscar texto" aria-label="Buscar nas entregas">
+        <select id="eCli" aria-label="Filtrar entregas por cliente"><option value="">Todos os clientes</option></select>
+      </div>
+    </div>
+    <div class="cards" id="ents"></div>
+  </section>
+
   <!-- EQUIPE -->
   <section class="view" id="v-equipe" hidden>
-    <div><h2 class="t">A equipe</h2><p class="lead">Sete agentes, cada um com uma função. As instruções de cada um ficam em <b>.claude/agents/</b> no repositório bios-ia.</p></div>
+    <div class="head">
+      <div><h2 class="t">A equipe</h2><p class="lead">Sete agentes e um Revisor de qualidade. A IA roda no seu plano do Claude, sem custo extra.</p></div>
+      <div class="tools"><button class="btn ghost" id="bExp" type="button">Exportar backup</button><label class="btn ghost" for="fImp" style="display:inline-block">Importar backup</label><input id="fImp" type="file" accept=".json,application/json" hidden></div>
+    </div>
     <div class="cards" id="cards"></div>
+    <div class="card"><h3>Uso da IA</h3><p class="note" id="usoTxt">Carregando…</p><div id="usoBars" style="display:flex;gap:6px;align-items:flex-end;height:80px"></div></div>
   </section>
 
   <!-- ATIVIDADE -->
@@ -167,294 +247,466 @@ dialog textarea{width:100%;min-height:110px;resize:vertical;margin-top:10px}
   </section>
 </main>
 
+<!-- diálogos -->
 <dialog id="dPed">
   <h3>Novo pedido</h3>
-  <p class="note">Escreva o que a BIOS precisa. O Diretor reúne a equipe, divide em tarefas e coloca no quadro.</p>
+  <p class="note">O Diretor reúne a equipe, divide em tarefas com prazo e coloca no quadro.</p>
   <form id="fPed">
-    <label for="pedido" class="note" hidden>Pedido</label>
-    <textarea id="pedido" placeholder="Ex.: Lançar o cardápio digital para pizzarias de Campina Grande este mês"></textarea>
-    <div class="row"><button class="btn" id="bPed" type="submit">Enviar ao Diretor</button><button class="btn ghost" type="button" id="cPed">Fechar</button><span class="note" id="pSt"></span></div>
+    <div class="fgrid" style="margin-top:10px">
+      <label class="full">Pedido<textarea id="pedido" placeholder="Ex.: Lançar o cardápio digital da Pizzaria do João este mês"></textarea></label>
+      <label>Cliente<select id="pCli"><option value="">BIOS (interno)</option></select></label>
+    </div>
+    <div class="row"><button class="btn" id="bPed" type="submit">Enviar ao Diretor</button><button class="btn ghost" type="button" data-close>Fechar</button><span class="note" id="pSt"></span></div>
   </form>
   <div class="plan" id="pOut"></div>
 </dialog>
 
 <dialog id="dTask">
-  <h3>Nova tarefa</h3>
+  <h3 id="tHead">Nova tarefa</h3>
   <form id="fTask">
-    <div class="row" style="flex-direction:column;align-items:stretch">
-      <label for="tTit" class="note">Título</label><input id="tTit" maxlength="80" required>
-      <label for="tAg" class="note">Responsável</label><select id="tAg"></select>
-      <label for="tDet" class="note">Detalhe (opcional)</label><input id="tDet" maxlength="200">
+    <div class="fgrid" style="margin-top:10px">
+      <label class="full">Título<input id="tTit" maxlength="80" required></label>
+      <label>Responsável<select id="tAg"></select></label>
+      <label>Cliente<select id="tCli"><option value="">BIOS (interno)</option></select></label>
+      <label>Prazo<input id="tPrazo" type="date"></label>
+      <label class="full">Detalhe<textarea id="tDet" maxlength="400" style="min-height:70px"></textarea></label>
     </div>
-    <div class="row"><button class="btn" type="submit">Criar</button><button class="btn ghost" type="button" id="cTask">Cancelar</button></div>
+    <div class="row"><button class="btn" type="submit">Salvar</button><button class="btn ghost" type="button" data-close>Cancelar</button></div>
   </form>
 </dialog>
 
+<dialog id="dCli">
+  <h3 id="cHead">Novo cliente</h3>
+  <form id="fCli2">
+    <div class="fgrid" style="margin-top:10px">
+      <label>Nome<input id="cNome" maxlength="80" required></label>
+      <label>Ramo<input id="cRamo" maxlength="60" placeholder="Lanchonete, barbearia…"></label>
+      <label>Contato (WhatsApp)<input id="cCont" maxlength="40"></label>
+      <label>Instagram<input id="cInsta" maxlength="60" placeholder="@perfil"></label>
+      <label>Cidade<input id="cCid" maxlength="60" placeholder="Campina Grande-PB"></label>
+      <label>Cores da marca<input id="cCores" maxlength="80" placeholder="vermelho e amarelo"></label>
+      <label class="full">Público e tom de voz<textarea id="cTom" maxlength="400" style="min-height:60px" placeholder="Quem compra, como falar com eles"></textarea></label>
+      <label class="full">Observações (o que já foi feito, o que evitar)<textarea id="cObs" maxlength="800" style="min-height:70px"></textarea></label>
+    </div>
+    <div class="row"><button class="btn" type="submit">Salvar ficha</button><button class="btn ghost" type="button" data-close>Cancelar</button></div>
+  </form>
+</dialog>
+
+<dialog id="dFin">
+  <h3 id="fHead">Novo lançamento</h3>
+  <form id="fFin">
+    <div class="fgrid" style="margin-top:10px">
+      <label>Cliente<select id="nCli" required></select></label>
+      <label>Situação<select id="nSit"><option value="orcamento">Orçamento enviado</option><option value="fechado">Fechado (a receber)</option><option value="pago">Pago</option><option value="perdido">Perdido</option></select></label>
+      <label class="full">Serviço<input id="nDesc" maxlength="120" required placeholder="Cardápio digital com pedido no WhatsApp"></label>
+      <label>Valor (R$)<input id="nVal" type="number" min="0" step="0.01" inputmode="decimal" required></label>
+      <label>Vencimento<input id="nVenc" type="date"></label>
+    </div>
+    <div class="row"><button class="btn" type="submit">Salvar</button><button class="btn ghost" type="button" data-close>Cancelar</button></div>
+  </form>
+</dialog>
+
+<dialog id="dRes" class="wide">
+  <h3 id="rTit"></h3>
+  <p class="note" id="rWho" style="margin-top:6px"></p>
+  <div id="rRev"></div>
+  <pre class="out" id="rTxt"></pre>
+  <div class="row"><button class="btn ok2" type="button" id="rAprovar">Aprovar</button><button class="btn ghost" type="button" id="rCopiar">Copiar texto</button><button class="btn ghost" type="button" id="rRefazer">Refazer</button><button class="btn ghost" type="button" data-close>Fechar</button></div>
+</dialog>
+
+<div id="toast" hidden role="status"></div>
+
 <script>
-// ================= equipe
+// ================= a empresa e a equipe
+const EMPRESA=`BIOS: empresa de Campina Grande-PB (Instagram @b1os.fc) que faz sites profissionais, cardápios digitais, aplicativos de agendamento, sistemas de gestão e automação de atendimento para pequenos negócios locais (lanchonetes, barbearias, salões, lojas, clínicas).
+Tom de voz: português do Brasil, direto, próximo, sem jargão técnico; fala de resultado (vender mais, perder menos tempo, organizar). Conteúdo para Instagram termina com "Comenta PALAVRA que eu te mando no direct" (CARDÁPIO, SITE, AGENDA, SISTEMA, AUTO, PROJETO).
+Identidade: nome sempre BIOS; cores azul #0965FA, ciano #2EC5FF, fundo escuro #020A1C; fontes Anton (títulos) e Inter (texto); sem emoji em peças de design.
+Regras: nada é publicado, enviado ou cobrado sem aprovação do Mathias (dono). Não invente números, preços, depoimentos ou clientes: onde faltar dado real, escreva [PREENCHER]. Em peças comerciais, não use personagens, logos ou músicas de terceiros.`;
 const TEAM={
-  diretor:{nome:"Diretor",setor:"Direção",cor:"#2EC5FF",pele:"#E8B48A",cab:"#1b1b1b",hair:0,desk:[90,128],papel:"Planeja e distribui o trabalho"},
-  conteudo:{nome:"Conteúdo",setor:"Conteúdo",cor:"#FFC447",pele:"#C98B5E",cab:"#3a2414",hair:1,desk:[220,128],papel:"Ganchos, roteiros e legendas"},
-  designer:{nome:"Designer",setor:"Design",cor:"#FF6FB1",pele:"#F1C7A0",cab:"#7a3db0",hair:2,desk:[350,128],papel:"Posts, stories e carrosséis"},
-  video:{nome:"Vídeo",setor:"Vídeo",cor:"#A77BFF",pele:"#8A5A3C",cab:"#111",hair:3,desk:[90,238],papel:"Reels, filmes e convites"},
-  "dev-sites":{nome:"Dev Sites",setor:"Dev",cor:"#3DDC84",pele:"#E0A97E",cab:"#2a2a2a",hair:0,desk:[220,238],papel:"Sites e cardápios digitais"},
-  comercial:{nome:"Comercial",setor:"Comercial",cor:"#FF8A3D",pele:"#B87A52",cab:"#1e120a",hair:2,desk:[350,238],papel:"Propostas e atendimento"},
-  relatorios:{nome:"Relatórios",setor:"Análise",cor:"#7FD3FF",pele:"#F0C9A6",cab:"#6b4a2b",hair:1,desk:[90,346],papel:"Números e próximos passos"}
+  diretor:{nome:"Diretor",setor:"Direção",cor:"#2EC5FF",pele:"#E8B48A",cab:"#1b1b1b",hair:0,desk:[90,128],papel:"Planeja e distribui o trabalho",
+    inst:"Você organiza a operação: transforma objetivos em planos curtos, com responsáveis, prazos e critério de pronto. Seja prático e priorize o que gera cliente."},
+  conteudo:{nome:"Conteúdo",setor:"Conteúdo",cor:"#FFC447",pele:"#C98B5E",cab:"#3a2414",hair:1,desk:[220,128],papel:"Ganchos, roteiros e legendas",
+    inst:"Você escreve conteúdo para o Instagram. Gancho nos 2 primeiros segundos (entregue 3 variações A/B/C). Reels de 15 a 25s: gancho, 3 dores curtas, demonstração, resultado, 'Comenta PALAVRA'. Um serviço por post, dizendo para quem e qual resultado. Legenda: 1ª linha é o gancho, corpo curto, CTA, 5 a 10 hashtags locais (#campinagrande #paraiba + nicho). Roteiro com texto falado e texto na tela, cena a cena."},
+  designer:{nome:"Designer",setor:"Design",cor:"#FF6FB1",pele:"#F1C7A0",cab:"#7a3db0",hair:2,desk:[350,128],papel:"Posts, stories e carrosséis",
+    inst:"Você é o designer. Entregue o briefing de produção pronto: formato (1080x1080 feed, 1080x1920 story), textos finais de cada slide/tela, hierarquia, cores e fontes da marca do cliente (ou da BIOS), posição dos elementos e o que vai em destaque. Uma mensagem principal por peça; contraste alto; CTA visível."},
+  video:{nome:"Vídeo",setor:"Vídeo",cor:"#A77BFF",pele:"#8A5A3C",cab:"#111",hair:3,desk:[90,238],papel:"Reels, filmes e convites",
+    inst:"Você é o editor de vídeo. Entregue o roteiro de edição: duração, cena a cena com tempo (ex.: 0:00-0:02), o que aparece na tela, texto na tela, narração, transições, efeitos sonoros e trilha (sem músicas de terceiros em peças da BIOS). Gancho legível no primeiro quadro."},
+  "dev-sites":{nome:"Dev Sites",setor:"Dev",cor:"#3DDC84",pele:"#E0A97E",cab:"#2a2a2a",hair:0,desk:[220,238],papel:"Sites e cardápios digitais",
+    inst:"Você planeja e escreve sites e cardápios digitais mobile-first. Entregue estrutura de páginas/seções, textos finais de cada seção, botão de WhatsApp com mensagem pré-preenchida, SEO local (título, descrição) e, quando pedirem, o código HTML/CSS completo e enxuto."},
+  comercial:{nome:"Comercial",setor:"Comercial",cor:"#FF8A3D",pele:"#B87A52",cab:"#1e120a",hair:2,desk:[350,238],papel:"Propostas e atendimento",
+    inst:"Você escreve propostas, orçamentos e mensagens para clientes, sempre como rascunho. Proposta: problema do cliente, solução BIOS, o que está incluso, prazo, investimento (só o valor que o Mathias informar; se não houver, [PREENCHER]), próximo passo. Mensagens curtas e simpáticas, com uma pergunta que avance a conversa."},
+  relatorios:{nome:"Relatórios",setor:"Análise",cor:"#7FD3FF",pele:"#F0C9A6",cab:"#6b4a2b",hair:1,desk:[90,346],papel:"Números e próximos passos",
+    inst:"Você transforma dados em decisões, usando só os números fornecidos. Formato: 3 destaques, 3 problemas, 3 ações para a próxima semana e uma tabela simples. Sem número fornecido, peça os dados e mostre o modelo de tabela a preencher."}
 };
 const IDS=Object.keys(TEAM);
 const ST={afazer:"A fazer",fazendo:"Fazendo",aprovar:"Para aprovar",feito:"Feito"};
+const SIT={orcamento:"Orçamento",fechado:"A receber",pago:"Pago",perdido:"Perdido"};
 const MEET=[[500,120],[540,120],[580,120],[500,176],[540,176],[580,176],[610,148]];
-const SPOTS=[[226,352,"café"],[300,346,"sofá"],[340,346,"sofá"],[590,350,"arcade"],[260,370,"café"],[180,360,"planta"]];
+const SPOTS=[[226,352],[300,346],[340,346],[590,350],[260,370],[180,360]];
 const PONG=[[418,352],[512,352]];
-let tasks=[],acts=[],db=null,sample=null,meetingUntil=0,selected=null,hover=null;
+let tasks=[],acts=[],clis=[],fins=[],uso={},db=null,sample=null,downloads=null,meetingUntil=0,selected=null,hover=null;
+const running=new Set();
 
-// ================= personagens
+// ================= utilidades
+const $=id=>document.getElementById(id);
+function esc(s){return String(s??"").replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]))}
+const hojeISO=()=>{const d=new Date();return new Date(d.getTime()-d.getTimezoneOffset()*6e4).toISOString().slice(0,10)};
+const addDias=(iso,n)=>{const d=new Date(iso+"T12:00:00");d.setDate(d.getDate()+n);return d.toISOString().slice(0,10)};
+const fmtData=iso=>iso?new Date(iso+"T12:00:00").toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit"}):"";
+const brl=v=>(Number(v)||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+const atrasada=k=>k.prazo&&k.status!=="feito"&&k.prazo<hojeISO();
+const cliNome=id=>clis.find(c=>c.id===id)?.nome||"";
+function toast(msg){const t=$("toast");t.textContent=msg;t.hidden=false;clearTimeout(toast.h);toast.h=setTimeout(()=>t.hidden=true,4500)}
+document.addEventListener("click",e=>{const c=e.target.closest("[data-close]");if(c)c.closest("dialog").close()});
+
+// ================= personagens e desenho (pixel art)
 const chars={};IDS.forEach((id,i)=>{const d=TEAM[id].desk;chars[id]={x:d[0],y:d[1]+2,tx:d[0],ty:d[1]+2,mode:"",wait:0,face:1,spot:i,moving:false}});
-
-// ================= desenho
-const cv=document.getElementById("cv"),g=cv.getContext("2d");g.imageSmoothingEnabled=false;
-const W=640,H=400;
+const cv=$("cv"),g=cv.getContext("2d");g.imageSmoothingEnabled=false;const W=640,H=400;
 function R(x,y,w,h,c){g.fillStyle=c;g.fillRect(Math.round(x),Math.round(y),Math.round(w),Math.round(h))}
 function hourRecife(){const d=new Date();return (d.getUTCHours()-3+24)%24+d.getUTCMinutes()/60}
 function sky(h){if(h<5||h>=19.5)return["#050b24","#0b1a44"];if(h<7)return["#2b2a6a","#e98a5a"];if(h<17)return["#2f8cf0","#9fd6ff"];return["#3a2a6a","#ff8a4a"]}
 const STARS=Array.from({length:40},(_,i)=>[(i*97)%640,(i*53)%40+4,(i%3)+1]);
 function backdrop(t){
   const h=hourRecife(),[s1,s2]=sky(h),night=h<5.5||h>=19;
-  // parede
   R(0,0,W,78,"#0d1838");
   for(let x=16;x<W;x+=104){
     const gr=g.createLinearGradient(0,10,0,62);gr.addColorStop(0,s1);gr.addColorStop(1,s2);g.fillStyle=gr;g.fillRect(x,10,80,52);
     if(night)STARS.forEach(([sx,sy,k])=>{if(sx>=x&&sx<x+80&&((t*k|0)+sx)%7)R(sx,10+sy,1,1,"#cfe3ff")});
-    // skyline de Campina Grande
     g.fillStyle=night?"#081028":"#3a5a8a";[[0,30],[10,22],[22,34],[30,18],[44,28],[54,24],[66,32]].forEach(([bx,bh])=>g.fillRect(x+bx,62-bh,12,bh));
     if(night){g.fillStyle="#ffd36a";for(let k=0;k<7;k++){const wx=x+3+((k*29)%74),wy=40+((k*17)%18);if(((t/3|0)+k)%5)g.fillRect(wx,wy,2,2)}}
     R(x-3,8,86,3,"#2a3d70");R(x-3,61,86,4,"#2a3d70");R(x+38,10,3,52,"#2a3d70");
   }
-  // letreiro neon
   const nx=W/2-46;R(nx-4,64,100,14,"#050b20");g.font="bold 13px Silkscreen, monospace";g.textAlign="center";
   g.shadowColor="#2EC5FF";g.shadowBlur=10+Math.sin(t*3)*3;g.fillStyle="#BFF0FF";g.fillText("BIOS IA",W/2+4,75);g.shadowBlur=0;
-  // relógio real
   const cx=600,cy=40;g.fillStyle="#e8eef9";g.beginPath();g.arc(cx,cy,12,0,7);g.fill();g.strokeStyle="#0d1838";g.lineWidth=2;
   const hh=h%12/12*Math.PI*2,mm=(h%1)*Math.PI*2;g.beginPath();g.moveTo(cx,cy);g.lineTo(cx+Math.sin(hh)*6,cy-Math.cos(hh)*6);g.moveTo(cx,cy);g.lineTo(cx+Math.sin(mm)*9,cy-Math.cos(mm)*9);g.stroke();
   R(0,78,W,4,"#2a3d70");
-  // piso de madeira
   for(let y=82;y<H;y+=10)for(let x=-((y/10)%3)*20;x<W;x+=60)R(x,y,59,9,((x+y)/10|0)%2?"#1a2650":"#1d2a58");
-  // tapetes dos setores
   IDS.forEach(id=>{const T=TEAM[id],[x,y]=T.desk;g.fillStyle=T.cor+"22";g.fillRect(x-52,y-34,104,66);g.strokeStyle=T.cor+"55";g.lineWidth=1;g.strokeRect(x-52.5,y-34.5,105,67)});
-  // sala de reunião (vidro)
   R(470,92,164,128,"#12204a");g.fillStyle="rgba(120,200,255,.08)";g.fillRect(470,92,164,128);g.strokeStyle="#5fb0ff";g.lineWidth=2;g.strokeRect(470,92,164,128);
   R(492,136,108,26,"#5a3b22");R(494,138,104,22,"#7a5232");
-  // TV com números
   R(512,96,68,26,"#050b20");R(514,98,64,22,"#0b2a6a");
   g.font="8px Silkscreen, monospace";g.fillStyle="#BFF0FF";g.textAlign="left";
-  const n=k=>tasks.filter(x=>x.status===k).length;g.fillText(`FAZ ${n("fazendo")}  APR ${n("aprovar")}`,517,108);g.fillText(`FEITO ${n("feito")}`,517,117);
-  // lounge
+  const n=k=>tasks.filter(x=>x.status===k).length;g.fillText(`FAZ ${n("fazendo")}  APR ${n("aprovar")}`,517,108);g.fillText(`ATRASO ${tasks.filter(atrasada).length}`,517,117);
   R(176,300,458,96,"#152048");
-  R(200,318,58,22,"#4a3424");R(200,316,58,4,"#6b4a2e");R(208,306,14,12,"#2b2b38");R(211,309,8,4,"#c0392b"); // café
+  R(200,318,58,22,"#4a3424");R(200,316,58,4,"#6b4a2e");R(208,306,14,12,"#2b2b38");R(211,309,8,4,"#c0392b");
   for(let k=0;k<3;k++){const s=(t*.8+k*.33)%1;g.fillStyle=`rgba(230,240,255,${.5*(1-s)})`;g.fillRect(214+Math.sin(t*3+k)*2,304-s*14,2,2)}
-  R(282,326,76,12,"#2E7BFF");R(282,338,76,12,"#1f5fd0");R(280,322,6,28,"#1f5fd0");R(354,322,6,28,"#1f5fd0"); // sofá
-  R(432,340,72,30,"#1e6b3a");R(467,340,2,30,"#e8eef9");R(432,354,72,1,"#e8eef9");R(436,370,4,8,"#333");R(496,370,4,8,"#333"); // ping-pong
-  R(576,318,30,40,"#2a2a36");R(580,322,22,16,"#0965FA");R(582,340,6,4,"#FF6B5A");R(592,342,4,4,"#FFC447"); // fliperama
+  R(282,326,76,12,"#2E7BFF");R(282,338,76,12,"#1f5fd0");R(280,322,6,28,"#1f5fd0");R(354,322,6,28,"#1f5fd0");
+  R(432,340,72,30,"#1e6b3a");R(467,340,2,30,"#e8eef9");R(432,354,72,1,"#e8eef9");R(436,370,4,8,"#333");R(496,370,4,8,"#333");
+  R(576,318,30,40,"#2a2a36");R(580,322,22,16,"#0965FA");R(582,340,6,4,"#FF6B5A");R(592,342,4,4,"#FFC447");
   [[176,296],[620,296],[455,96]].forEach(([px,py])=>{R(px-6,py+10,12,10,"#5a3b22");R(px-10,py-4,20,16,"#2fa24a");R(px-6,py-10,12,10,"#3cc45b")});
-  // rótulos
   g.font="8px Silkscreen, monospace";g.textAlign="center";g.fillStyle="#a4b4d0";
   IDS.forEach(id=>{const [x,y]=TEAM[id].desk;g.fillText(TEAM[id].setor.toUpperCase(),x,y-38)});
   g.fillText("REUNIÃO",552,230);g.fillText("CAFÉ & LOUNGE",400,310);
 }
-function deskTop(id,t){
-  const [x,y]=TEAM[id].desk,busy=chars[id].mode==="trabalhando"&&!chars[id].moving;
+const sitting=id=>chars[id].mode==="trabalhando"&&!chars[id].moving;
+function deskTop(id){
+  const [x,y]=TEAM[id].desk,busy=sitting(id);
   R(x-30,y-2,60,14,"#6b4a2e");R(x-30,y-2,60,2,"#8a6440");R(x-30,y+12,60,3,"#4a321e");R(x-27,y+15,4,10,"#4a321e");R(x+23,y+15,4,10,"#4a321e");
-  // monitor (de costas para nós) + caneca + papéis
   R(x-12,y-16,24,14,"#1a1f2e");R(x-2,y-2,4,2,"#1a1f2e");
-  if(busy){g.globalCompositeOperation="lighter";const gr=g.createRadialGradient(x,y-12,2,x,y-12,30);gr.addColorStop(0,TEAM[id].cor+"66");gr.addColorStop(1,"rgba(0,0,0,0)");g.fillStyle=gr;g.fillRect(x-32,y-42,64,60);g.globalCompositeOperation="source-over"}
+  if(busy){g.globalCompositeOperation="lighter";const gr=g.createRadialGradient(x,y-12,2,x,y-12,30);gr.addColorStop(0,TEAM[id].cor+(running.size&&[...running].some(t=>tasks.find(k=>k.id===t)?.agente===id)?"aa":"66"));gr.addColorStop(1,"rgba(0,0,0,0)");g.fillStyle=gr;g.fillRect(x-32,y-42,64,60);g.globalCompositeOperation="source-over"}
   R(x+16,y+1,5,6,"#e8eef9");R(x-24,y+2,10,6,"#d9e2f2");
 }
 function chair(id){const [x,y]=TEAM[id].desk;R(x-8,y-22,16,12,"#2a2f45");R(x-6,y-10,12,4,"#22263a")}
-function sprite(cx,x,y,T,o){ // o: {walk,sit,typing,face,front}
-  const P=(px,py,w,h,c)=>{cx.fillStyle=c;cx.fillRect(Math.round(x+px),Math.round(y+py),w,h)};
-  const ol="#0a0f1e";
+function sprite(cx,x,y,T,o){
+  const P=(px,py,w,h,c)=>{cx.fillStyle=c;cx.fillRect(Math.round(x+px),Math.round(y+py),w,h)};const ol="#0a0f1e";
   if(!o.sit){const a=o.walk%4,l=[0,2,0,-2][a];P(-4,4,4,7+(l>0?-1:0),ol);P(0,4,4,7+(l<0?-1:0),ol);P(-3,4,2,6-(l>0?1:0),"#2a3150");P(1,4,2,6-(l<0?1:0),"#2a3150");P(-4,10+(l>0?-1:0),3,2,"#111");P(1,10+(l<0?-1:0),3,2,"#111")}
   P(-6,-7,12,12,ol);P(-5,-6,10,10,T.cor);P(-5,-6,10,2,"rgba(255,255,255,.18)");
   const ar=o.typing?((o.t*12|0)%2):0;P(-8,-5+ar,3,7,ol);P(5,-5+(1-ar),3,7,ol);P(-7,-4+ar,2,5,T.cor);P(6,-4+(1-ar),2,5,T.cor);P(-7,1+ar,2,2,T.pele);P(6,1+(1-ar),2,2,T.pele);
   P(-5,-16,10,10,ol);P(-4,-15,8,8,T.pele);
   const hc=T.cab;if(T.hair===0){P(-4,-16,8,3,hc)}else if(T.hair===1){P(-5,-17,10,4,hc);P(-5,-14,2,4,hc)}else if(T.hair===2){P(-5,-17,10,4,hc);P(-5,-14,2,7,hc);P(3,-14,2,7,hc)}else{P(-4,-18,8,4,hc);P(-2,-20,4,3,hc)}
-  if(o.front!==false){const f=o.face>0?1:-1;P(-2+f,-11,1,2,"#111");P(1+f,-11,1,2,"#111");P(-1+f,-8,3,1,"#9a5a4a")}
+  const f=o.face>0?1:-1;P(-2+f,-11,1,2,"#111");P(1+f,-11,1,2,"#111");P(-1+f,-8,3,1,"#9a5a4a");
 }
 function personAt(id,t){
-  const c=chars[id],T=TEAM[id],sit=c.mode==="trabalhando"&&!c.moving;
-  const x=c.x,y=sit?TEAM[id].desk[1]-14:c.y;
+  const c=chars[id],T=TEAM[id],sit=sitting(id),x=c.x,y=sit?TEAM[id].desk[1]-14:c.y;
   if(!sit){g.fillStyle="rgba(0,0,0,.35)";g.beginPath();g.ellipse(x,y+12,7,2.5,0,0,7);g.fill()}
   sprite(g,x,y,T,{walk:c.moving?(t*10|0):0,sit,typing:sit,face:c.face,t});
   if(c.mode==="aprovar"&&!c.moving){const b=Math.sin(t*5)*1.5;R(x-2,y-34+b,4,8,"#0a0f1e");R(x-1,y-33+b,2,6,"#FFC447");R(x-1,y-25+b,2,2,"#FFC447")}
   if(selected===id){g.strokeStyle="#2EC5FF";g.lineWidth=1;g.beginPath();g.ellipse(x,(sit?TEAM[id].desk[1]+10:y+12),11,4,0,0,7);g.stroke()}
 }
-function pongBall(t){const players=IDS.filter(id=>chars[id].pong&&!chars[id].moving);if(players.length<2)return;
-  const k=(Math.sin(t*3)+1)/2,x=422+k*86,y=350-Math.abs(Math.sin(t*6))*10;R(x,y,3,3,"#fff");g.fillStyle="rgba(0,0,0,.3)";g.fillRect(x,358,3,1)}
+function pongBall(t){if(IDS.filter(id=>chars[id].pong&&!chars[id].moving).length<2)return;const k=(Math.sin(t*3)+1)/2,x=422+k*86,y=350-Math.abs(Math.sin(t*6))*10;R(x,y,3,3,"#fff");g.fillStyle="rgba(0,0,0,.3)";g.fillRect(x,358,3,1)}
 function frame(t){
-  backdrop(t);
-  IDS.forEach(chair);
-  // ordem de profundidade: quem está sentado fica atrás da própria mesa
-  const order=IDS.slice().sort((a,b)=>(chars[a].mode==="trabalhando"&&!chars[a].moving?TEAM[a].desk[1]-1:chars[a].y)-(chars[b].mode==="trabalhando"&&!chars[b].moving?TEAM[b].desk[1]-1:chars[b].y));
-  const items=[];IDS.forEach(id=>items.push({y:TEAM[id].desk[1],f:()=>deskTop(id,t)}));
-  order.forEach(id=>{const c=chars[id],sit=c.mode==="trabalhando"&&!c.moving;items.push({y:sit?TEAM[id].desk[1]-1:c.y+10,f:()=>personAt(id,t)})});
-  items.sort((a,b)=>a.y-b.y).forEach(i=>i.f());
-  pongBall(t);
-  // vinheta suave
+  backdrop(t);IDS.forEach(chair);
+  const items=[];IDS.forEach(id=>items.push({y:TEAM[id].desk[1],f:()=>deskTop(id)}));
+  IDS.forEach(id=>items.push({y:sitting(id)?TEAM[id].desk[1]-1:chars[id].y+10,f:()=>personAt(id,t)}));
+  items.sort((a,b)=>a.y-b.y).forEach(i=>i.f());pongBall(t);
   const v=g.createRadialGradient(W/2,H/2,H*.35,W/2,H/2,H*.85);v.addColorStop(0,"rgba(0,0,0,0)");v.addColorStop(1,"rgba(0,0,12,.45)");g.fillStyle=v;g.fillRect(0,0,W,H);
 }
-
-// ================= comportamento
 const cur=id=>tasks.find(k=>k.agente===id&&k.status==="fazendo")||tasks.find(k=>k.agente===id&&k.status==="aprovar");
 function think(dt){
-  const meeting=Date.now()<meetingUntil;const idle=[];
+  const meeting=Date.now()<meetingUntil,idle=[];
   IDS.forEach((id,i)=>{const c=chars[id],[dx,dy]=TEAM[id].desk,k=cur(id);
-    const mode=meeting?"reuniao":k?(k.status==="fazendo"?"trabalhando":"aprovar"):"livre";
-    if(mode==="livre")idle.push(id);
-    if(mode!==c.mode){c.mode=mode;c.pong=false;c.wait=0;
-      if(mode==="reuniao")[c.tx,c.ty]=MEET[i];else if(mode!=="livre"){c.tx=dx;c.ty=dy+26}}
-  });
-  // os dois primeiros livres jogam ping-pong; os outros passeiam pelo lounge
+    const mode=meeting?"reuniao":k?(k.status==="fazendo"?"trabalhando":"aprovar"):"livre";if(mode==="livre")idle.push(id);
+    if(mode!==c.mode){c.mode=mode;c.pong=false;c.wait=0;if(mode==="reuniao")[c.tx,c.ty]=MEET[i];else if(mode!=="livre"){c.tx=dx;c.ty=dy+26}}});
   idle.forEach((id,j)=>{const c=chars[id];
     if(j<2&&idle.length>=2){if(!c.pong){c.pong=true;[c.tx,c.ty]=PONG[j]}}
-    else{c.pong=false;c.wait-=dt;if(c.wait<=0){c.spot=(c.spot+1+((Math.random()*3)|0))%SPOTS.length;[c.tx,c.ty]=SPOTS[c.spot];c.wait=5+Math.random()*7}}
-  });
+    else{c.pong=false;c.wait-=dt;if(c.wait<=0){c.spot=(c.spot+1+((Math.random()*3)|0))%SPOTS.length;[c.tx,c.ty]=SPOTS[c.spot];c.wait=5+Math.random()*7}}});
   IDS.forEach(id=>{const c=chars[id],dx=c.tx-c.x,dy=c.ty-c.y,d=Math.hypot(dx,dy);c.moving=d>1;
     if(c.moving){const s=Math.min(d,60*dt);c.x+=dx/d*s;c.y+=dy/d*s;c.face=dx>=0?1:-1}else if(c.pong)c.face=c.tx<460?1:-1});
 }
 let last=performance.now();
 function loop(now){const dt=Math.min(.05,(now-last)/1000);last=now;think(dt);frame(now/1000);overlay();requestAnimationFrame(loop)}
-const ov=document.getElementById("ov");
-function headPos(id){const c=chars[id],sit=c.mode==="trabalhando"&&!c.moving;return [c.x,(sit?TEAM[id].desk[1]-14:c.y)-26]}
+const ov=$("ov");
 function overlay(){let h="";
-  IDS.forEach(id=>{const c=chars[id],[x,y]=headPos(id);let txt="",cls="";
+  IDS.forEach(id=>{const c=chars[id],x=c.x,y=(sitting(id)?TEAM[id].desk[1]-14:c.y)-26;let txt="",cls="";
     if(c.mode==="reuniao"){if(id==="diretor"){txt="Equipe, novo pedido!";cls="meet"}}
-    else if(!c.moving){const k=cur(id);if(k){txt=(k.status==="aprovar"?"Esperando você: ":"")+k.titulo;cls=k.status==="aprovar"?"warn":""}}
+    else if(!c.moving){const k=cur(id);if(k){const r=running.has(k.id);txt=(r?"Escrevendo: ":k.status==="aprovar"?"Esperando você: ":"")+k.titulo;cls=r?"work":k.status==="aprovar"?"warn":""}}
     if(!txt&&(hover===id||selected===id)){txt=TEAM[id].nome;cls="tag"}
     if(txt)h+=`<div class="bub ${cls}" style="left:${x/W*100}%;top:${(y-(c.mode==="aprovar"?10:0))/H*100}%">${esc(txt)}</div>`});
   if(ov.innerHTML!==h)ov.innerHTML=h}
-function esc(s){return String(s??"").replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]))}
 function pick(e){const r=cv.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*W,y=(e.clientY-r.top)/r.height*H;let best=null,bd=20;
-  IDS.forEach(id=>{const c=chars[id],sit=c.mode==="trabalhando"&&!c.moving,py=sit?TEAM[id].desk[1]-18:c.y-4,d=Math.hypot(c.x-x,py-y);if(d<bd){bd=d;best=id}});return best}
+  IDS.forEach(id=>{const c=chars[id],py=sitting(id)?TEAM[id].desk[1]-18:c.y-4,d=Math.hypot(c.x-x,py-y);if(d<bd){bd=d;best=id}});return best}
 cv.addEventListener("mousemove",e=>{hover=pick(e);cv.style.cursor=hover?"pointer":"default"});
 cv.addEventListener("mouseleave",()=>hover=null);
 cv.addEventListener("click",e=>{const id=pick(e);if(id){selected=id;renderSide()}});
-
-// ================= avatares (mesmo sprite, ampliado)
 function avatar(id,size){const c=document.createElement("canvas");c.width=24;c.height=24;const x=c.getContext("2d");x.imageSmoothingEnabled=false;
   sprite(x,12,18,TEAM[id],{walk:0,sit:true,typing:false,face:1,t:0});c.className=size>40?"av":"";c.setAttribute("aria-hidden","true");return c}
 
-// ================= estados
-const stateOf=id=>{if(Date.now()<meetingUntil)return["meet","Em reunião"];const k=cur(id);return k?(k.status==="fazendo"?["work","Trabalhando"]:["wait","Esperando você"]):["","Livre"]};
-function renderSide(){const el=document.getElementById("side");
+// ================= IA: execução, revisão e uso
+async function contarIA(n){if(!db)return;const d=hojeISO();const atual=uso[d]||0;uso[d]=atual+n;try{await db.doc("uso/"+d).set({chamadas:uso[d],dia:d})}catch(_){};renderUso()}
+function ficha(c){if(!c)return"Cliente: BIOS (trabalho interno da própria empresa).";
+  return `Ficha do cliente:\n- Nome: ${c.nome}\n- Ramo: ${c.ramo||"[PREENCHER]"}\n- Cidade: ${c.cidade||"[PREENCHER]"}\n- Instagram: ${c.instagram||"[PREENCHER]"}\n- Contato: ${c.contato||"[PREENCHER]"}\n- Cores: ${c.cores||"[PREENCHER]"}\n- Público e tom: ${c.tom||"[PREENCHER]"}\n- Observações: ${c.obs||"nenhuma"}`}
+function aprovadasDo(cliId){return tasks.filter(k=>k.status==="feito"&&k.resultado&&(k.cliente||"")===(cliId||"")).slice(0,2)}
+function promptAgente(k,extra){const T=TEAM[k.agente],c=clis.find(x=>x.id===k.cliente);
+  const ref=aprovadasDo(k.cliente).map(x=>`### ${x.titulo}\n${x.resultado.slice(0,1200)}`).join("\n\n");
+  return `${EMPRESA}\n\nVocê é o agente ${T.nome} da BIOS. ${T.inst}\n\n${ficha(c)}\n\n${ref?`Entregas já aprovadas para este cliente (siga o mesmo padrão de qualidade e tom):\n${ref}\n\n`:""}Tarefa: ${k.titulo}\nDetalhe: ${k.detalhe||"(sem detalhe)"}${k.prazo?`\nPrazo: ${fmtData(k.prazo)}`:""}\n\nEntregue o trabalho completo em Markdown, pronto para o Mathias revisar. Se a tarefa pede arte, vídeo ou site, entregue o briefing ou o texto final completo que a equipe usa para produzir. Onde faltar dado real, escreva [PREENCHER].${extra?`\n\n${extra}`:""}`}
+async function revisar(k,texto){
+  const r=await sample.json(`${EMPRESA}\n\nVocê é o Revisor de qualidade da BIOS. Avalie a entrega abaixo para a tarefa "${k.titulo}" (${k.detalhe||"sem detalhe"}), feita pelo agente ${TEAM[k.agente].nome}.
+Critérios: atende o pedido por completo; segue as regras da BIOS (sem números, preços ou depoimentos inventados; [PREENCHER] onde falta dado; nada de marcas de terceiros); tom certo para o cliente; clareza; pronta para uso. Em conteúdo de Instagram, exige gancho forte e "Comenta PALAVRA".
+Responda SOMENTE com JSON: {"nota": número de 0 a 10, "aprovado": true se nota >= 7, "problemas": ["até 4 itens curtos"], "elogio": "1 frase"}
+
+ENTREGA:
+${texto.slice(0,14000)}`,{cache:false});
+  return {nota:Math.max(0,Math.min(10,Number(r?.nota)||0)),aprovado:!!r?.aprovado,problemas:Array.isArray(r?.problemas)?r.problemas.map(String).slice(0,4):[],elogio:String(r?.elogio||"")}}
+async function executarTarefa(id){
+  if(!sample||!db){toast("A IA só funciona com a página aberta no claude.ai.");return}
+  const k=tasks.find(x=>x.id===id);if(!k||running.has(id))return;
+  running.add(id);await setStatus(id,"fazendo",false,true);log(k.agente,`começou: ${k.titulo}`);
+  abrirEntrega(id,"Escrevendo…",true);
+  try{
+    let {text}=await sample(promptAgente(k),{cache:false,onText:({text})=>stream(id,text)});let chamadas=1;
+    let rev=await revisar(k,text);chamadas++;
+    if(!rev.aprovado){stream(id,text+"\n\n— O Revisor pediu ajustes. Refazendo…");log(k.agente,`refazendo após revisão (nota ${rev.nota})`);
+      ({text}=await sample(promptAgente(k,`O Revisor da BIOS devolveu a primeira versão com nota ${rev.nota}. Corrija estes pontos: ${rev.problemas.join("; ")}.`),{cache:false,onText:({text})=>stream(id,text)}));chamadas++;
+      rev=await revisar(k,text);chamadas++}
+    await db.doc("tarefas/"+id).update({resultado:text,revisao:rev,status:"aprovar",ts:Date.now()});
+    log(k.agente,`entregou "${k.titulo}" (Revisor: nota ${rev.nota})`);contarIA(chamadas);
+    toast(`${TEAM[k.agente].nome} entregou: ${k.titulo}`);
+  }catch(err){await setStatus(id,"afazer",false,true);const c=err?.code;
+    toast(c==="not_granted"||c==="sampling_disabled"?"Permita o uso do Claude nesta página para os agentes trabalharem.":c==="rate_limited"?"Limite de uso do Claude atingido agora. Tente mais tarde.":"O agente não conseguiu terminar. Tente de novo.");if($("dRes").dataset.id===id&&$("dRes").open)$("dRes").close()}
+  finally{running.delete(id);renderAll()}}
+function stream(id,text){const d=$("dRes");if(d.open&&d.dataset.id===id)$("rTxt").textContent=text}
+function abrirEntrega(id,textoTemp,ao){const k=tasks.find(x=>x.id===id);if(!k)return;const T=TEAM[k.agente]||{nome:k.agente,cor:"#888"},d=$("dRes");
+  d.dataset.id=id;$("rTit").textContent=k.titulo;
+  $("rWho").innerHTML=`<span class="chip" style="background:${T.cor}">${esc(T.nome)}</span>${esc(cliNome(k.cliente)||"BIOS")} · ${ST[k.status]}`;
+  const r=k.revisao;$("rRev").innerHTML=!ao&&r?`<div class="rev"><b>Revisor: nota ${r.nota}/10.</b> ${esc(r.elogio)}${r.problemas.length?`<br>Pontos a conferir: ${r.problemas.map(esc).join(" · ")}`:""}</div>`:"";
+  $("rTxt").textContent=textoTemp??k.resultado??"";
+  $("rAprovar").hidden=ao||k.status!=="aprovar";$("rRefazer").hidden=ao;$("rCopiar").hidden=false;
+  if(!d.open)d.showModal()}
+$("rCopiar").onclick=async()=>{try{await navigator.clipboard.writeText($("rTxt").textContent);toast("Texto copiado.")}catch(_){const s=getSelection(),r=document.createRange();r.selectNodeContents($("rTxt"));s.removeAllRanges();s.addRange(r);toast("Texto selecionado. Use Ctrl+C.")}};
+$("rAprovar").onclick=async()=>{await setStatus($("dRes").dataset.id,"feito",true);$("dRes").close()};
+$("rRefazer").onclick=()=>executarTarefa($("dRes").dataset.id);
+document.addEventListener("click",e=>{const x=e.target.closest("[data-run]");if(x)executarTarefa(x.dataset.run);const v=e.target.closest("[data-ver]");if(v)abrirEntrega(v.dataset.ver);
+  const ed=e.target.closest("[data-edit]");if(ed)openTask(null,ed.dataset.edit)});
+
+// ================= tarefas
+async function setStatus(id,s,approved,silent){if(!db)return;const k=tasks.find(x=>x.id===id);if(!k||k.status===s)return;
+  k.status=s;renderAll();try{await db.doc("tarefas/"+id).update({status:s,ts:Date.now()});if(!silent)log(approved?null:k.agente,approved?`aprovou "${k.titulo}"`:`"${k.titulo}" → ${ST[s]}`)}catch(_){}}
+function log(agente,texto){if(db)db.collection("atividade").add({agente,texto,ts:Date.now()}).catch(()=>{})}
+function taskTags(k){const t=[];if(k.cliente)t.push(`<span class="tag">${esc(cliNome(k.cliente))}</span>`);if(k.prazo)t.push(`<span class="tag ${atrasada(k)?"late":""}">${atrasada(k)?"Atrasada · ":""}${fmtData(k.prazo)}</span>`);if(k.revisao)t.push(`<span class="tag score">Nota ${k.revisao.nota}</span>`);return t.length?`<div class="tags">${t.join("")}</div>`:""}
+function taskActions(k){const r=running.has(k.id);return `${r?`<span class="note">Escrevendo…</span>`:k.status!=="feito"?`<button class="btn sm" type="button" data-run="${k.id}">${k.resultado?"Refazer com IA":"Executar com IA"}</button>`:""}${k.resultado?`<button class="btn ghost sm" type="button" data-ver="${k.id}">Ver entrega</button>`:""}<button class="btn ghost sm" type="button" data-edit="${k.id}">Editar</button>`}
+
+// ================= painel lateral do escritório
+const stateOf=id=>{if(Date.now()<meetingUntil)return["meet","Em reunião"];const k=cur(id);return k?(k.status==="fazendo"?["work",running.has(k.id)?"Escrevendo":"Trabalhando"]:["wait","Esperando você"]):["","Livre"]};
+function renderSide(){const el=$("side");
   if(!selected){el.innerHTML=`<h3>Equipe</h3><p class="note">Escolha um agente no escritório ou aqui.</p><div class="team-list" id="tlist"></div>`;
     const l=el.querySelector("#tlist");IDS.forEach(id=>{const b=document.createElement("button");b.className="tl";b.type="button";b.append(avatar(id,32));
-      const [cls,lab]=stateOf(id),sp=document.createElement("span");sp.innerHTML=`<b>${esc(TEAM[id].nome)}</b><small>${lab}</small>`;b.append(sp);b.onclick=()=>{selected=id;renderSide()};l.append(b)});return}
+      const [,lab]=stateOf(id),sp=document.createElement("span");sp.innerHTML=`<b>${esc(TEAM[id].nome)}</b><small>${lab}</small>`;b.append(sp);b.onclick=()=>{selected=id;renderSide()};l.append(b)});return}
   const id=selected,T=TEAM[id],[cls,lab]=stateOf(id),mine=tasks.filter(k=>k.agente===id&&k.status!=="feito").sort((a,b)=>(b.ts||0)-(a.ts||0)),done=tasks.filter(k=>k.agente===id&&k.status==="feito").length;
   el.innerHTML=`<div class="prof"><span id="avs"></span><div><h3 style="color:${T.cor}">${esc(T.nome)}</h3><p class="note">${esc(T.setor)} · ${esc(T.papel)}</p></div></div>
     <span class="pill ${cls}"><i></i>${lab}</span>
-    <div class="mini">${mine.length?mine.map(k=>`<div class="mt" style="--c:${T.cor}"><p>${esc(k.titulo)}</p>${k.detalhe?`<span>${esc(k.detalhe)}</span>`:""}
-      <div class="seg" role="group" aria-label="Status">${Object.keys(ST).map(s=>`<button type="button" data-set="${k.id}" data-s="${s}" aria-pressed="${s===k.status}">${ST[s]}</button>`).join("")}</div></div>`).join(""):`<p class="note">Sem tarefas abertas. ${chars[id].pong?"Está jogando ping-pong.":"Está no lounge."}</p>`}</div>
+    <div class="mini">${mine.length?mine.map(k=>`<div class="mt" style="--c:${T.cor}"><p>${esc(k.titulo)}</p>${k.detalhe?`<span>${esc(k.detalhe)}</span>`:""}${taskTags(k)}
+      <div class="seg" role="group" aria-label="Status">${Object.keys(ST).map(s=>`<button type="button" data-set="${k.id}" data-s="${s}" aria-pressed="${s===k.status}">${ST[s]}</button>`).join("")}</div>
+      <div class="row" style="margin:0">${taskActions(k)}</div></div>`).join(""):`<p class="note">Sem tarefas abertas. ${chars[id].pong?"Está jogando ping-pong.":"Está no lounge."}</p>`}</div>
     <p class="note">${done} entregue(s).</p>
     <div class="row" style="margin:0"><button class="btn sm" type="button" id="sAdd">+ Tarefa para ${esc(T.nome)}</button><button class="btn ghost sm" type="button" id="sBack">Ver equipe</button></div>`;
   el.querySelector("#avs").append(avatar(id,56));
-  el.querySelector("#sBack").onclick=()=>{selected=null;renderSide()};
-  el.querySelector("#sAdd").onclick=()=>openTask(id);
-}
-document.getElementById("side").addEventListener("click",e=>{const b=e.target.closest("[data-set]");if(b)setStatus(b.dataset.set,b.dataset.s)});
+  el.querySelector("#sBack").onclick=()=>{selected=null;renderSide()};el.querySelector("#sAdd").onclick=()=>openTask(id)}
+$("side").addEventListener("click",e=>{const b=e.target.closest("[data-set]");if(b)setStatus(b.dataset.set,b.dataset.s)});
 
 // ================= quadro
-const fAg=document.getElementById("fAg"),tAg=document.getElementById("tAg");
-IDS.forEach(id=>{fAg.add(new Option(TEAM[id].nome,id));tAg.add(new Option(TEAM[id].nome,id))});
-fAg.onchange=renderBoard;
-function renderBoard(){const b=document.getElementById("board"),f=fAg.value;b.innerHTML="";
-  Object.keys(ST).forEach(s=>{const list=tasks.filter(k=>k.status===s&&(!f||k.agente===f)).sort((a,c)=>(c.ts||0)-(a.ts||0));
+const fAg=$("fAg"),fCli=$("fCli");IDS.forEach(id=>{fAg.add(new Option(TEAM[id].nome,id));$("tAg").add(new Option(TEAM[id].nome,id))});
+fAg.onchange=fCli.onchange=renderBoard;
+function fillCliSelects(){[["fCli","Todos os clientes"],["eCli","Todos os clientes"],["tCli","BIOS (interno)"],["pCli","BIOS (interno)"]].forEach(([id,lab])=>{const s=$(id),v=s.value;s.innerHTML=`<option value="">${lab}</option>`+clis.map(c=>`<option value="${c.id}">${esc(c.nome)}</option>`).join("");s.value=v});
+  const n=$("nCli"),v=n.value;n.innerHTML=`<option value="">BIOS (interno)</option>`+clis.map(c=>`<option value="${c.id}">${esc(c.nome)}</option>`).join("");n.value=v}
+function renderBoard(){const b=$("board"),fa=fAg.value,fc=fCli.value;b.innerHTML="";
+  Object.keys(ST).forEach(s=>{const list=tasks.filter(k=>k.status===s&&(!fa||k.agente===fa)&&(!fc||k.cliente===fc)).sort((a,c)=>(atrasada(c)-atrasada(a))||(c.ts||0)-(a.ts||0));
     const col=document.createElement("div");col.className="col";col.dataset.s=s;col.innerHTML=`<h3>${ST[s]} <b>${list.length}</b></h3>`;
     if(!list.length)col.insertAdjacentHTML("beforeend",`<div class="empty">${db?"Solte um cartão aqui":"Conectando ao banco…"}</div>`);
     list.forEach(k=>{const T=TEAM[k.agente]||{nome:k.agente,cor:"#888"};
-      col.insertAdjacentHTML("beforeend",`<div class="task" draggable="true" data-id="${k.id}" style="--c:${T.cor}"><p>${esc(k.titulo)}</p>
-      <div class="meta"><span class="who" style="--c:${T.cor}"><i></i>${esc(T.nome)}</span>${s==="aprovar"?`<button class="ok" data-ok="${k.id}" type="button">Aprovar</button>`:""}
-      <select aria-label="Mover ${esc(k.titulo)}" data-mv="${k.id}" id="mv-${k.id}">${Object.keys(ST).map(v=>`<option value="${v}"${v===s?" selected":""}>${ST[v]}</option>`).join("")}</select></div></div>`)});
+      col.insertAdjacentHTML("beforeend",`<div class="task" draggable="true" data-id="${k.id}" style="--c:${T.cor}"><p>${esc(k.titulo)}</p>${taskTags(k)}
+      <div class="meta"><span class="who" style="--c:${T.cor}"><i></i>${esc(T.nome)}</span>${s==="aprovar"?`<button class="btn ok2 sm" data-ok="${k.id}" type="button">Aprovar</button>`:""}
+      <select aria-label="Mover ${esc(k.titulo)}" data-mv="${k.id}" id="mv-${k.id}">${Object.keys(ST).map(v=>`<option value="${v}"${v===s?" selected":""}>${ST[v]}</option>`).join("")}</select></div>
+      <div class="row" style="margin:0">${taskActions(k)}</div></div>`)});
     col.addEventListener("dragover",e=>{e.preventDefault();col.classList.add("over")});col.addEventListener("dragleave",()=>col.classList.remove("over"));
-    col.addEventListener("drop",e=>{e.preventDefault();col.classList.remove("over");const id=e.dataTransfer.getData("text/plain");if(id)setStatus(id,s)});
-    b.append(col)});
-  b.querySelectorAll(".task").forEach(t=>{t.addEventListener("dragstart",e=>{e.dataTransfer.setData("text/plain",t.dataset.id);t.classList.add("dragging")});t.addEventListener("dragend",()=>t.classList.remove("dragging"))});
-}
-document.getElementById("board").addEventListener("change",e=>{const id=e.target.dataset.mv;if(id)setStatus(id,e.target.value)});
-document.getElementById("board").addEventListener("click",e=>{const id=e.target.dataset.ok;if(id)setStatus(id,"feito",true)});
-async function setStatus(id,s,approved){if(!db)return;const k=tasks.find(x=>x.id===id);if(!k||k.status===s)return;
-  try{await db.doc("tarefas/"+id).update({status:s,ts:Date.now()});log(approved?null:k.agente,approved?`aprovou "${k.titulo}"`:`"${k.titulo}" → ${ST[s]}`)}catch(_){}}
-function log(agente,texto){if(db)db.collection("atividade").add({agente,texto,ts:Date.now()}).catch(()=>{})}
+    col.addEventListener("drop",e=>{e.preventDefault();col.classList.remove("over");const id=e.dataTransfer.getData("text/plain");if(id)setStatus(id,s)});b.append(col)});
+  b.querySelectorAll(".task").forEach(t=>{t.addEventListener("dragstart",e=>{e.dataTransfer.setData("text/plain",t.dataset.id);t.classList.add("dragging")});t.addEventListener("dragend",()=>t.classList.remove("dragging"))})}
+$("board").addEventListener("change",e=>{const id=e.target.dataset.mv;if(id)setStatus(id,e.target.value)});
+$("board").addEventListener("click",e=>{const id=e.target.dataset.ok;if(id)setStatus(id,"feito",true)});
 
-// ================= equipe e atividade
-function renderCards(){const el=document.getElementById("cards");el.innerHTML="";
+// ================= nova/editar tarefa
+let editTask=null;
+function openTask(agente,id){editTask=id||null;const k=id?tasks.find(x=>x.id===id):null;$("tHead").textContent=k?"Editar tarefa":"Nova tarefa";
+  $("tTit").value=k?.titulo||"";$("tAg").value=k?.agente||agente||"diretor";$("tCli").value=k?.cliente||"";$("tPrazo").value=k?.prazo||"";$("tDet").value=k?.detalhe||"";$("dTask").showModal()}
+$("bAddT").onclick=()=>openTask(fAg.value);
+$("fTask").addEventListener("submit",async e=>{e.preventDefault();if(!db){$("dTask").close();return}
+  const d={titulo:$("tTit").value.trim().slice(0,80),agente:$("tAg").value,cliente:$("tCli").value,prazo:$("tPrazo").value,detalhe:$("tDet").value.trim().slice(0,400),ts:Date.now()};if(!d.titulo)return;
+  try{if(editTask){await db.doc("tarefas/"+editTask).update(d);log(d.agente,`tarefa atualizada: ${d.titulo}`)}else{await db.collection("tarefas").add({...d,status:"afazer"});log(d.agente,`recebeu: ${d.titulo}`)}}catch(_){toast("Não foi possível salvar.")}
+  $("dTask").close()});
+
+// ================= clientes
+let editCli=null;
+function openCli(id){editCli=id||null;const c=id?clis.find(x=>x.id===id):{};$("cHead").textContent=id?"Editar cliente":"Novo cliente";
+  [["cNome","nome"],["cRamo","ramo"],["cCont","contato"],["cInsta","instagram"],["cCid","cidade"],["cCores","cores"],["cTom","tom"],["cObs","obs"]].forEach(([f,k])=>$(f).value=c?.[k]||"");$("dCli").showModal()}
+$("bAddC").onclick=()=>openCli();
+$("fCli2").addEventListener("submit",async e=>{e.preventDefault();if(!db){$("dCli").close();return}
+  const d={nome:$("cNome").value.trim(),ramo:$("cRamo").value.trim(),contato:$("cCont").value.trim(),instagram:$("cInsta").value.trim(),cidade:$("cCid").value.trim(),cores:$("cCores").value.trim(),tom:$("cTom").value.trim(),obs:$("cObs").value.trim(),ts:Date.now()};if(!d.nome)return;
+  try{if(editCli)await db.doc("clientes/"+editCli).update(d);else{await db.collection("clientes").add(d);log(null,`cadastrou o cliente ${d.nome}`)}}catch(_){toast("Não foi possível salvar.")}$("dCli").close()});
+function renderClientes(){const el=$("clis");
+  if(!clis.length){el.innerHTML=`<div class="empty" style="grid-column:1/-1">Nenhum cliente ainda. Cadastre o primeiro, como a Emilly Lanches, para os agentes conhecerem o negócio.</div>`;return}
+  el.innerHTML=clis.slice().sort((a,b)=>a.nome.localeCompare(b.nome)).map(c=>{const ts=tasks.filter(k=>k.cliente===c.id),ab=ts.filter(k=>k.status!=="feito").length,ok=ts.filter(k=>k.status==="feito").length;
+    const f=fins.filter(x=>x.cliente===c.id),rec=f.filter(x=>x.situacao==="fechado").reduce((s,x)=>s+(+x.valor||0),0),pago=f.filter(x=>x.situacao==="pago").reduce((s,x)=>s+(+x.valor||0),0);
+    const faltam=["ramo","instagram","tom","cores"].filter(k=>!c[k]).length;
+    return `<article class="ac"><div><h4>${esc(c.nome)}</h4><p class="note">${esc([c.ramo,c.cidade].filter(Boolean).join(" · ")||"Ficha incompleta")}</p></div>
+      ${faltam?`<span class="pill wait"><i></i>Faltam ${faltam} campo(s) na ficha</span>`:`<span class="pill work"><i></i>Ficha completa</span>`}
+      <dl><div><dt>Abertas</dt><dd>${ab}</dd></div><div><dt>Feitas</dt><dd>${ok}</dd></div><div><dt>A receber</dt><dd style="font-size:15px">${brl(rec)}</dd></div><div><dt>Pago</dt><dd style="font-size:15px">${brl(pago)}</dd></div></dl>
+      <div class="row" style="margin:0"><button class="btn ghost sm" type="button" data-cedit="${c.id}">Editar ficha</button><button class="btn ghost sm" type="button" data-cped="${c.id}">Pedido para este cliente</button><button class="btn ghost sm" type="button" data-cfin="${c.id}">+ Orçamento</button></div></article>`}).join("")}
+$("clis").addEventListener("click",e=>{const a=e.target.closest("[data-cedit]");if(a)openCli(a.dataset.cedit);const p=e.target.closest("[data-cped]");if(p)openPedido(p.dataset.cped);const f=e.target.closest("[data-cfin]");if(f)openFin(null,f.dataset.cfin)});
+
+// ================= financeiro
+let editFin=null;
+function openFin(id,cli){editFin=id||null;const f=id?fins.find(x=>x.id===id):{};$("fHead").textContent=id?"Editar lançamento":"Novo lançamento";
+  $("nCli").value=f?.cliente??cli??"";$("nSit").value=f?.situacao||"orcamento";$("nDesc").value=f?.descricao||"";$("nVal").value=f?.valor??"";$("nVenc").value=f?.vencimento||"";$("dFin").showModal()}
+$("bAddF").onclick=()=>openFin();
+$("fFin").addEventListener("submit",async e=>{e.preventDefault();if(!db){$("dFin").close();return}
+  const d={cliente:$("nCli").value,situacao:$("nSit").value,descricao:$("nDesc").value.trim(),valor:Math.max(0,Number($("nVal").value)||0),vencimento:$("nVenc").value,ts:Date.now()};
+  if(d.situacao==="pago")d.pagoEm=hojeISO();
+  try{if(editFin)await db.doc("financeiro/"+editFin).update(d);else{await db.collection("financeiro").add(d);log("comercial",`novo lançamento: ${d.descricao} (${brl(d.valor)})`)}}catch(_){toast("Não foi possível salvar.")}$("dFin").close()});
+function renderFin(){const mes=hojeISO().slice(0,7);
+  $("fAberto").textContent=brl(fins.filter(x=>x.situacao==="orcamento").reduce((s,x)=>s+(+x.valor||0),0));
+  $("fReceber").textContent=brl(fins.filter(x=>x.situacao==="fechado").reduce((s,x)=>s+(+x.valor||0),0));
+  $("fMes").textContent=brl(fins.filter(x=>x.situacao==="pago"&&(x.pagoEm||"").startsWith(mes)).reduce((s,x)=>s+(+x.valor||0),0));
+  const t=$("fin");
+  if(!fins.length){t.innerHTML=`<tr><td colspan="6"><div class="empty">Nenhum lançamento. Registre um orçamento e peça ao Comercial para escrever a proposta.</div></td></tr>`;return}
+  t.innerHTML=fins.slice().sort((a,b)=>(b.ts||0)-(a.ts||0)).map(f=>{const venc=f.vencimento&&f.situacao==="fechado"&&f.vencimento<hojeISO();
+    return `<tr><td>${esc(cliNome(f.cliente)||"BIOS")}</td><td>${esc(f.descricao)}</td><td><span class="pill ${f.situacao==="pago"?"work":f.situacao==="fechado"?(venc?"bad":"wait"):f.situacao==="perdido"?"":"meet"}"><i></i>${venc?"Vencido":SIT[f.situacao]}</span></td>
+    <td>${fmtData(f.vencimento)}</td><td class="num">${brl(f.valor)}</td><td><div class="row" style="margin:0;justify-content:flex-end;flex-wrap:nowrap">
+    ${f.situacao==="orcamento"?`<button class="btn sm" type="button" data-prop="${f.id}">${f.proposta?"Refazer proposta":"Proposta com IA"}</button>`:""}${f.proposta?`<button class="btn ghost sm" type="button" data-vprop="${f.id}">Ver proposta</button>`:""}
+    ${f.situacao==="fechado"?`<button class="btn ok2 sm" type="button" data-pago="${f.id}">Marcar pago</button>`:""}<button class="btn ghost sm" type="button" data-fedit="${f.id}">Editar</button></div></td></tr>`}).join("")}
+$("fin").addEventListener("click",async e=>{const ed=e.target.closest("[data-fedit]");if(ed)openFin(ed.dataset.fedit);
+  const p=e.target.closest("[data-pago]");if(p&&db){const f=fins.find(x=>x.id===p.dataset.pago);await db.doc("financeiro/"+f.id).update({situacao:"pago",pagoEm:hojeISO(),ts:Date.now()});log(null,`recebeu ${brl(f.valor)} de ${cliNome(f.cliente)||"BIOS"}`)}
+  const pr=e.target.closest("[data-prop]");if(pr)gerarProposta(pr.dataset.prop,pr);
+  const vp=e.target.closest("[data-vprop]");if(vp){const f=fins.find(x=>x.id===vp.dataset.vprop);verTexto(`Proposta: ${f.descricao}`,f.proposta,"comercial",cliNome(f.cliente))}});
+function verTexto(tit,txt,ag,cli){const d=$("dRes"),T=TEAM[ag];d.dataset.id="";$("rTit").textContent=tit;$("rWho").innerHTML=`<span class="chip" style="background:${T.cor}">${T.nome}</span>${esc(cli||"BIOS")}`;
+  $("rRev").innerHTML="";$("rTxt").textContent=txt||"";$("rAprovar").hidden=true;$("rRefazer").hidden=true;if(!d.open)d.showModal()}
+async function gerarProposta(id,btn){if(!sample||!db){toast("A IA só funciona com a página aberta no claude.ai.");return}
+  const f=fins.find(x=>x.id===id),c=clis.find(x=>x.id===f.cliente);btn.disabled=true;btn.textContent="Escrevendo…";verTexto(`Proposta: ${f.descricao}`,"Escrevendo…","comercial",c?.nome);
+  try{const {text}=await sample(`${EMPRESA}\n\nVocê é o agente Comercial da BIOS. ${TEAM.comercial.inst}\n\n${ficha(c)}\n\nEscreva a proposta comercial para: ${f.descricao}.\nInvestimento definido pelo Mathias: ${brl(f.valor)}${f.vencimento?`. Validade/vencimento: ${fmtData(f.vencimento)}`:""}.\nEntregue também, no final, uma mensagem curta de WhatsApp para enviar junto com a proposta.`,{cache:false,onText:({text})=>{if($("dRes").open)$("rTxt").textContent=text}});
+    await db.doc("financeiro/"+id).update({proposta:text,ts:Date.now()});log("comercial",`escreveu a proposta: ${f.descricao}`);contarIA(1)}
+  catch(err){toast(err?.code==="rate_limited"?"Limite de uso do Claude atingido agora.":"Não foi possível escrever a proposta.")}finally{btn.disabled=false}}
+
+// ================= agenda
+let wkOff=0;
+function inicioSemana(off){const d=new Date(hojeISO()+"T12:00:00"),w=(d.getDay()+6)%7;d.setDate(d.getDate()-w+off*7);return d.toISOString().slice(0,10)}
+$("wPrev").onclick=()=>{wkOff--;renderAgenda()};$("wNext").onclick=()=>{wkOff++;renderAgenda()};$("wHoje").onclick=()=>{wkOff=0;renderAgenda()};
+function renderAgenda(){const ini=inicioSemana(wkOff),hoje=hojeISO();$("wLab").textContent=`${fmtData(ini)} a ${fmtData(addDias(ini,6))}`;
+  const late=tasks.filter(atrasada).sort((a,b)=>a.prazo.localeCompare(b.prazo));
+  $("lateBox").innerHTML=late.length?`<div class="card" style="border-color:var(--bad)"><h3 style="color:#ffb3a8">Atrasadas (${late.length})</h3><div class="mini">${late.map(k=>`<div class="mt" style="--c:${TEAM[k.agente]?.cor||"#888"}"><p>${esc(k.titulo)}</p><span>${esc(TEAM[k.agente]?.nome||"")} · prazo ${fmtData(k.prazo)}${k.cliente?" · "+esc(cliNome(k.cliente)):""}</span><div class="row" style="margin:0">${taskActions(k)}</div></div>`).join("")}</div></div>`:"";
+  const dias=["Seg","Ter","Qua","Qui","Sex","Sáb","Dom"];
+  $("week").innerHTML=dias.map((n,i)=>{const d=addDias(ini,i),list=tasks.filter(k=>k.prazo===d);
+    return `<div class="dcol ${d===hoje?"today":""}"><h5>${n} ${fmtData(d)}</h5>${list.map(k=>`<button class="it" type="button" data-edit="${k.id}" style="--c:${TEAM[k.agente]?.cor||"#888"}">${esc(k.titulo)}<br><span class="note">${ST[k.status]}</span></button>`).join("")||`<span class="note">—</span>`}</div>`}).join("");
+  const sem=tasks.filter(k=>!k.prazo&&k.status!=="feito").length;if(sem)$("week").insertAdjacentHTML("afterend","");$("wLab").title=`${sem} tarefa(s) abertas sem prazo`}
+
+// ================= entregas
+$("eBusca").oninput=$("eCli").onchange=renderEntregas;
+function renderEntregas(){const q=$("eBusca").value.trim().toLowerCase(),fc=$("eCli").value;
+  const list=tasks.filter(k=>k.resultado&&(!fc||k.cliente===fc)&&(!q||(k.titulo+" "+k.resultado).toLowerCase().includes(q))).sort((a,b)=>(b.ts||0)-(a.ts||0));
+  $("ents").innerHTML=list.length?list.map(k=>{const T=TEAM[k.agente]||{nome:k.agente,cor:"#888"};return `<article class="ac"><div><h4 style="font-size:20px">${esc(k.titulo)}</h4><p class="note"><span class="chip" style="background:${T.cor}">${esc(T.nome)}</span>${esc(cliNome(k.cliente)||"BIOS")} · ${ST[k.status]}</p></div>
+    ${k.revisao?`<span class="pill ${k.revisao.nota>=7?"work":"wait"}"><i></i>Revisor: ${k.revisao.nota}/10</span>`:""}<p class="note" style="overflow-wrap:anywhere">${esc(k.resultado.replace(/[#*_>`]/g,"").slice(0,180))}…</p>
+    <div class="row" style="margin:0"><button class="btn ghost sm" type="button" data-ver="${k.id}">Abrir</button></div></article>`}).join(""):`<div class="empty" style="grid-column:1/-1">Nenhuma entrega ainda. No quadro, clique em "Executar com IA" em uma tarefa.</div>`}
+
+// ================= equipe, uso e backup
+function renderCards(){const el=$("cards");el.innerHTML="";
   IDS.forEach(id=>{const T=TEAM[id],c={};Object.keys(ST).forEach(s=>c[s]=tasks.filter(k=>k.agente===id&&k.status===s).length);const tot=Object.values(c).reduce((a,b)=>a+b,0)||1,[cls,lab]=stateOf(id);
+    const notas=tasks.filter(k=>k.agente===id&&k.revisao).map(k=>k.revisao.nota),media=notas.length?(notas.reduce((a,b)=>a+b,0)/notas.length).toFixed(1):"–";
     const d=document.createElement("article");d.className="ac";d.innerHTML=`<div class="top"><span class="avh"></span><div><h4 style="color:${T.cor}">${esc(T.nome)}</h4><p class="note">${esc(T.papel)}</p></div></div>
       <span class="pill ${cls}"><i></i>${lab}</span>
       <div class="load" aria-hidden="true"><i style="width:${c.fazendo/tot*100}%;background:var(--ok)"></i><i style="width:${c.aprovar/tot*100}%;background:var(--warn)"></i><i style="width:${c.afazer/tot*100}%;background:var(--line2)"></i><i style="width:${c.feito/tot*100}%;background:var(--cyan)"></i></div>
-      <dl><div><dt>A fazer</dt><dd>${c.afazer}</dd></div><div><dt>Fazendo</dt><dd>${c.fazendo}</dd></div><div><dt>Aprovar</dt><dd>${c.aprovar}</dd></div><div><dt>Feito</dt><dd>${c.feito}</dd></div></dl>
+      <dl><div><dt>A fazer</dt><dd>${c.afazer}</dd></div><div><dt>Fazendo</dt><dd>${c.fazendo}</dd></div><div><dt>Feito</dt><dd>${c.feito}</dd></div><div><dt>Nota</dt><dd>${media}</dd></div></dl>
       <div class="row" style="margin:0"><button class="btn ghost sm" type="button" data-see="${id}">Ver no escritório</button><button class="btn ghost sm" type="button" data-new="${id}">+ Tarefa</button></div>`;
     d.querySelector(".avh").append(avatar(id,56));el.append(d)})}
-document.getElementById("cards").addEventListener("click",e=>{const s=e.target.dataset.see,n=e.target.dataset.new;if(s){selected=s;go("escritorio");renderSide()}if(n)openTask(n)});
-function renderTimeline(){const el=document.getElementById("tline");
+$("cards").addEventListener("click",e=>{const s=e.target.dataset.see,n=e.target.dataset.new;if(s){selected=s;go("escritorio");renderSide()}if(n)openTask(n)});
+function renderUso(){const hoje=hojeISO(),dias=Array.from({length:14},(_,i)=>addDias(hoje,i-13)),vals=dias.map(d=>uso[d]||0),max=Math.max(1,...vals),tot=vals.reduce((a,b)=>a+b,0);
+  $("sIA").textContent=uso[hoje]||0;
+  $("usoTxt").textContent=`${uso[hoje]||0} chamada(s) hoje · ${tot} nos últimos 14 dias. Roda no limite do seu plano do Claude, sem custo extra. Cada execução usa de 2 a 4 chamadas (agente + Revisor).`;
+  $("usoBars").innerHTML=vals.map((v,i)=>`<div title="${fmtData(dias[i])}: ${v}" style="flex:1;height:${Math.max(4,v/max*100)}%;background:${dias[i]===hoje?"var(--cyan)":"var(--line2)"};border-radius:4px 4px 0 0"></div>`).join("")}
+$("bExp").onclick=async()=>{const data=JSON.stringify({versao:3,exportadoEm:new Date().toISOString(),tarefas:tasks,clientes:clis,financeiro:fins,atividade:acts},null,1);
+  if(!downloads){toast("Exportar só funciona com a página aberta no claude.ai.");return}
+  try{await downloads.save({filename:`bios-ia-backup-${hojeISO()}.json`,data});toast("Backup salvo.")}catch(e){if(e?.code!=="declined")toast("Não foi possível salvar o backup.")}};
+$("fImp").onchange=async e=>{const f=e.target.files[0];if(!f||!db)return;try{const j=JSON.parse(await f.text());let n=0;
+  for(const [col,list] of [["tarefas",j.tarefas],["clientes",j.clientes],["financeiro",j.financeiro]])for(const {id,...d} of (list||[])){if(id){await db.doc(`${col}/${id}`).set(d);n++}}
+  toast(`${n} registro(s) importados.`);log(null,`importou um backup (${n} registros)`)}catch(_){toast("Arquivo de backup inválido.")}e.target.value=""};
+
+// ================= atividade
+function renderTimeline(){const el=$("tline");
   if(!acts.length){el.innerHTML=`<div class="empty">${db?"Ainda sem atividade. Mande um pedido ao Diretor.":"Abra no claude.ai para ver a atividade ao vivo."}</div>`;return}
-  const days={};acts.forEach(a=>{const d=new Date(a.ts),k=d.toLocaleDateString("pt-BR",{weekday:"long",day:"2-digit",month:"2-digit"});(days[k]=days[k]||[]).push(a)});
-  el.innerHTML=Object.entries(days).map(([k,list])=>`<div class="day"><h4>${esc(k)}</h4>${list.map(a=>{const T=TEAM[a.agente]||{nome:"Você",cor:"#F5F8FF"},d=new Date(a.ts);
-    return `<div class="ev"><time>${d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})}</time><span><span class="chip" style="background:${T.cor}">${esc(T.nome)}</span>${esc(a.texto)}</span></div>`}).join("")}</div>`).join("")}
+  const days={};acts.forEach(a=>{const k=new Date(a.ts).toLocaleDateString("pt-BR",{weekday:"long",day:"2-digit",month:"2-digit"});(days[k]=days[k]||[]).push(a)});
+  el.innerHTML=Object.entries(days).map(([k,list])=>`<div class="day"><h4>${esc(k)}</h4>${list.map(a=>{const T=TEAM[a.agente]||{nome:"Você",cor:"#F5F8FF"};
+    return `<div class="ev"><time>${new Date(a.ts).toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})}</time><span><span class="chip" style="background:${T.cor}">${esc(T.nome)}</span>${esc(a.texto)}</span></div>`}).join("")}</div>`).join("")}
 
-function renderAll(){const n=s=>tasks.filter(k=>k.status===s).length;
-  document.getElementById("sWork").textContent=n("fazendo");document.getElementById("sAppr").textContent=n("aprovar");document.getElementById("sDone").textContent=n("feito");
-  const na=document.getElementById("nAppr");na.textContent=n("aprovar");na.hidden=!n("aprovar");
-  renderSide();renderBoard();renderCards();renderTimeline()}
+function renderAll(){const n=s=>tasks.filter(k=>k.status===s).length,late=tasks.filter(atrasada).length;
+  $("sWork").textContent=n("fazendo");$("sAppr").textContent=n("aprovar");$("sLate").textContent=late;
+  $("nAppr").textContent=n("aprovar");$("nAppr").hidden=!n("aprovar");$("nLate").textContent=late;$("nLate").hidden=!late;
+  renderSide();renderBoard();renderCards();renderClientes();renderFin();renderAgenda();renderEntregas();renderUso()}
 
-// ================= navegação por abas
-const VIEWS=["escritorio","quadro","equipe","atividade"];
-function go(v){if(!VIEWS.includes(v))v="escritorio";VIEWS.forEach(x=>document.getElementById("v-"+x).hidden=x!==v);
-  document.querySelectorAll("nav a").forEach(a=>a.toggleAttribute("aria-current",a.dataset.v===v)||a.setAttribute("aria-current","page"));
+// ================= navegação
+const VIEWS=["escritorio","quadro","clientes","financeiro","agenda","entregas","equipe","atividade"];
+function go(v){if(!VIEWS.includes(v))v="escritorio";VIEWS.forEach(x=>$("v-"+x).hidden=x!==v);
   document.querySelectorAll("nav a").forEach(a=>{if(a.dataset.v===v)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
   if(location.hash!=="#"+v)history.replaceState(null,"","#"+v)}
 document.querySelectorAll("nav a").forEach(a=>a.addEventListener("click",e=>{e.preventDefault();go(a.dataset.v)}));
 window.addEventListener("hashchange",()=>go(location.hash.slice(1)));
 
-// ================= nova tarefa manual
-const dTask=document.getElementById("dTask");
-function openTask(id){tAg.value=id||"diretor";document.getElementById("tTit").value="";document.getElementById("tDet").value="";dTask.showModal()}
-document.getElementById("bAddT").onclick=()=>openTask(fAg.value);
-document.getElementById("cTask").onclick=()=>dTask.close();
-document.getElementById("fTask").addEventListener("submit",async e=>{e.preventDefault();if(!db){dTask.close();return}
-  const titulo=document.getElementById("tTit").value.trim(),agente=tAg.value,detalhe=document.getElementById("tDet").value.trim();if(!titulo)return;
-  try{await db.collection("tarefas").add({titulo,agente,detalhe,status:"afazer",ts:Date.now()});log(agente,`recebeu: ${titulo}`)}catch(_){}
-  dTask.close()});
-
 // ================= pedido ao Diretor
-const dPed=document.getElementById("dPed"),bPed=document.getElementById("bPed"),pSt=document.getElementById("pSt"),pOut=document.getElementById("pOut");
-document.getElementById("bNovo").onclick=()=>{pSt.textContent="";dPed.showModal()};
-document.getElementById("cPed").onclick=()=>dPed.close();
-document.getElementById("fPed").addEventListener("submit",async e=>{e.preventDefault();const txt=document.getElementById("pedido").value.trim();
-  if(!txt){pSt.textContent="Escreva o pedido primeiro.";return}
-  if(!sample||!db){pSt.textContent="O Diretor só atende com a página aberta no claude.ai.";return}
-  bPed.disabled=true;pSt.textContent="O Diretor está reunindo a equipe…";pOut.innerHTML="";meetingUntil=Date.now()+90000;
-  log("diretor",`recebeu o pedido: "${txt.slice(0,120)}"`);
-  const prompt=`Você é o Diretor da BIOS, empresa de Campina Grande-PB que faz sites, cardápios digitais, apps de agendamento, sistemas de gestão e automação de atendimento para pequenos negócios (Instagram @b1os.fc). Regras: nada é publicado ou enviado sem aprovação do dono (Mathias); não invente números, clientes ou depoimentos; não use personagens ou marcas de terceiros em peças comerciais.
-Equipe (use exatamente estes ids): diretor, conteudo, designer, video, dev-sites, comercial, relatorios.
-Pedido do Mathias: """${txt}"""
-Divida em 3 a 7 tarefas concretas. Responda SOMENTE com JSON:
-{"resumo":"1-2 frases do plano","tarefas":[{"titulo":"até 60 caracteres","agente":"id","detalhe":"o que entregar, 1 frase"}]}`;
-  try{const r=await sample.json(prompt,{cache:false});
+function openPedido(cli){$("pSt").textContent="";$("pOut").innerHTML="";$("pCli").value=cli||"";$("dPed").showModal()}
+$("bNovo").onclick=()=>openPedido();
+$("fPed").addEventListener("submit",async e=>{e.preventDefault();const txt=$("pedido").value.trim(),cliId=$("pCli").value,c=clis.find(x=>x.id===cliId);
+  if(!txt){$("pSt").textContent="Escreva o pedido primeiro.";return}
+  if(!sample||!db){$("pSt").textContent="O Diretor só atende com a página aberta no claude.ai.";return}
+  $("bPed").disabled=true;$("pSt").textContent="O Diretor está reunindo a equipe…";$("pOut").innerHTML="";meetingUntil=Date.now()+90000;
+  log("diretor",`recebeu o pedido: "${txt.slice(0,120)}"${c?` (${c.nome})`:""}`);
+  try{const r=await sample.json(`${EMPRESA}\n\nVocê é o Diretor da BIOS. ${TEAM.diretor.inst}\n\n${ficha(c)}\n\nEquipe (use exatamente estes ids): diretor, conteudo, designer, video, dev-sites, comercial, relatorios.\nPedido do Mathias: """${txt}"""\nHoje é ${fmtData(hojeISO())}. Divida em 3 a 7 tarefas concretas, na ordem em que devem acontecer, com prazo realista em dias a partir de hoje. Responda SOMENTE com JSON:\n{"resumo":"1-2 frases do plano","tarefas":[{"titulo":"até 60 caracteres","agente":"id","detalhe":"o que entregar, 1 frase","prazoDias":número de 1 a 30}]}`,{cache:false});
     const list=(Array.isArray(r?.tarefas)?r.tarefas:[]).filter(k=>TEAM[k.agente]).slice(0,7);if(!list.length)throw{code:"invalid_json"};
-    const ref=await db.collection("pedidos").add({texto:txt,resumo:String(r.resumo||""),ts:Date.now()});
-    for(const k of list){await db.collection("tarefas").add({titulo:String(k.titulo).slice(0,80),agente:k.agente,detalhe:String(k.detalhe||""),status:"afazer",pedido:ref.id,ts:Date.now()});log(k.agente,`recebeu: ${String(k.titulo).slice(0,80)}`)}
-    pOut.innerHTML=`<div><b>Plano:</b> ${esc(r.resumo||"")}</div>`+list.map(k=>`<div><span class="chip" style="background:${TEAM[k.agente].cor}">${esc(TEAM[k.agente].nome)}</span>${esc(k.titulo)}</div>`).join("");
-    pSt.textContent=`${list.length} tarefas no quadro.`;document.getElementById("pedido").value="";
-  }catch(err){const c=err?.code;pSt.textContent=c==="not_granted"||c==="sampling_disabled"?"Permita o uso do Claude nesta página para o Diretor trabalhar.":c==="rate_limited"?"Muitos pedidos seguidos. Tente de novo em alguns minutos.":"O Diretor não conseguiu montar o plano. Reescreva o pedido e tente de novo."}
-  finally{bPed.disabled=false;meetingUntil=Date.now()+3000}});
+    const ref=await db.collection("pedidos").add({texto:txt,cliente:cliId,resumo:String(r.resumo||""),ts:Date.now()});
+    for(const k of list){const prazo=addDias(hojeISO(),Math.max(1,Math.min(30,Math.round(Number(k.prazoDias)||3))));
+      await db.collection("tarefas").add({titulo:String(k.titulo).slice(0,80),agente:k.agente,detalhe:String(k.detalhe||""),cliente:cliId,prazo,status:"afazer",pedido:ref.id,ts:Date.now()});log(k.agente,`recebeu: ${String(k.titulo).slice(0,80)}`)}
+    contarIA(1);
+    $("pOut").innerHTML=`<div><b>Plano:</b> ${esc(r.resumo||"")}</div>`+list.map(k=>`<div><span class="chip" style="background:${TEAM[k.agente].cor}">${esc(TEAM[k.agente].nome)}</span>${esc(k.titulo)}</div>`).join("")+`<p class="note">No quadro, clique em "Executar com IA" em cada tarefa.</p>`;
+    $("pSt").textContent=`${list.length} tarefas no quadro.`;$("pedido").value="";
+  }catch(err){const c=err?.code;$("pSt").textContent=c==="not_granted"||c==="sampling_disabled"?"Permita o uso do Claude nesta página para o Diretor trabalhar.":c==="rate_limited"?"Limite de uso do Claude atingido agora. Tente mais tarde.":"O Diretor não conseguiu montar o plano. Reescreva o pedido e tente de novo."}
+  finally{$("bPed").disabled=false;meetingUntil=Date.now()+3000}});
 
 // ================= início
 go(location.hash.slice(1)||"escritorio");renderAll();requestAnimationFrame(loop);
 (async()=>{
   try{sample=await claude.use("sample")}catch(_){}
+  try{downloads=await claude.use("downloads")}catch(_){}
   try{db=await claude.use("db")}catch(_){db=null}
   if(!db){renderAll();return}
   db.collection("tarefas").onSnapshot(s=>{tasks=s.docs.map(d=>({id:d.id,...d.data()}));renderAll()},()=>{});
-  db.collection("atividade").orderBy("ts","desc").limit(120).onSnapshot(s=>{acts=s.docs.map(d=>d.data());renderTimeline()},()=>{});
+  db.collection("clientes").onSnapshot(s=>{clis=s.docs.map(d=>({id:d.id,...d.data()}));fillCliSelects();renderAll()},()=>{});
+  db.collection("financeiro").onSnapshot(s=>{fins=s.docs.map(d=>({id:d.id,...d.data()}));renderFin();renderClientes()},()=>{});
+  db.collection("uso").onSnapshot(s=>{uso={};s.docs.forEach(d=>uso[d.id]=d.data().chamadas||0);renderUso()},()=>{});
+  db.collection("atividade").orderBy("ts","desc").limit(150).onSnapshot(s=>{acts=s.docs.map(d=>d.data());renderTimeline()},()=>{});
 })();
 </script>
